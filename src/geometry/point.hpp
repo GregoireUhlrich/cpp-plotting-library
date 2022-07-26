@@ -2,8 +2,6 @@
 
 namespace geometry {
 
-namespace _2D {
-
 template <typename T>
 struct Point {
 
@@ -17,28 +15,36 @@ struct Point {
     Point(T x, T y) : x(x), y(y)
     {
     }
+
+    template <typename U>
+    Point(const Point<U> &other)
+        : x(static_cast<T>(other.x)), y(static_cast<T>(other.y))
+    {
+    }
 };
-
-} // namespace _2D
-
-namespace _3D {
 
 template <typename T>
-struct Point {
+constexpr Point<T> operator-(const Point<T> &right)
+{
+    return Point<T>(-right.x, -right.y);
+}
 
-    T x;
-    T y;
-    T z;
+template <typename T>
+constexpr Point<T> operator+(const Point<T> &left, const Point<T> &right)
+{
+    return Point<T>(left.x + right.x, left.y + right.y);
+}
 
-    Point() : x(0), y(0), z(0)
-    {
-    }
+template <typename T>
+constexpr Point<T> operator-(const Point<T> &left, const Point<T> &right)
+{
+    return Point<T>(left.x - right.x, left.y - right.y);
+}
 
-    Point(T x, T y, T z) : x(x), y(y), z(z)
-    {
-    }
-};
-
-} // namespace _3D
+template <typename U, typename T>
+constexpr Point<U> operator*(const Point<T> &left, U right)
+{
+    return Point<U>(left.x * right, left.y * right);
+}
 
 } // namespace geometry
