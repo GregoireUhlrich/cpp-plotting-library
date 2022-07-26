@@ -23,6 +23,7 @@ int main()
     print(base, "(3,2)");
     print(base + geometry::Point(-2, 6), "(1,8)");
     print(base * 2.3, "(6.9, 4.6)");
+    print(base / 2., "(1.5, 1)");
 
     base *= 0;
 

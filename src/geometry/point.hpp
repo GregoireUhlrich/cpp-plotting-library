@@ -89,6 +89,21 @@ constexpr Point<U> operator*(const Point<T> &left, U right)
  * @return constexpr Point<U>
  */
 template <typename U, typename T>
+constexpr Point<U> operator/(const Point<T> &left, U right)
+{
+    return Point<U>(left.x / right, left.y / right);
+}
+
+/**
+ * @brief
+ *
+ * @tparam U
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<U>
+ */
+template <typename U, typename T>
 constexpr Point<U> operator*(U left, const Point<T> &right)
 {
     return Point<U>(left * right.x, left * right.y);
@@ -124,6 +139,23 @@ constexpr Point<T> &operator*=(Point<T> &left, T right)
 {
     left.x *= right;
     left.y *= right;
+
+    return left;
+}
+
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<T>&
+ */
+template <typename T>
+constexpr Point<T> &operator/=(Point<T> &left, T right)
+{
+    left.x /= right;
+    left.y /= right;
 
     return left;
 }
