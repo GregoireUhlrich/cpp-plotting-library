@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION "3.5")
 
 project(cpp-plotting-library LANGUAGES CXX)
 
+include(SFMLSetup.cmake)
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -12,3 +14,4 @@ set(CMAKE_CXX_FLAGS "${CXX_WARNINGS}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 add_subdirectory(src)
+add_subdirectory(examples)
