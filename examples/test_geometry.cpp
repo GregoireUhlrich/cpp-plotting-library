@@ -1,7 +1,8 @@
 #include "geometry/point.hpp"
 #include <iostream>
 
-void print(geometry::Point<int> p)
+template <typename T>
+void print(geometry::Point<T> p)
 {
     std::cout << "2D point : ";
     std::cout << "(" << p.x << ":" << p.y << ")" << std::endl;
