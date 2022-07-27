@@ -4,6 +4,8 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
 
+#include "esthetic.hpp"
+
 namespace graphic {
 
 class Pad {
@@ -18,8 +20,9 @@ class Pad {
     void create();
 
   public:
-    Pad(/* args */);
-    ~Pad();
+    Pad();
+    Pad(int width, int height, int border);
+    virtual ~Pad();
 
     void draw(sf::RenderTarget &target);
 };
@@ -35,8 +38,13 @@ void Pad::create()
     rectangle.setOutlineColor(sf::Color::Transparent);
 }
 
-Pad::Pad(/* args */)
-    : width(GLOBAL_WIDTH), height(GLOBAL_HEIGHT), border(THICKNESS)
+Pad::Pad() : width(GLOBAL_WIDTH), height(GLOBAL_HEIGHT), border(THICKNESS)
+{
+    create();
+}
+
+Pad::Pad(int width, int height, int border)
+    : width(width), height(height), border(border)
 {
     create();
 }

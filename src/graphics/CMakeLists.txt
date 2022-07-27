@@ -6,7 +6,8 @@ include_directories(${SFML_INCLUDE_DIR})
 set(SFML_LIBS sfml-graphics sfml-window sfml-system)
 
 set(GUI_SOURCES
-    pad.hpp)
+    pad.hpp
+    drawable.hpp)
 
 add_library(graphics-obj OBJECT ${GUI_SOURCES})
 target_link_libraries(graphics-obj PRIVATE ${SFML_LIBS})

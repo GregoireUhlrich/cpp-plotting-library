@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 
+#include "graphics/drawable.hpp"
 #include "graphics/esthetic.hpp"
 #include "graphics/pad.hpp"
 
@@ -9,7 +10,7 @@ int main()
         sf::VideoMode(graphic::GLOBAL_WIDTH, graphic::GLOBAL_HEIGHT),
         "i3Float");
 
-    graphic::Pad pad;
+    graphic::Drawable circle;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -19,7 +20,7 @@ int main()
         }
 
         window.clear();
-        pad.draw(window);
+        circle.draw(window);
         window.display();
     }
 
