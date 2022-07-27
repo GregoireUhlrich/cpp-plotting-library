@@ -10,23 +10,64 @@ struct Point {
     T x;
     T y;
 
+    /**
+     * @brief Construct a new Point object
+     *
+     */
     Point() : x(0), y(0)
     {
     }
 
+    /**
+     * @brief Construct a new Point object
+     *
+     * @param r
+     * @param theta
+     */
     Point(T r, angle theta)
         : x(r * std::cos(theta.radian())), y(r * std::sin(theta.radian()))
     {
     }
 
+    /**
+     * @brief Construct a new Point object
+     *
+     * @param x
+     * @param y
+     */
     Point(T x, T y) : x(x), y(y)
     {
     }
 
+    /**
+     * @brief Construct a new Point object
+     *
+     * @tparam U
+     * @param other
+     */
     template <typename U>
     Point(const Point<U> &other)
         : x(static_cast<T>(other.x)), y(static_cast<T>(other.y))
     {
+    }
+
+    /**
+     * @brief
+     *
+     * @param other
+     */
+    void translate(const Point<T> &other)
+    {
+        *this += other;
+    }
+
+    void rotate(const angle &theta)
+    {
+        T prevX = x;
+        T prevY = y;
+
+        x = prevX * std::cos(theta.radian()) - std::sin(theta.radian());
+        y = prevX * std::sin(theta.radian()) + std::cos(theta.radian());
     }
 };
 
