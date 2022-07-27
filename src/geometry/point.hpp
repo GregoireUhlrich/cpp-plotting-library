@@ -142,7 +142,7 @@ constexpr auto operator+(U left, Point<T> const &right)
 // Substraction
 
 template <class T>
-constexpr Point<T> &operator-(Point<T> const &left)
+constexpr Point<T> operator-(Point<T> const &left)
 {
     return {.x = -left.x, .y = -left.y};
 }
@@ -158,8 +158,8 @@ constexpr Point<T> &operator-=(Point<T> &left, Point<T> const &right)
 template <class T>
 constexpr Point<T> &operator-=(Point<T> &left, T right)
 {
-    left -= right;
-    left -= right;
+    left.x -= right;
+    left.y -= right;
     return left;
 }
 
