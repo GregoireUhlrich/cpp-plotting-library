@@ -75,6 +75,30 @@ TEST(Geometry, point_base)
     assert_point(static_cast<geometry::Point<long>>(p2), 3l, -140'000l);
 }
 
+TEST(Geometry, point_addition)
+{
+    geometry::Point<int>   i1{4, 6};
+    geometry::Point<int>   i2{-2, 0};
+    geometry::Point<float> f1{-2.7f, -1.5f};
+    geometry::Point<float> f2{-9.0f, 0.5f};
+
+    assert_point(i1 + i2, 2, 6);
+    assert_point(i2 + i1, 2, 6);
+    assert_point(i1 + 5, 9, 11);
+    assert_point(5 + i1, 9, 11);
+    i1 += 5;
+    i1 += i2;
+    assert_point(i1, 7, 11);
+
+    assert_point(f1 + f2, -11.7f, -1.f);
+    assert_point(f2 + f1, -11.7f, -1.f);
+    assert_point(f1 + 5.0f, 2.3f, 3.5f);
+    assert_point(5.0f + f1, 2.3f, 3.5f);
+    f1 += f2;
+    f1 += 6.f;
+    assert_point(f1, -5.7f, 5.0f);
+}
+
 TEST(Geometry, Angle)
 {
     geometry::Point<float> newBase{2, 3};
