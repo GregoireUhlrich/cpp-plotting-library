@@ -66,20 +66,13 @@ void assert_point(geometry::Point<T> const &p, T x, T y)
     ASSERT_EQ(p.y, y);
 }
 
-TEST(Geometry, Point)
+TEST(Geometry, point_base)
 {
-    geometry::Point<int> base{.x = 2, .y = 3};
-    assert_point(base, 2, 3);
-    assert_point(base + geometry::Point<int>{-2, 6}, 0, 9);
-    assert_point(base * 2.3, 4.6, 6.9);
-
-    base += geometry::Point<int>{1, -1};
-
-    assert_point(base, 3, 2);
-
-    base *= 0;
-
-    assert_point(base, 0, 0);
+    geometry::Point<int>    p1{.x = 2, .y = -3};
+    geometry::Point<double> p2{.x = 2.6, .y = -1.4e5};
+    assert_point(p1, 2, -3);
+    assert_point(p2, 2.6, -1.4e5);
+    assert_point(static_cast<geometry::Point<long>>(p2), 3l, -140'000l);
 }
 
 TEST(Geometry, Angle)

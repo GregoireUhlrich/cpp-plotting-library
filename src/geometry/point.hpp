@@ -52,14 +52,14 @@ struct Point {
     explicit operator Point<U>() const noexcept
     {
         return Point<U>{
-            .x = static_cast<U>(round(x)),
-            .y = static_cast<U>(round(y)),
+            .x = round<U>(x),
+            .y = round<U>(y),
         };
     }
 
     static Point<T>
     from_angle(double       modulus,
-               Angle const &angle) requires std::floating_point<T>
+               Angle const &angle) noexcept requires std::floating_point<T>
     {
         const auto rad = angle.radian();
         return Point<T>{
@@ -92,8 +92,10 @@ struct Point {
         T prevX = x;
         T prevY = y;
 
-        x = prevX * std::cos(theta.radian()) - std::sin(theta.radian());
-        y = prevX * std::sin(theta.radian()) + std::cos(theta.radian());
+        x = prevX * std::cos(theta.radian())
+            - prevY * std::sin(theta.radian());
+        y = prevX * std::sin(theta.radian())
+            + prevY * std::cos(theta.radian());
     }
 };
 
