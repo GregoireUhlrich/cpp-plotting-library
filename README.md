@@ -1,7 +1,12 @@
 # cpp-plotting-library
-Scientific plotting library for C++
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/GregoireUhlrich/cpp-plotting-library/CMake/main?label=tests&logo=C%2B%2B&logoColor=green)
 
-## Build
+## Summary
+
+This library provides a simple way to plot scientifc data directly from C++.
+
+## Get Started
+### Build
 
 ``` bash
     mkdir build
@@ -16,14 +21,14 @@ To build the doc an explicit target must be given to `make`:
 ```
 The main page can then be found at `build/doc/index.html`.
 
-## Run tests
+### Run tests
 
 Once the package has been built, just run
 ``` bash
     ctest
 ```
 
-## Run tests with code coverage
+### Run tests with code coverage
 
 To enable code coverage, the package must be built in coverage mode:
 ``` bash
