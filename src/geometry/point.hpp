@@ -80,6 +80,26 @@ struct Point {
     /**
      * @brief
      *
+     * @return double
+     */
+    double absolute()
+    {
+        return std::sqrt(x * x + y * y);
+    }
+
+    /**
+     * @brief
+     *
+     * @return Angle
+     */
+    Angle argument() const
+    {
+        return std::atan(float(y) / x);
+    }
+
+    /**
+     * @brief
+     *
      * @param other
      */
     void translate(const Point<T> &other)
@@ -87,6 +107,12 @@ struct Point {
         *this += other;
     }
 
+    /**
+     * @brief
+     *
+     * @tparam U
+     * @param factor
+     */
     template <typename U>
     void scale(U factor)
     {

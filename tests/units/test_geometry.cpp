@@ -192,6 +192,11 @@ TEST(Geometry, Angle)
     assert_point_near(
         newBase, 0.7071067811865476f, 0.7071067811865476f, 1e-10f);
 
+    geometry::Point<double> base{1.0f, -1.0f};
+    ASSERT_DOUBLE_EQ(base.absolute(), std::sqrt(2));
+    geometry::Point<double> base2{0.7071067811865476f, 0.7071067811865476f};
+    ASSERT_DOUBLE_EQ(base2.argument().radian(), M_PI_4);
+
     geometry::Angle a(6.59);
     geometry::Angle a_bis = 8.6555879;
     geometry::Angle b(2.34);
