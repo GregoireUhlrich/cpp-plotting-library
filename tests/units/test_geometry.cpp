@@ -11,7 +11,8 @@
  * @param p Point to assert
  * @param x Required point value for x
  * @param y Required point value for y
- * @return requires Template specialisation only for floating-point types.
+ *
+ * @note Template specialisation only for floating-point types.
  */
 template <class T>
 requires std::floating_point<T>
@@ -35,8 +36,9 @@ void assert_point(geometry::Point<T> const &p, T x, T y)
  * @param p   Point to assert
  * @param x   Required point value for x
  * @param y   Required point value for y
- * @param eps Absolute precision required for th assertion
- * @return requires Template specialisation only for floating-point types.
+ * @param eps Absolute precision required for the assertion
+ *
+ * @note Template specialisation only for floating-point types.
  */
 template <class T>
 requires std::floating_point<T>
@@ -53,7 +55,8 @@ void assert_point_near(geometry::Point<T> const &p, T x, T y, T eps)
  * @param p Point to assert
  * @param x Required point value for x
  * @param y Required point value for y
- * @return requires Template specialisation only for integral types.
+
+ * @note Template specialisation only for integral types.
  */
 template <class T>
 requires std::integral<T>
