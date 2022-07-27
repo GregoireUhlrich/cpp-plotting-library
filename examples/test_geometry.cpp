@@ -20,24 +20,34 @@ int main()
 {
 
     geometry::Point<int> base(2, 3);
+    /*
+        print(base, "(2,3)");
+        print(base + geometry::Point(-2, 6), "(0,9)");
+        print(base * 2.3, "(4.6,6.9)");
 
-    print(base, "(2,3)");
-    print(base + geometry::Point(-2, 6), "(0,9)");
-    print(base * 2.3, "(4.6,6.9)");
+        base += geometry::Point(1, -1);
 
-    base += geometry::Point(1, -1);
+        print(base, "(3,2)");
+        print(base + geometry::Point(-2, 6), "(1,8)");
+        print(base * 2.3, "(6.9, 4.6)");
+        print(base / 2., "(1.5, 1)");
 
-    print(base, "(3,2)");
-    print(base + geometry::Point(-2, 6), "(1,8)");
-    print(base * 2.3, "(6.9, 4.6)");
-    print(base / 2., "(1.5, 1)");
+        base *= 0;
 
-    base *= 0;
+        print(base, "(0,0)");
+        print(base + geometry::Point(-2, 6), "(-2,6)");
+        print(base * 2.3, "(0,0)");
+    */
+    geometry::angle pi_2 = M_PI_2;
+    geometry::angle pi   = M_PI;
+    geometry::angle pi_4 = M_PI_4;
 
-    print(base, "(0,0)");
-    print(base + geometry::Point(-2, 6), "(-2,6)");
-    print(base * 2.3, "(0,0)");
-
+    base = geometry::Point(1.0, pi_2);
+    print(base, "(0,1)");
+    base = geometry::Point(1.0, pi);
+    print(base, "(-1,0)");
+    base = geometry::Point(1.0, pi_4);
+    print(base, "(0.7071067811865476,0.7071067811865476)");
     ////////////////////////////////////////////////////////////////////////////
 
     geometry::angle a(6.59);

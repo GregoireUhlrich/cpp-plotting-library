@@ -1,5 +1,7 @@
 #pragma once
 
+#include "geometry/angle.hpp"
+#include <iostream>
 namespace geometry {
 
 template <typename T>
@@ -10,6 +12,16 @@ struct Point {
 
     Point() : x(0), y(0)
     {
+    }
+
+    Point(T r, angle theta)
+        : x(static_cast<double>(r) * std::cos(theta.radian())),
+          y(static_cast<double>(r) * std::sin(theta.radian()))
+    {
+        std::cout << r << std::endl;
+
+        std::cout << r * std::cos(theta.radian()) << std::endl;
+        std::cout << r * std::sin(theta.radian()) << std::endl;
     }
 
     Point(T x, T y) : x(x), y(y)
