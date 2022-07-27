@@ -14,12 +14,13 @@ FetchContent_MakeAvailable(googletest)
 find_package(Doxygen REQUIRED dot)
 
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
 set(CXX_WARNINGS
     "-Wall -Wextra -Wpedantic -Wconversion -Werror"
 )
 set(CMAKE_CXX_FLAGS "${CXX_WARNINGS}")
+set(CMAKE_CXX_FLAGS "-std=c++20")
 
 # Setup testing
 set(CMAKE_CXX_FLAGS_COVERAGE "-g -O0 -fprofile-arcs -ftest-coverage")

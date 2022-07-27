@@ -60,6 +60,4 @@ class Angle {
     }
 };
 
-using angle = Angle;
-
 } // namespace geometry

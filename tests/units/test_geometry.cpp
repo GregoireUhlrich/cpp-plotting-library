@@ -68,12 +68,12 @@ void assert_point(geometry::Point<T> const &p, T x, T y)
 
 TEST(Geometry, Point)
 {
-    geometry::Point<int> base(2, 3);
+    geometry::Point<int> base{.x = 2, .y = 3};
     assert_point(base, 2, 3);
-    assert_point(base + geometry::Point(-2, 6), 0, 9);
+    assert_point(base + geometry::Point<int>{-2, 6}, 0, 9);
     assert_point(base * 2.3, 4.6, 6.9);
 
-    base += geometry::Point(1, -1);
+    base += geometry::Point<int>{1, -1};
 
     assert_point(base, 3, 2);
 
@@ -84,24 +84,24 @@ TEST(Geometry, Point)
 
 TEST(Geometry, Angle)
 {
-    geometry::Point<float> newBase(2, 3);
+    geometry::Point<float> newBase{2, 3};
 
-    geometry::angle pi_2 = std::numbers::pi / 2;
-    geometry::angle pi   = std::numbers::pi;
-    geometry::angle pi_4 = std::numbers::pi / 4;
+    geometry::Angle pi_2 = std::numbers::pi / 2;
+    geometry::Angle pi   = std::numbers::pi;
+    geometry::Angle pi_4 = std::numbers::pi / 4;
 
-    newBase = geometry::Point(1.0, pi_2);
+    newBase = geometry::Point<float>::from_angle(1.0f, pi_2);
     assert_point_near(newBase, 0.0f, 1.0f, 1e-10f);
-    newBase = geometry::Point(1.0, pi);
+    newBase = geometry::Point<float>::from_angle(1.0f, pi);
     assert_point_near(newBase, -1.f, 0.f, 1e-10f);
-    newBase = geometry::Point(1.0, pi_4);
+    newBase = geometry::Point<float>::from_angle(1.0f, pi_4);
     assert_point_near(
         newBase, 0.7071067811865476f, 0.7071067811865476f, 1e-10f);
 
-    geometry::angle a(6.59);
-    geometry::angle a_bis = 8.6555879;
-    geometry::angle b(2.34);
-    geometry::angle c(2 * std::numbers::pi);
+    geometry::Angle a(6.59);
+    geometry::Angle a_bis = 8.6555879;
+    geometry::Angle b(2.34);
+    geometry::Angle c(2 * std::numbers::pi);
 
     ASSERT_DOUBLE_EQ(a.radian(), 0.3068146928204136);
     ASSERT_DOUBLE_EQ(a_bis.radian(), 2.372402592820414);
