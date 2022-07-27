@@ -202,3 +202,14 @@ TEST(Geometry, Angle)
     ASSERT_DOUBLE_EQ(b.radian(), 2.34);
     ASSERT_DOUBLE_EQ(c.radian(), 0);
 }
+
+TEST(Geometry, rotation)
+{
+    geometry::Angle pi_4 = std::numbers::pi / 4;
+
+    geometry::Point<float> base{1, 0};
+    base.rotate(pi_4);
+    assert_point_near(base, 0.7071067811865476f, 0.7071067811865476f, 1e-10f);
+    base.rotate(pi_4);
+    assert_point_near(base, 0.0f, 1.0f, 1e-10f);
+}
