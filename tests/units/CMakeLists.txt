@@ -15,4 +15,4 @@ function(ADD_UNIT_TEST NAME)
     gtest_discover_tests(${NAME}.x PROPERTIES LABELS units)
 endfunction()
 
-ADD_UNIT_TEST(sample_unit_test)
+ADD_UNIT_TEST(test_geometry)
