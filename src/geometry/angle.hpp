@@ -22,6 +22,12 @@ class Angle {
     {
     }
 
+    Angle &operator=(double angle)
+    {
+        value = modulo(angle);
+        return *this;
+    }
+
     double radian() const
     {
         return value;

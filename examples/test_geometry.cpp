@@ -41,10 +41,12 @@ int main()
     ////////////////////////////////////////////////////////////////////////////
 
     geometry::Angle a(6.59);
+    geometry::Angle a_bis = 8.6555879;
     geometry::Angle b(2.34);
     geometry::Angle c(2 * M_PI);
 
     print(a, "0.3068146928204136");
+    print(a_bis, "2.372402592820414");
     print(b, "2.34");
     print(c, "0");
 
