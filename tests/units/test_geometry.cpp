@@ -2,6 +2,7 @@
 #include "geometry/point.hpp"
 #include "gtest/gtest.h"
 #include <concepts>
+#include <cstdint>
 #include <numbers>
 
 /**
@@ -72,7 +73,11 @@ TEST(Geometry, point_base)
     geometry::Point<double> p2{.x = 2.6, .y = -1.4e5};
     assert_point(p1, 2, -3);
     assert_point(p2, 2.6, -1.4e5);
-    assert_point(static_cast<geometry::Point<long>>(p2), 3l, -140'000l);
+    assert_point(static_cast<geometry::Point<int>>(p2), 3, -140'000);
+    assert_point(static_cast<geometry::Point<long long>>(
+                     geometry::Point<double>{1e15, 0.}),
+                 static_cast<long long>(1e15),
+                 0ll);
 }
 
 TEST(Geometry, point_addition)

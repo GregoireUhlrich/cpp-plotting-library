@@ -21,10 +21,10 @@ namespace geometry {
 template <std::integral IntegralType>
 IntegralType round(std::floating_point auto value)
 {
-    if constexpr (sizeof(IntegralType) == 64) { // long long
+    if constexpr (sizeof(IntegralType) == sizeof(long long)) { // long long
         return static_cast<IntegralType>(std::llround(value));
     }
-    else if constexpr (sizeof(IntegralType) == 32) { // long
+    else if constexpr (sizeof(IntegralType) == sizeof(long)) { // long
         return static_cast<IntegralType>(std::lround(value));
     }
     else { // int
