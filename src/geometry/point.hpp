@@ -103,6 +103,14 @@ struct Point {
 
 // Addition
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<T>&
+ */
 template <class T>
 constexpr Point<T> &operator+=(Point<T> &left, Point<T> const &right)
 {
@@ -111,6 +119,14 @@ constexpr Point<T> &operator+=(Point<T> &left, Point<T> const &right)
     return left;
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<T>&
+ */
 template <class T>
 constexpr Point<T> &operator+=(Point<T> &left, T right)
 {
@@ -119,6 +135,15 @@ constexpr Point<T> &operator+=(Point<T> &left, T right)
     return left;
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @tparam U
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class T, class U>
 constexpr auto operator+(Point<T> const &left, Point<U> const &right)
 {
@@ -126,6 +151,15 @@ constexpr auto operator+(Point<T> const &left, Point<U> const &right)
                                            .y = left.y + right.y};
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @tparam U
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class T, class U>
 constexpr auto operator+(Point<T> const &left, U right)
 {
@@ -133,6 +167,15 @@ constexpr auto operator+(Point<T> const &left, U right)
                                            .y = left.y + right};
 }
 
+/**
+ * @brief
+ *
+ * @tparam U
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class U, class T>
 constexpr auto operator+(U left, Point<T> const &right)
 {
@@ -141,12 +184,27 @@ constexpr auto operator+(U left, Point<T> const &right)
 
 // Substraction
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @return constexpr Point<T>
+ */
 template <class T>
 constexpr Point<T> operator-(Point<T> const &left)
 {
     return {.x = -left.x, .y = -left.y};
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<T>&
+ */
 template <class T>
 constexpr Point<T> &operator-=(Point<T> &left, Point<T> const &right)
 {
@@ -155,6 +213,14 @@ constexpr Point<T> &operator-=(Point<T> &left, Point<T> const &right)
     return left;
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<T>&
+ */
 template <class T>
 constexpr Point<T> &operator-=(Point<T> &left, T right)
 {
@@ -163,6 +229,15 @@ constexpr Point<T> &operator-=(Point<T> &left, T right)
     return left;
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @tparam U
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class T, class U>
 constexpr auto operator-(Point<T> const &left, Point<U> const &right)
 {
@@ -170,6 +245,15 @@ constexpr auto operator-(Point<T> const &left, Point<U> const &right)
                                            .y = left.y - right.y};
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @tparam U
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class T, class U>
 constexpr auto operator-(Point<T> const &left, U right)
 {
@@ -177,6 +261,15 @@ constexpr auto operator-(Point<T> const &left, U right)
                                            .y = left.y - right};
 }
 
+/**
+ * @brief
+ *
+ * @tparam U
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class U, class T>
 constexpr auto operator-(U left, Point<T> const &right)
 {
@@ -185,6 +278,14 @@ constexpr auto operator-(U left, Point<T> const &right)
 
 // Muliplication
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<T>&
+ */
 template <class T>
 constexpr Point<T> &operator*=(Point<T> &left, Point<T> const &right)
 {
@@ -193,6 +294,14 @@ constexpr Point<T> &operator*=(Point<T> &left, Point<T> const &right)
     return left;
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<T>&
+ */
 template <class T>
 constexpr Point<T> &operator*=(Point<T> &left, T right)
 {
@@ -201,6 +310,15 @@ constexpr Point<T> &operator*=(Point<T> &left, T right)
     return left;
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @tparam U
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class T, class U>
 constexpr auto operator*(Point<T> const &left, Point<U> const &right)
 {
@@ -208,6 +326,15 @@ constexpr auto operator*(Point<T> const &left, Point<U> const &right)
                                            .y = left.y * right.y};
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @tparam U
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class T, class U>
 constexpr auto operator*(Point<T> const &left, U right)
 {
@@ -215,6 +342,15 @@ constexpr auto operator*(Point<T> const &left, U right)
                                            .y = left.y * right};
 }
 
+/**
+ * @brief
+ *
+ * @tparam U
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class U, class T>
 constexpr auto operator*(U left, Point<T> const &right)
 {
@@ -223,6 +359,14 @@ constexpr auto operator*(U left, Point<T> const &right)
 
 // Division
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<T>&
+ */
 template <class T>
 constexpr Point<T> &operator/=(Point<T> &left, Point<T> const &right)
 {
@@ -231,6 +375,14 @@ constexpr Point<T> &operator/=(Point<T> &left, Point<T> const &right)
     return left;
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr Point<T>&
+ */
 template <class T>
 constexpr Point<T> &operator/=(Point<T> &left, T right)
 {
@@ -239,6 +391,15 @@ constexpr Point<T> &operator/=(Point<T> &left, T right)
     return left;
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @tparam U
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class T, class U>
 constexpr auto operator/(Point<T> const &left, Point<U> const &right)
 {
@@ -246,6 +407,15 @@ constexpr auto operator/(Point<T> const &left, Point<U> const &right)
                                            .y = left.y / right.y};
 }
 
+/**
+ * @brief
+ *
+ * @tparam T
+ * @tparam U
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class T, class U>
 constexpr auto operator/(Point<T> const &left, U right)
 {
@@ -253,6 +423,15 @@ constexpr auto operator/(Point<T> const &left, U right)
                                            .y = left.y / right};
 }
 
+/**
+ * @brief
+ *
+ * @tparam U
+ * @tparam T
+ * @param left
+ * @param right
+ * @return constexpr auto
+ */
 template <class U, class T>
 constexpr auto operator/(U left, Point<T> const &right)
 {
