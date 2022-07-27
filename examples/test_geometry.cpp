@@ -27,9 +27,8 @@ int main()
     base += geometry::Point(1, -1);
 
     print(base, "(3,2)");
-    print(base + geometry::Point(-2, 6), "(1,8)");
-    print(base * 2.3, "(6.9, 4.6)");
-    print(base / 2., "(1.5, 1)");
+    base.translate(geometry::Point(2, 4));
+    print(base, "(5, 6)");
 
     base *= 0;
 
