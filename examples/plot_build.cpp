@@ -1,12 +1,15 @@
 #include <SFML/Graphics.hpp>
 
+#include "graphics/esthetic.hpp"
 #include "graphics/pad.hpp"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "i3Float");
+    sf::RenderWindow window(
+        sf::VideoMode(graphic::GLOBAL_WIDTH, graphic::GLOBAL_HEIGHT),
+        "i3Float");
 
-    graphics::Pad pad;
+    graphic::Pad pad;
 
     while (window.isOpen()) {
         sf::Event event;
