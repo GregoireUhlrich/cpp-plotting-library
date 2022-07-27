@@ -15,13 +15,8 @@ struct Point {
     }
 
     Point(T r, angle theta)
-        : x(static_cast<double>(r) * std::cos(theta.radian())),
-          y(static_cast<double>(r) * std::sin(theta.radian()))
+        : x(r * std::cos(theta.radian())), y(r * std::sin(theta.radian()))
     {
-        std::cout << r << std::endl;
-
-        std::cout << r * std::cos(theta.radian()) << std::endl;
-        std::cout << r * std::sin(theta.radian()) << std::endl;
     }
 
     Point(T x, T y) : x(x), y(y)
