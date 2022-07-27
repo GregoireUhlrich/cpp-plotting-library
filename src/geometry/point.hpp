@@ -87,6 +87,18 @@ struct Point {
         *this += other;
     }
 
+    template <typename U>
+    void scale(U factor)
+    {
+        x *= factor;
+        y *= factor;
+    }
+
+    /**
+     * @brief
+     *
+     * @param theta
+     */
     void rotate(const Angle &theta)
     {
         T prevX = x;

@@ -213,3 +213,10 @@ TEST(Geometry, rotation)
     base.rotate(pi_4);
     assert_point_near(base, 0.0f, 1.0f, 1e-10f);
 }
+
+TEST(Geometry, scaling)
+{
+    geometry::Point<float> base{1, -1};
+    base.scale(2);
+    assert_point_near(base, 2.0f, -2.0f, 1e-10f);
+}
