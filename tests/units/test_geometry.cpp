@@ -2,6 +2,7 @@
 #include "geometry/point.hpp"
 #include "gtest/gtest.h"
 #include <concepts>
+#include <numbers>
 
 /**
  * @brief Helper function to assert a Point's content (x *and* y).
@@ -82,9 +83,9 @@ TEST(Geometry, Angle)
 {
     geometry::Point<float> newBase(2, 3);
 
-    geometry::angle pi_2 = M_PI_2;
-    geometry::angle pi   = M_PI;
-    geometry::angle pi_4 = M_PI_4;
+    geometry::angle pi_2 = std::numbers::pi / 2;
+    geometry::angle pi   = std::numbers::pi;
+    geometry::angle pi_4 = std::numbers::pi / 4;
 
     newBase = geometry::Point(1.0, pi_2);
     assert_point_near(newBase, 0.0f, 1.0f, 1e-10f);
@@ -97,7 +98,7 @@ TEST(Geometry, Angle)
     geometry::angle a(6.59);
     geometry::angle a_bis = 8.6555879;
     geometry::angle b(2.34);
-    geometry::angle c(2 * M_PI);
+    geometry::angle c(2 * std::numbers::pi);
 
     ASSERT_DOUBLE_EQ(a.radian(), 0.3068146928204136);
     ASSERT_DOUBLE_EQ(a_bis.radian(), 2.372402592820414);
