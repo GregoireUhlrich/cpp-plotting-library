@@ -147,6 +147,30 @@ TEST(Geometry, point_multiplication)
     assert_point(f1, 2.7f * 54.0f, -1.5f * 3.f);
 }
 
+TEST(Geometry, point_division)
+{
+    geometry::Point<int>   i1{4, 6};
+    geometry::Point<int>   i2{-2, 1};
+    geometry::Point<float> f1{-2.7f, -1.5f};
+    geometry::Point<float> f2{-9.0f, 0.5f};
+
+    assert_point(i1 / i2, -2, 6);
+    assert_point(i2 / i1, 0, 0);
+    assert_point(i1 / 5, 0, 1);
+    assert_point(5 / i1, 1, 0);
+    i1 /= i2;
+    i1 /= 5;
+    assert_point(i1, 0, 1);
+
+    assert_point(f1 / f2, 2.7f / 9.0f, -1.5f / 0.5f);
+    assert_point(f2 / f1, 1 / 2.7f * 9.0f, -1 / 1.5f * 0.5f);
+    assert_point(f1 / 5.0f, -2.7f / 5, -1.5f / 5);
+    assert_point(5.0f / f1, -5 / 2.7f, -5 / 1.5f);
+    f1 /= f2;
+    f1 /= 6.f;
+    assert_point(f1, 2.7f / 9.0f / 6, -1.5f / 0.5f / 6);
+}
+
 TEST(Geometry, Angle)
 {
     geometry::Point<float> newBase{2, 3};

@@ -256,8 +256,8 @@ constexpr auto operator/(Point<T> const &left, U right)
 template <class U, class T>
 constexpr auto operator/(U left, Point<T> const &right)
 {
-    return Point<std::common_type_t<T, U>>{.x = right / left.x,
-                                           .y = right / left.y};
+    return Point<std::common_type_t<T, U>>{.x = left / right.x,
+                                           .y = left / right.y};
 }
 
 } // namespace geometry
