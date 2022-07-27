@@ -1,12 +1,19 @@
+#include "geometry/angle.hpp"
 #include "geometry/point.hpp"
 #include <iostream>
 #include <string>
 
 template <typename T>
-void print(geometry::Point<T> p, std::string const message)
+void print(const geometry::Point<T> &p, const std::string &message)
 {
     std::cout << "2D point : ";
     std::cout << "(" << p.x << "," << p.y << ") --> " << message << std::endl;
+}
+
+void print(const geometry::Angle &p, const std::string &message)
+{
+    std::cout << "Angle : ";
+    std::cout << p.radian() << " --> " << message << std::endl;
 }
 
 int main()
@@ -30,6 +37,16 @@ int main()
     print(base, "(0,0)");
     print(base + geometry::Point(-2, 6), "(-2,6)");
     print(base * 2.3, "(0,0)");
+
+    ////////////////////////////////////////////////////////////////////////////
+
+    geometry::Angle a(6.59);
+    geometry::Angle b(2.34);
+    geometry::Angle c(2 * M_PI);
+
+    print(a, "0.3068146928204136");
+    print(b, "2.34");
+    print(c, "0");
 
     return 0;
 }
