@@ -15,15 +15,11 @@ class Axis : public Drawable {
     sf::RectangleShape line;
     sf::CircleShape    arrow;
 
-    int length;
-    int thickness;
-    int arrow_size;
-
-    int position_x;
-    int position_y;
-    int position_ax;
-    int position_ay;
-    int orientation;
+    float        size_arrow;
+    sf::Vector2f size_line;
+    sf::Vector2f position_line;
+    sf::Vector2f position_arrow;
+    int          orientation;
 
     void fill_variables(Coordinate c);
     void create() override;
@@ -38,39 +34,40 @@ class Axis : public Drawable {
 
 void Axis::fill_variables(Coordinate c)
 {
-    arrow_size = 7;
+    size_arrow = 7;
     if (c == Coordinate::x) {
-        length     = GLOBAL_WIDTH - 2 * (PAD_SHIFT + AXIS_SHIFT) - AXIS_SPACE;
-        thickness  = AXIS_THICKNESS;
-        position_x = PAD_SHIFT + AXIS_SHIFT;
-        position_y = GLOBAL_HEIGHT - PAD_SHIFT - AXIS_SHIFT - AXIS_THICKNESS
-                     - BASE_SHIFT;
-        position_ax
-            = GLOBAL_WIDTH - PAD_SHIFT - AXIS_SHIFT - AXIS_SPACE + arrow_size;
-        position_ay = position_y - thickness - arrow_size / 2 - 1;
-        orientation = 90;
+        size_line.x = GLOBAL_WIDTH - 2 * (PAD_SHIFT + AXIS_SHIFT) - AXIS_SPACE;
+        size_line.y = AXIS_THICKNESS;
+        position_line.x = PAD_SHIFT + AXIS_SHIFT;
+        position_line.y = GLOBAL_HEIGHT - PAD_SHIFT - AXIS_SHIFT
+                          - AXIS_THICKNESS - BASE_SHIFT;
+        position_arrow.x
+            = GLOBAL_WIDTH - PAD_SHIFT - AXIS_SHIFT - AXIS_SPACE + size_arrow;
+        position_arrow.y = position_line.y - size_line.y - size_arrow / 2 - 1;
+        orientation      = 90;
     }
     else if (c == Coordinate::y) {
-        length     = AXIS_THICKNESS;
-        thickness  = GLOBAL_HEIGHT - 2 * (PAD_SHIFT + AXIS_SHIFT) - AXIS_SPACE;
-        position_x = PAD_SHIFT + AXIS_SHIFT + BASE_SHIFT;
-        position_y = PAD_SHIFT + AXIS_SHIFT + AXIS_SPACE;
-        position_ax = position_x - length - arrow_size / 2 - 1;
-        position_ay = position_y - arrow_size;
-        orientation = 0;
+        size_line.x = AXIS_THICKNESS;
+        size_line.y
+            = GLOBAL_HEIGHT - 2 * (PAD_SHIFT + AXIS_SHIFT) - AXIS_SPACE;
+        position_line.x  = PAD_SHIFT + AXIS_SHIFT + BASE_SHIFT;
+        position_line.y  = PAD_SHIFT + AXIS_SHIFT + AXIS_SPACE;
+        position_arrow.x = position_line.x - size_line.x - size_arrow / 2 - 1;
+        position_arrow.y = position_line.y - size_arrow;
+        orientation      = 0;
     }
 }
 
 void Axis::create()
 {
-    arrow = sf::CircleShape(float(arrow_size), 3);
+    arrow = sf::CircleShape(size_arrow, 3);
     arrow.rotate(float(orientation));
     arrow.setFillColor(sf::Color::Black);
-    arrow.setPosition(sf::Vector2f(float(position_ax), float(position_ay)));
+    arrow.setPosition(position_arrow);
 
     line.setFillColor(sf::Color::Black);
-    line.setSize(sf::Vector2f(float(length), float(thickness)));
-    line.setPosition(sf::Vector2f(float(position_x), float(position_y)));
+    line.setSize(size_line);
+    line.setPosition(position_line);
 }
 
 Axis::Axis()
