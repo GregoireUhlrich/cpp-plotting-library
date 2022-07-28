@@ -24,6 +24,11 @@ class Pad {
     Pad(int width, int height, int border);
     virtual ~Pad();
 
+    sf::RectangleShape &area()
+    {
+        return rectangle;
+    }
+
     void draw(sf::RenderTarget &target);
 };
 
