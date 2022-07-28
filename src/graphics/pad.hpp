@@ -1,14 +1,14 @@
 #ifndef PAD_HPP
 #define PAD_HPP
 
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/RenderTarget.hpp>
-
+#include "drawable.hpp"
 #include "esthetic.hpp"
+
+#include <SFML/Graphics/RectangleShape.hpp>
 
 namespace graphic {
 
-class Pad {
+class Pad : public Drawable {
   private:
     sf::RectangleShape rectangle;
 
@@ -17,7 +17,7 @@ class Pad {
 
     int border;
 
-    void create();
+    void create() override;
 
   public:
     Pad();
@@ -29,7 +29,7 @@ class Pad {
         return rectangle;
     }
 
-    void draw(sf::RenderTarget &target);
+    void draw(sf::RenderTarget &target) override;
 };
 
 void Pad::create()
@@ -43,7 +43,7 @@ void Pad::create()
     rectangle.setOutlineColor(sf::Color::Transparent);
 }
 
-Pad::Pad() : width(GLOBAL_WIDTH), height(GLOBAL_HEIGHT), border(THICKNESS)
+Pad::Pad() : width(GLOBAL_WIDTH), height(GLOBAL_HEIGHT), border(PAD_SHIFT)
 {
     create();
 }

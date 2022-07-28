@@ -7,6 +7,8 @@ set(SFML_LIBS sfml-graphics sfml-window sfml-system)
 
 set(GUI_SOURCES
     pad.hpp
+    axis.hpp
+    circle.hpp
     drawable.hpp)
 
 add_library(graphics-obj OBJECT ${GUI_SOURCES})

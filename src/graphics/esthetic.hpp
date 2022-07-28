@@ -3,9 +3,11 @@
 
 namespace graphic {
 
-inline constexpr int GLOBAL_HEIGHT = 600;
-inline constexpr int GLOBAL_WIDTH  = 800;
-inline constexpr int THICKNESS     = 6;
+inline constexpr int GLOBAL_HEIGHT  = 600;
+inline constexpr int GLOBAL_WIDTH   = 800;
+inline constexpr int PAD_SHIFT      = 6;
+inline constexpr int AXIS_THICKNESS = 2;
+inline constexpr int AXIS_SHIFT     = 20;
 
 } // namespace graphic
 
