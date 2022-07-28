@@ -6,14 +6,15 @@
 #include "pad.hpp"
 
 #include <SFML/Graphics/CircleShape.hpp>
+#include <array>
 
 namespace graphic {
 
 class Circle : public Drawable {
   private:
-    Pad             pad;
-    Axis            axis;
-    sf::CircleShape circle;
+    Pad                 pad;
+    std::array<Axis, 2> axis;
+    sf::CircleShape     circle;
 
     void create() override;
 
@@ -27,7 +28,11 @@ class Circle : public Drawable {
 
 void Circle::create()
 {
+    for (size_t d = 0; d != axis.size(); ++d) {
+        axis[d] = Axis(Coordinate(d));
+    }
     circle.setRadius(110.0f);
+    circle.setPosition(sf::Vector2f(200, 150));
     circle.setFillColor(sf::Color::Green);
 }
 
@@ -48,7 +53,9 @@ Circle::~Circle()
 void Circle::draw(sf::RenderTarget &target)
 {
     pad.draw(target);
-    axis.draw(target);
+    for (Axis &a : axis) {
+        a.draw(target);
+    }
     target.draw(circle);
 }
 
