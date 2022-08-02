@@ -17,7 +17,7 @@ class Pad : public Drawable {
 
     int border;
 
-    void create() override;
+    void init() override;
 
   public:
     Pad();
@@ -32,7 +32,7 @@ class Pad : public Drawable {
     void draw(sf::RenderTarget &target) override;
 };
 
-void Pad::create()
+void Pad::init()
 {
     rectangle.setPosition(float(border), float(border));
     rectangle.setSize(
@@ -45,13 +45,13 @@ void Pad::create()
 
 Pad::Pad() : width(GLOBAL_WIDTH), height(GLOBAL_HEIGHT), border(PAD_SHIFT)
 {
-    create();
+    init();
 }
 
 Pad::Pad(int width, int height, int border)
     : width(width), height(height), border(border)
 {
-    create();
+    init();
 }
 
 Pad::~Pad()

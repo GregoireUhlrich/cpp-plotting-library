@@ -22,7 +22,7 @@ class Axis : public Drawable {
     int          orientation;
 
     void fill_variables(Coordinate c);
-    void create() override;
+    void init() override;
 
   public:
     Axis();
@@ -58,7 +58,7 @@ void Axis::fill_variables(Coordinate c)
     }
 }
 
-void Axis::create()
+void Axis::init()
 {
     arrow = sf::CircleShape(size_arrow, 3);
     arrow.rotate(float(orientation));
@@ -77,7 +77,7 @@ Axis::Axis()
 Axis::Axis(Coordinate variable)
 {
     fill_variables(variable);
-    create();
+    init();
 }
 
 Axis::~Axis()

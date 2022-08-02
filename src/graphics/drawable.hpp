@@ -7,7 +7,7 @@ namespace graphic {
 
 class Drawable {
   private:
-    virtual void create() = 0;
+    virtual void init() = 0;
 
   public:
     Drawable();

@@ -16,7 +16,7 @@ class Circle : public Drawable {
     std::array<Axis, 2> axis;
     sf::CircleShape     circle;
 
-    void create() override;
+    void init() override;
 
   public:
     Circle();
@@ -26,7 +26,7 @@ class Circle : public Drawable {
     void draw(sf::RenderTarget &target) override;
 };
 
-void Circle::create()
+void Circle::init()
 {
     for (size_t d = 0; d != axis.size(); ++d) {
         axis[d] = Axis(Coordinate(d));
@@ -38,12 +38,12 @@ void Circle::create()
 
 Circle::Circle()
 {
-    create();
+    init();
 }
 
 Circle::Circle(Pad &pad) : pad(pad)
 {
-    create();
+    init();
 }
 
 Circle::~Circle()
