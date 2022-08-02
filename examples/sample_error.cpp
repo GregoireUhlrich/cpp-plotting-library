@@ -1,4 +1,4 @@
-#include "utils/error.h"
+#include "utils/error.hpp"
 
 struct IndexError: public cpt::Exception {
     using Exception::Exception;
