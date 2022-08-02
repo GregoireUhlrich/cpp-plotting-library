@@ -5,6 +5,9 @@
 #include <exception>
 #include <sstream>
 
+namespace cpt
+{
+   
 class Exception: public std::exception {
 public:
     Exception(Printable auto &&...args)
@@ -20,6 +23,8 @@ public:
     
 private:
     std::string _message;
-};
+}; 
+} // namespace cpt
+
 
 #endif

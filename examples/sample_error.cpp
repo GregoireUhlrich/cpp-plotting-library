@@ -1,6 +1,6 @@
 #include "utils/error.h"
 
-struct IndexError: public Exception {
+struct IndexError: public cpt::Exception {
     using Exception::Exception;
 };
 

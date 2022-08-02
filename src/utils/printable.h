@@ -3,10 +3,15 @@
 
 #include <iostream>
 
+namespace cpt
+{
+    
 template<class T>
 concept Printable = requires(T el, std::ostream &out)
 {
     out << el;
 };
+} // namespace cpt
+
 
 #endif
