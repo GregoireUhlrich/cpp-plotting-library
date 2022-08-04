@@ -4,36 +4,37 @@
 #include "array/builtins.hpp"
 #include "array/io.hpp"
 #include "array/view.hpp"
+#include "array/arithmetics.hpp"
 
-auto get_view(auto const &x)
+// Utilities to apply a threshold on very small floating-point values
+constexpr static double threshold = 1e-10;
+
+auto min_threshold = [](auto val)
 {
-   return cpt::ArrayView{x} | std::views::transform([](float x) { return x + 1; });
-}
+    return std::abs(val) < threshold ? 0 : val;
+};
 
 int main() {
 
-    cpt::Array<int> arr1 = cpt::range<int>(10);
-    const cpt::Array<int> arr2 = cpt::range<int>(10);
-    const auto arr3 = {1, 2, 3};
-    const int arr4[] = {4, 5, 6};
-    std::vector<float> arr5 = {1.1, 2.2, 3.3}; 
-    auto arr5_times_2 = get_view(arr5);
-    const char str[] = "Hello, World!";
-    cpt::print(arr1);
-    cpt::print(arr2);
-    cpt::print(arr3);
-    cpt::print(arr4);
-    cpt::print(arr5);
-    cpt::print(str);
-    cpt::print(arr5_times_2);
-    cpt::print(cpt::ArrayView{arr5} | std::views::transform([](float x) { return x + 1; }));
-    auto c = cpt::view(arr5);
-    auto c2 = cpt::view(cpt::ArrayView(arr5));
-    auto cc = cpt::view(cpt::cos(c));
-    cpt::print(cc);
-    cpt::print(c2);
-    cpt::print(cpt::cos(cpt::MathView{cpt::ArrayView{arr5}}));
-    //cpt::print(cpt::cos(cpt::MathView{arr5}));
+    const auto x_data = cpt::range(10);    // Store the data in a variable first
+    auto x            = cpt::view(x_data); // Then we can take the view and work from there
 
-    return 0;
+    ////
+    // Test [cos(x)^2 + sin(x)^2 == 1]
+    auto y1 = 1 - (cpt::cos(x)*cpt::cos(x) + cpt::sin(x)*cpt::sin(x)); // No calculation is done here!
+
+    std::cout << "Should be 0 : ";
+    cpt::print(cpt::apply(y1, min_threshold)); // Apply a threshold to detect 'almost 0' values
+    //
+    ////
+
+    ////
+    // Test [1 + tan(x)^2 == 1 / cos(x)^2 ]
+    auto y2 = 1 / cpt::pow(cpt::cos(x), 2);
+    auto y3 = 1 + cpt::pow(cpt::tan(x), 2);
+
+    std::cout << "Should be 0 : ";
+    cpt::print(cpt::apply(y2 - y3, min_threshold)); // Apply a threshold to detect 'almost 0' values
+    //
+    ////
 }
