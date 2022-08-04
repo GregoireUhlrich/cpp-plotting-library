@@ -13,7 +13,7 @@ namespace cpt
 
     template<class View, ArrayValue T>
         requires cpt::is_math_view_v<View>
-    auto operator+(View view, T val)
+    constexpr auto operator+(View view, T val)
     {
         return MathView {
             std::move(view),
@@ -25,14 +25,14 @@ namespace cpt
 
     template<class View, ArrayValue T>
         requires cpt::is_math_view_v<View>
-    auto operator+(T val, View view)
+    constexpr auto operator+(T val, View view)
     {
         return (std::move(view) + val);
     }   
 
     template<class View>
         requires cpt::is_math_view_v<View>
-    auto operator-(View view)
+    constexpr auto operator-(View view)
     {
         return MathView {
             std::move(view),
@@ -44,7 +44,7 @@ namespace cpt
 
     template<class View, ArrayValue T>
         requires cpt::is_math_view_v<View>
-    auto operator-(View view, T val)
+    constexpr auto operator-(View view, T val)
     {
         return MathView {
             std::move(view),
@@ -56,14 +56,14 @@ namespace cpt
 
     template<class View, ArrayValue T>
         requires cpt::is_math_view_v<View>
-    auto operator-(T val, View view)
+    constexpr auto operator-(T val, View view)
     {
         return ((-std::move(view)) + val);
     }   
 
     template<class View, ArrayValue T>
         requires cpt::is_math_view_v<View>
-    auto operator*(View view, T val)
+    constexpr auto operator*(View view, T val)
     {
         return MathView {
             std::move(view),
@@ -75,14 +75,14 @@ namespace cpt
 
     template<class View, ArrayValue T>
         requires cpt::is_math_view_v<View>
-    auto operator*(T val, View view)
+    constexpr auto operator*(T val, View view)
     {
         return (std::move(view) * val);
     }   
 
     template<class View, ArrayValue T>
         requires cpt::is_math_view_v<View>
-    auto operator/(View view, T val)
+    constexpr auto operator/(View view, T val)
     {
         return MathView {
             std::move(view),
@@ -94,7 +94,7 @@ namespace cpt
 
     template<class View, ArrayValue T>
         requires cpt::is_math_view_v<View>
-    auto operator/(T val, View view)
+    constexpr auto operator/(T val, View view)
     {
         return MathView {
             std::move(view),
@@ -110,7 +110,7 @@ namespace cpt
     
     template<class LView, class RView>
         requires(cpt::is_math_view_v<LView> && cpt::is_math_view_v<RView>)
-    auto operator+(LView lview, RView rview)
+    constexpr auto operator+(LView lview, RView rview)
     {
         return MathView{ZipView{
             std::move(lview), 
@@ -122,7 +122,7 @@ namespace cpt
     
     template<class LView, class RView>
         requires(cpt::is_math_view_v<LView> && cpt::is_math_view_v<RView>)
-    auto operator*(LView lview, RView rview)
+    constexpr auto operator*(LView lview, RView rview)
     {
         return MathView{ZipView{
             std::move(lview), 
@@ -134,7 +134,7 @@ namespace cpt
 
     template<class LView, class RView>
         requires(cpt::is_math_view_v<LView> && cpt::is_math_view_v<RView>)
-    auto operator-(LView lview, RView rview)
+    constexpr auto operator-(LView lview, RView rview)
     {
         return MathView{ZipView{
             std::move(lview), 
@@ -146,7 +146,7 @@ namespace cpt
 
     template<class LView, class RView>
         requires(cpt::is_math_view_v<LView> && cpt::is_math_view_v<RView>)
-    auto operator/(LView lview, RView rview)
+    constexpr auto operator/(LView lview, RView rview)
     {
         return MathView{ZipView{
             std::move(lview), 
