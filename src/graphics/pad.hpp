@@ -18,6 +18,7 @@ class Pad : public Drawable {
     int border;
 
     void init() override;
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
   public:
     Pad();
@@ -28,8 +29,6 @@ class Pad : public Drawable {
     {
         return rectangle;
     }
-
-    void draw(sf::RenderTarget &target) override;
 };
 
 void Pad::init()
@@ -58,9 +57,9 @@ Pad::~Pad()
 {
 }
 
-void Pad::draw(sf::RenderTarget &target)
+void Pad::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    target.draw(rectangle);
+    target.draw(rectangle, states);
 }
 
 } // namespace cpt

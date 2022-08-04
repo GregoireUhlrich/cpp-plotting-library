@@ -17,13 +17,12 @@ class SubPlot : public Drawable {
     sf::CircleShape     circle;
 
     void init() override;
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
   public:
     SubPlot();
     SubPlot(Pad &pad);
     virtual ~SubPlot();
-
-    void draw(sf::RenderTarget &target) override;
 };
 
 void SubPlot::init()
@@ -50,13 +49,13 @@ SubPlot::~SubPlot()
 {
 }
 
-void SubPlot::draw(sf::RenderTarget &target)
+void SubPlot::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    pad.draw(target);
-    for (Axis &a : axis) {
-        a.draw(target);
+    target.draw(pad, states);
+    for (const Axis &a : axis) {
+        target.draw(a, states);
     }
-    target.draw(circle);
+    target.draw(circle, states);
 }
 
 } // namespace cpt

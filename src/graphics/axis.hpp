@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 namespace cpt {
 
@@ -23,13 +24,12 @@ class Axis : public Drawable {
 
     void fill_variables(Coordinate c);
     void init() override;
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
   public:
     Axis();
     Axis(Coordinate coordinate);
     ~Axis();
-
-    void draw(sf::RenderTarget &target) override;
 };
 
 void Axis::fill_variables(Coordinate c)
@@ -84,10 +84,10 @@ Axis::~Axis()
 {
 }
 
-void Axis::draw(sf::RenderTarget &target)
+void Axis::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
-    target.draw(line);
-    target.draw(arrow);
+    target.draw(line, states);
+    target.draw(arrow, states);
 }
 
 } // namespace cpt

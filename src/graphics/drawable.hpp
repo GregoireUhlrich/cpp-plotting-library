@@ -1,19 +1,19 @@
 #ifndef DRAWABLE_HPP
 #define DRAWABLE_HPP
 
-#include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/Drawable.hpp>
 
 namespace cpt {
 
-class Drawable {
+class Drawable : public sf::Drawable {
   private:
     virtual void init() = 0;
+
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
   public:
     Drawable();
     virtual ~Drawable();
-
-    virtual void draw(sf::RenderTarget &target) = 0;
 };
 
 Drawable::Drawable()

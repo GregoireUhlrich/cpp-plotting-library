@@ -1,14 +1,13 @@
 #include <SFML/Graphics.hpp>
 
-#include "graphics/subplot.hpp"
 #include "graphics/esthetic.hpp"
 #include "graphics/pad.hpp"
+#include "graphics/subplot.hpp"
 
 int main()
 {
     sf::RenderWindow window(
-        sf::VideoMode(cpt::GLOBAL_WIDTH, cpt::GLOBAL_HEIGHT),
-        "i3Float");
+        sf::VideoMode(cpt::GLOBAL_WIDTH, cpt::GLOBAL_HEIGHT), "i3Float");
 
     cpt::SubPlot subplot;
 
@@ -20,7 +19,7 @@ int main()
         }
 
         window.clear();
-        subplot.draw(window);
+        window.draw(subplot);
         window.display();
     }
 
