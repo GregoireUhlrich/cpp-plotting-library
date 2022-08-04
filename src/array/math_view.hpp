@@ -84,6 +84,19 @@ namespace cpt
             return !(*this == o);
         }
 
+        constexpr bool operator<(MathViewIterator const &o) const noexcept {
+            return _it < o._it;
+        }
+        constexpr bool operator>(MathViewIterator const &o) const noexcept {
+            return (o < *this);
+        }
+        constexpr bool operator<=(MathViewIterator const &o) const noexcept {
+            return !(*this > o);
+        }
+        constexpr bool operator>=(MathViewIterator const &o) const noexcept {
+            return !(*this < o);
+        }
+
     private:
         iterator _it;
         std::function<value_type(input_value_type)> _func;

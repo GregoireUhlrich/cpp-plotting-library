@@ -4,6 +4,7 @@
 #include "array/builtins.hpp"
 #include "array/io.hpp"
 #include "array/view.hpp"
+#include "array/collect.hpp"
 #include "array/arithmetics.hpp"
 
 // Utilities to apply a threshold on very small floating-point values

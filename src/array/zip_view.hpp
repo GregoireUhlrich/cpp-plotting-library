@@ -88,6 +88,19 @@ namespace cpt
             return !(*this == o);
         }
 
+        constexpr bool operator<(ZipViewIterator const &o) const noexcept {
+            return std::pair{_lit, _rit} < std::pair{o._lit, o._rit};
+        }
+        constexpr bool operator>(ZipViewIterator const &o) const noexcept {
+            return (o < *this);
+        }
+        constexpr bool operator<=(ZipViewIterator const &o) const noexcept {
+            return !(*this > o);
+        }
+        constexpr bool operator>=(ZipViewIterator const &o) const noexcept {
+            return !(*this < o);
+        }
+
     private:
         literator _lit;
         riterator _rit;
