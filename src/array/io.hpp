@@ -3,13 +3,14 @@
 
 #include "array_view.hpp"
 #include "math_view.hpp"
+#include "view.hpp"
 
 namespace cpt
 {
-    template<ArrayRange R>
+    template<ArrayRange R, MathApplication<R> F>
     void print(
-        MathView<R> const &view,
-        std::ostream       &out = std::cout)
+        MathView<R, F> const &view,
+        std::ostream         &out = std::cout)
     {
         out << "[";
         std::copy(
@@ -21,18 +22,10 @@ namespace cpt
 
     template<ArrayRange Range>
     void print(
-        ArrayView<Range> const &arr,
-        std::ostream           &out = std::cout)
-    {
-        cpt::print(MathView{arr}, out);
-    }
-
-    template<ArrayRange Range>
-    void print(
         Range  const &arr,
         std::ostream &out = std::cout)
     {
-        cpt::print(ArrayView{arr}, out);
+        cpt::print(cpt::view(arr), out);
     }
 } // namespace cpt
 
