@@ -8,6 +8,11 @@ namespace cpt
     template<class T>
     concept Numeric = std::integral<T> || std::floating_point<T>;
 
+    template<class R>
+    concept NumRange = 
+        std::ranges::range<R> 
+        && Numeric<std::ranges::range_value_t<R>>;
+
 } // namespace cpt
 
 

@@ -1,7 +1,7 @@
 #ifndef CPT_RANGE_H_INCLUDED
 #define CPT_RANGE_H_INCLUDED
 
-#include "collection.hpp"
+#include "numcollection.hpp"
 #include "../utils/error.hpp"
 #include <numeric>
 #include <algorithm>
@@ -13,7 +13,7 @@ namespace cpt
     };
 
     template<std::integral T = int>
-    Collection<T> range(
+    NumCollection<T> range(
         T start,
         T end,
         T step)   
@@ -27,7 +27,7 @@ namespace cpt
                 " is invalid (wrong sign) for range [", 
                 start, ", ", end, ").");
         }
-        Collection<T> range((end - start) / step);
+        NumCollection<T> range((end - start) / step);
         std::ranges::generate(range, [value = start, step=step]() mutable  { 
             const auto res = value;
             value += step;
@@ -37,7 +37,7 @@ namespace cpt
     }
 
     template<std::integral T = int>
-    Collection<T> range(
+    NumCollection<T> range(
         T start,
         T end)
     {
@@ -45,7 +45,7 @@ namespace cpt
     }   
 
     template<std::integral T = int>
-    Collection<T> range(T end)
+    NumCollection<T> range(T end)
     {
         return range<T>(0, end);
     }   
