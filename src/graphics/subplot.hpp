@@ -61,7 +61,7 @@ void SubPlot::draw(sf::RenderTarget &target, sf::RenderStates states) const
     }
 
     for (const auto &plot : lines) {
-        plot.draw(target);
+        plot.draw(target, states);
     }
 }
 

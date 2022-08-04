@@ -32,7 +32,7 @@ namespace cpt
         template<class T, class U>
         void load_data(LineData<T, U> const &data);
 
-        void draw(sf::RenderTarget &target, sf::RenderStates = {}) const override;
+        void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     public:
         PlotLineConfig config;
@@ -61,12 +61,12 @@ namespace cpt
         }
     }
 
-    void PlotLine::draw(sf::RenderTarget &target, sf::RenderStates) const
+    void PlotLine::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
         for (const auto &line : lines)
-            target.draw(line);
+            target.draw(line, states);
         for (const auto &marker : markers)
-            target.draw(marker);
+            target.draw(marker, states);
     }
 
 } // namespace cpt
