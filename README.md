@@ -1,4 +1,4 @@
-# cpp-plotting-library
+# C++ Plotting Tool (CPT)
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/GregoireUhlrich/cpp-plotting-library/CMake/main?label=tests&logo=C%2B%2B&logoColor=green)
 
 ## Summary
