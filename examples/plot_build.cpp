@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 
-#include "graphics/circle.hpp"
+#include "graphics/subplot.hpp"
 #include "graphics/esthetic.hpp"
 #include "graphics/pad.hpp"
 
@@ -10,7 +10,7 @@ int main()
         sf::VideoMode(graphic::GLOBAL_WIDTH, graphic::GLOBAL_HEIGHT),
         "i3Float");
 
-    graphic::Circle circle;
+    graphic::SubPlot subplot;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -20,7 +20,7 @@ int main()
         }
 
         window.clear();
-        circle.draw(window);
+        subplot.draw(window);
         window.display();
     }
 

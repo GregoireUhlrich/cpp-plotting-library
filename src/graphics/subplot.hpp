@@ -10,7 +10,7 @@
 
 namespace graphic {
 
-class Circle : public Drawable {
+class SubPlot : public Drawable {
   private:
     Pad                 pad;
     std::array<Axis, 2> axis;
@@ -19,14 +19,14 @@ class Circle : public Drawable {
     void init() override;
 
   public:
-    Circle();
-    Circle(Pad &pad);
-    virtual ~Circle();
+    SubPlot();
+    SubPlot(Pad &pad);
+    virtual ~SubPlot();
 
     void draw(sf::RenderTarget &target) override;
 };
 
-void Circle::init()
+void SubPlot::init()
 {
     for (size_t d = 0; d != axis.size(); ++d) {
         axis[d] = Axis(Coordinate(d));
@@ -36,21 +36,21 @@ void Circle::init()
     circle.setFillColor(sf::Color::Green);
 }
 
-Circle::Circle()
+SubPlot::SubPlot()
 {
     init();
 }
 
-Circle::Circle(Pad &pad) : pad(pad)
+SubPlot::SubPlot(Pad &pad) : pad(pad)
 {
     init();
 }
 
-Circle::~Circle()
+SubPlot::~SubPlot()
 {
 }
 
-void Circle::draw(sf::RenderTarget &target)
+void SubPlot::draw(sf::RenderTarget &target)
 {
     pad.draw(target);
     for (Axis &a : axis) {
