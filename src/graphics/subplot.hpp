@@ -4,6 +4,7 @@
 #include "axis.hpp"
 #include "drawable.hpp"
 #include "pad.hpp"
+#include "plotline.hpp"
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include <array>
@@ -14,7 +15,7 @@ class SubPlot : public Drawable {
   private:
     Pad                 pad;
     std::array<Axis, 2> axis;
-    sf::CircleShape     circle;
+    std::vector<PlotLine> lines;
 
     void init() override;
 
@@ -22,6 +23,11 @@ class SubPlot : public Drawable {
     SubPlot();
     SubPlot(Pad &pad);
     virtual ~SubPlot();
+
+    template<class T, class U>
+    void plot(LineData<T, U> const &data) {
+        lines.push_back(PlotLine{data});
+    }
 
     void draw(sf::RenderTarget &target) override;
 };
@@ -31,9 +37,6 @@ void SubPlot::init()
     for (size_t d = 0; d != axis.size(); ++d) {
         axis[d] = Axis(Coordinate(d));
     }
-    circle.setRadius(110.0f);
-    circle.setPosition(sf::Vector2f(200, 150));
-    circle.setFillColor(sf::Color::Green);
 }
 
 SubPlot::SubPlot()
@@ -56,7 +59,9 @@ void SubPlot::draw(sf::RenderTarget &target)
     for (Axis &a : axis) {
         a.draw(target);
     }
-    target.draw(circle);
+    for (const auto &plot : lines) {
+        plot.draw(target);
+    }
 }
 
 } // namespace cpt

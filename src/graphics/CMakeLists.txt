@@ -6,7 +6,9 @@ set(GUI_SOURCES
     pad.hpp
     axis.hpp
     subplot.hpp
-    drawable.hpp)
+    drawable.hpp
+    linedata.hpp
+    plotline.hpp)
 
 add_library(graphics-obj OBJECT ${GUI_SOURCES})
 target_link_libraries(graphics-obj PRIVATE ${SFML_LIBS})
