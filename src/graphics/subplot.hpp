@@ -8,7 +8,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <array>
 
-namespace graphic {
+namespace cpt {
 
 class SubPlot : public Drawable {
   private:
@@ -59,6 +59,6 @@ void SubPlot::draw(sf::RenderTarget &target)
     target.draw(circle);
 }
 
-} // namespace graphic
+} // namespace cpt
 
 #endif // CIRCLE_HPP

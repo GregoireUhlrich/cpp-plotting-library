@@ -7,10 +7,10 @@
 int main()
 {
     sf::RenderWindow window(
-        sf::VideoMode(graphic::GLOBAL_WIDTH, graphic::GLOBAL_HEIGHT),
+        sf::VideoMode(cpt::GLOBAL_WIDTH, cpt::GLOBAL_HEIGHT),
         "i3Float");
 
-    graphic::SubPlot subplot;
+    cpt::SubPlot subplot;
 
     while (window.isOpen()) {
         sf::Event event;

@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 
-namespace graphic {
+namespace cpt {
 
 class Drawable {
   private:
@@ -24,6 +24,6 @@ Drawable::~Drawable()
 {
 }
 
-} // namespace graphic
+} // namespace cpt
 
 #endif // DRAWABLE_HPP

@@ -7,7 +7,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
-namespace graphic {
+namespace cpt {
 
 class Axis : public Drawable {
 
@@ -90,6 +90,6 @@ void Axis::draw(sf::RenderTarget &target)
     target.draw(arrow);
 }
 
-} // namespace graphic
+} // namespace cpt
 
 #endif // AXIS_HPP

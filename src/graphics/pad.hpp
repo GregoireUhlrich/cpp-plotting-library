@@ -6,7 +6,7 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-namespace graphic {
+namespace cpt {
 
 class Pad : public Drawable {
   private:
@@ -63,6 +63,6 @@ void Pad::draw(sf::RenderTarget &target)
     target.draw(rectangle);
 }
 
-} // namespace graphic
+} // namespace cpt
 
 #endif // PAD_HPP

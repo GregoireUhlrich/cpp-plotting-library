@@ -1,7 +1,7 @@
 #ifndef ESTHETIC_HPP
 #define ESTHETIC_HPP
 
-namespace graphic {
+namespace cpt {
 
 enum Coordinate { x, y };
 
@@ -13,6 +13,6 @@ static constexpr int AXIS_THICKNESS = 2;
 static constexpr int AXIS_SHIFT     = 20;
 static constexpr int AXIS_SPACE     = 20;
 
-} // namespace graphic
+} // namespace cpt
 
 #endif // ESTHETIC_HPP
