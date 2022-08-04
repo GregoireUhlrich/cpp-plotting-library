@@ -7,20 +7,22 @@
 
 namespace cpt
 {
-    template<ArrayRange R, MathApplication<R> F>
+    template<class View>
+        requires cpt::is_math_view_v<View>  
     void print(
-        MathView<R, F> const &view,
-        std::ostream         &out = std::cout)
+        View   const &view,
+        std::ostream &out = std::cout)
     {
         out << "[";
         std::copy(
             std::ranges::cbegin(view),
             std::ranges::cend(view),
-            std::ostream_iterator<typename ArrayView<R>::value_type>(out, ", "));
+            std::ostream_iterator<typename View::output_value_type>(out, ", "));
         out << "]\n";
     }
 
     template<ArrayRange Range>
+        requires (!cpt::is_math_view_v<Range>)
     void print(
         Range  const &arr,
         std::ostream &out = std::cout)
