@@ -8,24 +8,24 @@ namespace cpt
 {
     template<ArrayRange Range>
         requires (!std::ranges::view<Range>)
-    auto view(Range range)
+    constexpr auto view(Range &range)
     {
-        return MathView{ArrayView{range}};
+        return MathView{ArrayView{range}, identity<std::ranges::range_value_t<Range>>};
     }
 
     template<ArrayRange Range>
         requires (std::ranges::view<Range> && !cpt::is_math_view_v<Range>)
-    auto view(Range range)
+    constexpr auto view(Range const &range)
     {
-        return MathView{std::move(range)};
+        return MathView{range, identity<std::ranges::range_value_t<Range>>};
     }
 
 
     template<ArrayRange Range>
         requires (std::ranges::view<Range> && cpt::is_math_view_v<Range>)
-    auto view(Range range)
+    constexpr auto view(Range const &range)
     {
-        return std::move(range);
+        return range;
     }
 
 } // namespace cpt
