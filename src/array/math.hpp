@@ -7,32 +7,40 @@
 #include "math_view.hpp"
 
 namespace cpt
-{
-    template<ArrayRange R, std::invocable<std::ranges::range_value_t<R>> Func>
-        requires (!std::same_as<void, std::invoke_result_t<Func, std::ranges::range_value_t<R>>>)
-    auto apply(MathView<R> const &x, Func &&f)
+{    
+    template<class View, MathApplication<View> Func>
+        requires cpt::is_math_view_v<View>
+    auto apply(View x, Func func)
     {
-        using T = std::ranges::range_value_t<R>;
-        return MathView{
-            x | std::views::transform(
-                [f=std::forward<Func>(f)](T xi) { 
-                    return f(xi);
-                })
-        };
+        return MathView{std::move(x), std::move(func)};
     }    
 
-    template<ArrayRange R>
-    auto cos(MathView<R> const &x)
+    template<class View, ArrayValue T>
+        requires cpt::is_math_view_v<View>
+    auto pow(View x, T n)
     {
-        using T = std::ranges::range_value_t<R>;
-        return apply(x, [](T xi) { return std::cos(xi); });
+        return cpt::apply(std::move(x), [n=n](auto xi) { return std::pow(xi, n); });
     }
 
-    template<ArrayRange R>
-    auto sin(MathView<R> const &x)
+    template<class View>
+        requires cpt::is_math_view_v<View>
+    auto cos(View x)
     {
-        using T = std::ranges::range_value_t<R>;
-        return apply(x, [](T xi) { return std::sin(xi); });
+        return cpt::apply(std::move(x), [](auto xi) { return std::cos(xi); });
+    }
+
+    template<class View>
+        requires cpt::is_math_view_v<View>
+    auto sin(View x)
+    {
+        return cpt::apply(std::move(x), [](auto xi) { return std::sin(xi); });
+    }
+
+    template<class View>
+        requires cpt::is_math_view_v<View>
+    auto tan(View x)
+    {
+        return cpt::apply(std::move(x), [](auto xi) { return std::tan(xi); });
     }
 } // namespace cpt
 
