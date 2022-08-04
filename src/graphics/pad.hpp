@@ -1,14 +1,14 @@
 #ifndef PAD_HPP
 #define PAD_HPP
 
-#include "drawable.hpp"
 #include "esthetic.hpp"
 
+#include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
 namespace cpt {
 
-class Pad : public Drawable {
+class Pad : public sf::Drawable {
   private:
     sf::RectangleShape rectangle;
 
@@ -17,8 +17,9 @@ class Pad : public Drawable {
 
     int border;
 
-    void init() override;
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+    void init();
+    void draw(sf::RenderTarget &target,
+              sf::RenderStates  states) const override;
 
   public:
     Pad();

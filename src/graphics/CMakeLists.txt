@@ -6,7 +6,6 @@ set(GUI_SOURCES
     pad.hpp
     axis.hpp
     subplot.hpp
-    drawable.hpp
     linedata.hpp
     plotline.hpp)
 

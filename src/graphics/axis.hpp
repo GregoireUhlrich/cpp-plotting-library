@@ -1,7 +1,6 @@
 #ifndef AXIS_HPP
 #define AXIS_HPP
 
-#include "drawable.hpp"
 #include "esthetic.hpp"
 
 #include <SFML/Graphics/CircleShape.hpp>
@@ -10,7 +9,7 @@
 
 namespace cpt {
 
-class Axis : public Drawable {
+class Axis : public sf::Drawable {
 
   private:
     sf::RectangleShape line;
@@ -23,7 +22,7 @@ class Axis : public Drawable {
     int          orientation;
 
     void fill_variables(Coordinate c);
-    void init() override;
+    void init();
     void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
   public:

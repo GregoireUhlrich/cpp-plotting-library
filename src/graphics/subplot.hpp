@@ -2,7 +2,6 @@
 #define CIRCLE_HPP
 
 #include "axis.hpp"
-#include "drawable.hpp"
 #include "pad.hpp"
 #include "plotline.hpp"
 
@@ -11,13 +10,13 @@
 
 namespace cpt {
 
-class SubPlot : public Drawable {
+class SubPlot : public sf::Drawable {
   private:
     Pad                   pad;
     std::array<Axis, 2>   axis;
     std::vector<PlotLine> lines;
 
-    void init() override;
+    void init();
     void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
   public:
