@@ -47,4 +47,6 @@ int main() {
     print(logspace<double>(0., 10., 10u));
     print(logspace<double>(0., 10., 10u, {.end_point = false}));
     print(logspace<double>(0., 10., 10u, {.base = 2}));
+    print(atan2(y2, y2));
+    print(exp2(x));
 }

@@ -25,7 +25,7 @@ namespace cpt
         });
     }
 
-    template<class YView, class XView, ArrayValue T>
+    template<class YView, class XView>
         requires (cpt::is_math_view_v<XView> && cpt::is_math_view_v<YView>)
     constexpr auto atan2(YView y, XView x) noexcept
     {
