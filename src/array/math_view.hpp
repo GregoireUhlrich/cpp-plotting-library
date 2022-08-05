@@ -24,16 +24,25 @@ namespace cpt
     class MathView;
 
     template <ArrayRange Range, MathApplication<Range> Func>
-    class MathViewIterator {
+    using MathViewIteratorBase = std::iterator< 
+            std::random_access_iterator_tag,
+            std::invoke_result_t<Func, std::ranges::range_value_t<Range>>,
+            std::ranges::range_difference_t<Range>
+            >;
+
+    template <ArrayRange Range, MathApplication<Range> Func>
+    class MathViewIterator: public MathViewIteratorBase<Range, Func> {
     public:
+        using iterator_base = MathViewIteratorBase<Range, Func>;
         using range_t = Range;
         using func_t = Func;
         using iterator = std::ranges::iterator_t<Range>;
         using input_value_type = std::ranges::range_value_t<Range>;
-        using value_type = std::invoke_result_t<Func, input_value_type>;
-        using difference_type = decltype(std::declval<iterator>()-std::declval<iterator>());
-        using reference = value_type&;
-        using pointer   = value_type*;
+
+        using difference_type = iterator_base::difference_type;
+        using value_type      = iterator_base::value_type;
+        using reference       = iterator_base::reference;
+        using pointer         = iterator_base::pointer;
 
         constexpr MathViewIterator() = default;
 
@@ -146,8 +155,12 @@ namespace cpt
                      public  std::ranges::view_interface<MathView<Range, Func>> {
     public:
 
+        using range_t = Range;
+        using func_t  = Func;
+
         using iterator       = MathViewIterator<Range, Func>;
         using const_iterator = MathViewIterator<Range, Func>;
+
         using input_value_type  = std::ranges::range_value_t<Range>;
         using output_value_type = std::invoke_result_t<Func, input_value_type>;
 

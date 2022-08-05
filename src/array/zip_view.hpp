@@ -21,8 +21,17 @@ namespace cpt
     class ZipView;
 
     template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
-    class ZipViewIterator {
+    using ZipViewIteratorBase = std::iterator<
+            std::random_access_iterator_tag,
+            std::invoke_result_t<Func, std::ranges::range_value_t<LRange>, std::ranges::range_value_t<RRange>>,
+            std::ranges::range_difference_t<LRange>
+            >;
+
+    template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
+    class ZipViewIterator: public ZipViewIteratorBase<LRange, RRange, Func> {
+
     public:
+        using iterator_base = ZipViewIteratorBase<LRange, RRange, Func>;
         using lrange_t = LRange;
         using rrange_t = RRange;
         using func_t = Func;
@@ -30,15 +39,15 @@ namespace cpt
         using riterator = std::ranges::iterator_t<RRange>;
         using lvalue_type = std::ranges::range_value_t<LRange>;
         using rvalue_type = std::ranges::range_value_t<RRange>;
-        using value_type = std::invoke_result_t<Func, lvalue_type, rvalue_type>;
-        using difference_type = decltype(std::declval<literator>()-std::declval<literator>());
-        using reference = value_type&;
-        using pointer   = value_type*;
+
+        using difference_type = iterator_base::difference_type;
+        using value_type      = iterator_base::value_type;
+        using reference       = iterator_base::reference;
+        using pointer         = iterator_base::pointer;
 
         constexpr ZipViewIterator() = default;
 
-        template<class FuncImpl>
-        explicit
+        template<ZipApplication<LRange, RRange> FuncImpl>
         constexpr ZipViewIterator(literator lit, riterator rit, FuncImpl func) noexcept
             : _lit(lit), _rit(rit), _func(std::move(func))
         {
@@ -155,8 +164,11 @@ namespace cpt
 
         using lrange_t = LRange;
         using rrange_t = RRange;
+        using func_t   = Func;
+
         using iterator       = ZipViewIterator<LRange, RRange, Func>;
         using const_iterator = ZipViewIterator<LRange, RRange, Func>;
+        
         using lvalue_type  = std::ranges::range_value_t<LRange>;
         using rvalue_type  = std::ranges::range_value_t<RRange>;
         using output_value_type = std::invoke_result_t<Func, lvalue_type, rvalue_type>;
