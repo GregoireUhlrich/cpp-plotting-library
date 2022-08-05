@@ -40,4 +40,5 @@ int main() {
     print(apply_on_view(y2 - y3, min_threshold)); // Apply a threshold to detect 'almost 0' values
     //
     ////
+    print(span(y2));
 }

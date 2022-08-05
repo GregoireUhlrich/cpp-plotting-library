@@ -23,13 +23,6 @@ namespace cpt
     {
         return _collect_impl<cpt::Array<typename View::output_value_type>>(view);
     }
-
-    template<class View>
-        requires cpt::is_math_view_v<View>
-    auto span(View const &view)
-    {
-        return _collect_impl<std::span<typename View::output_value_type>>(view);
-    }    
 } // namespace cpt
 
 

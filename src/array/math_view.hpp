@@ -46,13 +46,6 @@ namespace cpt
 
         constexpr auto operator*() const { return _func(*_it); }
 
-        constexpr auto operator-(MathViewIterator const &o) const {
-            return _it - o._it;
-        }
-        constexpr MathViewIterator operator+(difference_type diff) const {
-            return MathViewIterator<Range, Func>{_it + diff, _func};
-        }
-
         constexpr MathViewIterator &operator++() noexcept
         {
             ++_it;
@@ -97,11 +90,54 @@ namespace cpt
             return !(*this < o);
         }
 
+        constexpr auto &operator+=(difference_type diff) noexcept {
+            _it += diff;
+            return *this;
+        }
+        constexpr auto &operator-=(difference_type diff) noexcept {
+            _it -= diff;
+            return *this;
+        }
+
+        constexpr auto it()   const noexcept { return _it; }
+        constexpr auto func() const noexcept { return _func; }
+
+        constexpr auto operator[](difference_type diff) const noexcept {
+            return *(*this + diff);
+        }
+
     private:
         iterator _it;
         std::function<value_type(input_value_type)> _func;
     };
 
+    template <ArrayRange Range, MathApplication<Range> Func>
+    constexpr auto operator-(
+        MathViewIterator<Range, Func> const &l,
+        MathViewIterator<Range, Func> const &r) {
+        return l.it() - r.it();
+    }
+
+    template <ArrayRange Range, MathApplication<Range> Func>
+    constexpr auto operator-(
+        MathViewIterator<Range, Func> const &it,
+        typename MathViewIterator<Range, Func>::difference_type diff) {
+        return MathViewIterator<Range, Func>{it.it() - diff, it.func()};
+    }
+
+    template <ArrayRange Range, MathApplication<Range> Func>
+    constexpr auto operator+(
+        MathViewIterator<Range, Func> const &it,
+        typename MathViewIterator<Range, Func>::difference_type diff) {
+        return MathViewIterator<Range, Func>{it.it() + diff, it.func()};
+    }
+
+    template <ArrayRange Range, MathApplication<Range> Func>
+    constexpr auto operator+(
+        typename MathViewIterator<Range, Func>::difference_type diff,
+        MathViewIterator<Range, Func> const &it) {
+        return it + diff;
+    }
 
     template <ArrayRange Range, MathApplication<Range> Func>
         requires std::ranges::view<Range>
