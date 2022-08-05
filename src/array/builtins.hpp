@@ -48,9 +48,9 @@ namespace cpt
 
     template<std::floating_point T = double>
     cpt::Array<T> linspace(
-        cpt::ArrayValue auto start,
-        cpt::ArrayValue auto end,
-        std::integral auto n_points,
+        cpt::ArrayValue  auto start,
+        cpt::ArrayValue  auto end,
+        std::integral    auto n_points,
         LinspaceConfig const &config = {}
         )
     {
@@ -75,6 +75,46 @@ namespace cpt
                          / static_cast<T>(n_intervals);
         std::ranges::generate(res, [val=start, step=step]() mutable {
             const T x = val;
+            val += step;
+            return x;
+        });
+        return res;
+    }
+
+    struct LogspaceConfig {
+        unsigned int base = 10;
+        bool         end_point = true;
+    };
+
+    template<std::floating_point T = double>
+    cpt::Array<T> logspace(
+        cpt::ArrayValue  auto start,
+        cpt::ArrayValue  auto end,
+        std::integral    auto n_points,
+        LogspaceConfig const &config = {}
+        )
+    {
+        if (n_points <= 0) {
+            throw InvalidRangeError(
+                "Cannot create logarithmic space with 0 or less points (n = ", 
+                n_points, 
+                ").");
+        }
+        if (n_points == 1) {
+            if (config.end_point) {
+                throw InvalidRangeError(
+                    "Cannot create logspace with end point "
+                    "using only one point."
+                    );
+            }
+            return {start};
+        }
+        const auto n_intervals = config.end_point ? n_points - 1 : n_points;
+        cpt::Array<T> res(n_points);
+        const auto step = (static_cast<T>(end) - static_cast<T>(start)) 
+                         / static_cast<T>(n_intervals);
+        std::ranges::generate(res, [val=start, step=step, base=static_cast<T>(config.base)]() mutable {
+            const T x = std::pow(base, val);
             val += step;
             return x;
         });

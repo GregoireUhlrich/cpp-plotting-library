@@ -44,4 +44,7 @@ int main() {
     print((y2 - y3).collect<int>());
     print(linspace(0., 10, 10l));
     print(linspace<double>(0., 10., 10u, {.end_point = false}));
+    print(logspace<double>(0., 10., 10u));
+    print(logspace<double>(0., 10., 10u, {.end_point = false}));
+    print(logspace<double>(0., 10., 10u, {.base = 2}));
 }
