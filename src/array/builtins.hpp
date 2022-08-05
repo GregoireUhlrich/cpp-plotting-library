@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include "array.hpp"
-#include "../utils/error.h"
+#include "../utils/error.hpp"
 
 namespace cpt
 {
@@ -12,7 +12,7 @@ namespace cpt
         using Exception::Exception;
     };
 
-    template<cpt::ArrayValue T>
+    template<std::integral T>
     cpt::Array<T> range(
         T start, 
         T end,
@@ -41,6 +41,45 @@ namespace cpt
     cpt::Array<T> range(T end) {
         return range<T>(T{0}, end);
     } 
+
+    struct LinspaceConfig {
+        bool end_point = true;
+    };
+
+    template<std::floating_point T = double>
+    cpt::Array<T> linspace(
+        cpt::ArrayValue auto start,
+        cpt::ArrayValue auto end,
+        std::integral auto n_points,
+        LinspaceConfig const &config = {}
+        )
+    {
+        if (n_points <= 0) {
+            throw InvalidRangeError(
+                "Cannot create linear space with 0 or less points (n = ", 
+                n_points, 
+                ").");
+        }
+        if (n_points == 1) {
+            if (config.end_point) {
+                throw InvalidRangeError(
+                    "Cannot create linspace with end point "
+                    "using only one point."
+                    );
+            }
+            return {start};
+        }
+        const auto n_intervals = config.end_point ? n_points - 1 : n_points;
+        cpt::Array<T> res(n_points);
+        const auto step = (static_cast<T>(end) - static_cast<T>(start)) 
+                         / static_cast<T>(n_intervals);
+        std::ranges::generate(res, [val=start, step=step]() mutable {
+            const T x = val;
+            val += step;
+            return x;
+        });
+        return res;
+    }
 
 } // namespace cpt
 

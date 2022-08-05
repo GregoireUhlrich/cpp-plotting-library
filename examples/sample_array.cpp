@@ -4,7 +4,6 @@
 #include "array/builtins.hpp"
 #include "array/io.hpp"
 #include "array/view.hpp"
-#include "array/collect.hpp"
 #include "array/arithmetics.hpp"
 
 // Utilities to apply a threshold on very small floating-point values
@@ -40,5 +39,9 @@ int main() {
     print(apply_on_view(y2 - y3, min_threshold)); // Apply a threshold to detect 'almost 0' values
     //
     ////
-    print(span(y2));
+    print((y2 - y3).collect());
+    print((y2 - y3).collect<double>());
+    print((y2 - y3).collect<int>());
+    print(linspace(0., 10, 10l));
+    print(linspace<double>(0., 10., 10u, {.end_point = false}));
 }
