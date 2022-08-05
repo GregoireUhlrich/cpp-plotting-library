@@ -1,7 +1,7 @@
-#ifndef CPP_PLOT_ERROR_H_INCLUDED
-#define CPP_PLOT_ERROR_H_INCLUDED
+#ifndef CPT_ERROR_H_INCLUDED
+#define CPT_ERROR_H_INCLUDED
 
-#include "printable.h"
+#include "printable.hpp"
 #include <exception>
 #include <sstream>
 
