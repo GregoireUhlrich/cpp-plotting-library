@@ -4,7 +4,8 @@
 #include <iostream>
 #include <ranges>
 #include <iterator>
-#include "array_value.hpp"
+#include <concepts>
+#include <vector>
 
 namespace cpt
 {
