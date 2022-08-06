@@ -6,42 +6,46 @@
 #include "array_view.hpp"
 #include "math_view.hpp"
 #include "zip_view.hpp"
+#include "view.hpp"
 
 namespace cpt
 {    
-    template<class View, MathApplication<View> Func>
-        requires cpt::is_math_view_v<View>
-    constexpr auto apply_on_view(View x, Func func) noexcept
+    template<cpt::View ViewType, MathApplication<ViewType> FuncType>
+    constexpr auto apply_on_view(ViewType x, FuncType func) noexcept
     {
         return MathView{std::move(x), std::move(func)};
     }    
 
-    template<class View, ArrayValue T>
-        requires cpt::is_math_view_v<View>
-    constexpr auto pow(View x, T n) noexcept
+    constexpr auto pow(cpt::View auto x, cpt::ArrayValue auto n) noexcept
     {
-        return cpt::apply_on_view(std::move(x), [n=n](auto xi) { 
-            return std::pow(xi, n); 
-        });
+        return cpt::apply_on_view(
+            std::move(x), 
+            [n=n](auto xi) { 
+                return std::pow(xi, n); 
+            }
+        );
     }
 
-    template<class YView, class XView>
-        requires (cpt::is_math_view_v<XView> && cpt::is_math_view_v<YView>)
-    constexpr auto atan2(YView y, XView x) noexcept
+    constexpr auto atan2(cpt::View auto y, cpt::View auto x) noexcept
     {
-        return MathView{ZipView{y, x, [](auto yi, auto xi) {
-            return std::atan2(yi, xi);
-        }}};
+        return ZipView{
+            std::move(y), 
+            std::move(x), 
+            [](auto yi, auto xi) {
+                return std::atan2(yi, xi);
+            }
+        };
     }
 
-    #define DEFINE_CPT_FUNCTION(func)                             \
-        template<class View>                                      \
-            requires cpt::is_math_view_v<View>                    \
-        constexpr auto func(View x) noexcept                      \
-        {                                                         \
-            return cpt::apply_on_view(std::move(x), [](auto xi) { \
-                return std::func(xi);                             \
-            });                                                   \
+    #define DEFINE_CPT_FUNCTION(func)                  \
+        constexpr auto func(cpt::View auto x) noexcept \
+        {                                              \
+            return cpt::apply_on_view(                 \
+                std::move(x),                          \
+                [](auto xi) {                          \
+                    return std::func(xi);              \
+                }                                      \
+            );                                         \
         }
 
     DEFINE_CPT_FUNCTION(exp)
