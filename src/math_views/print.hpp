@@ -28,5 +28,4 @@ namespace cpt
     }
 } // namespace cpt
 
-
 #endif
