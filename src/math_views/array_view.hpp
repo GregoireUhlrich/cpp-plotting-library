@@ -8,6 +8,15 @@
 
 namespace cpt
 {
+    template<class T>
+    concept ArrayValue = std::integral<T> || std::floating_point<T>;
+    
+    template<cpt::ArrayValue T>
+    class Array: public std::vector<T>
+    {
+        using std::vector<T>::vector;
+    };
+    
     template<class Range>
     concept ArrayRange = 
         std::ranges::range<Range> 

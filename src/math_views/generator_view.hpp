@@ -5,7 +5,7 @@
 #include <iterator>
 #include <concepts>
 #include <functional>
-#include "array_value.hpp"
+#include "array_view.hpp"
 
 namespace cpt
 {

@@ -1,3 +1,3 @@
 add_subdirectory(utils)
-add_subdirectory(array)
+add_subdirectory(math_views)
 add_subdirectory(graphics)

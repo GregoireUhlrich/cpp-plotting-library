@@ -3,8 +3,8 @@
 
 #include <algorithm>
 
-#include "array.hpp"
 #include "../utils/error.hpp"
+#include "array_view.hpp"
 #include "generator_view.hpp"
 
 namespace cpt

@@ -4,7 +4,6 @@
 #include <ranges>
 #include <functional>
 #include "array_view.hpp"
-#include "array.hpp"
 
 namespace cpt
 {

@@ -1,4 +1,4 @@
-#include "views.hpp"
+#include "math_views.hpp"
 
 // Utilities to apply a threshold on very small floating-point values
 constexpr static double threshold = 1e-10;
