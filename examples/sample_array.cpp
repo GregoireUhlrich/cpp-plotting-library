@@ -41,6 +41,6 @@ int main() {
     print(exp2(x));
 
     print(collect(y2 - y3));
-    print(collect<double>(y2 - y3));
+    print(collect<double>(view_cast<int>(y2 - y3)));
     print(collect<int>(y2 - y3));
 }
