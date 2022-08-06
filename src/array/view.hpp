@@ -36,26 +36,6 @@ namespace cpt
     }    
 
     template<ArrayValue T, View ViewType>
-    Array<T> collect(ViewType const &view)
-    {
-        if constexpr (std::is_same_v<T, typename ViewType::output_value_type>) {
-            return Array<T>(std::ranges::begin(view), std::ranges::end(view));
-        }
-        else {
-            const auto converted = apply_on_view(view, [](auto x) {
-                return static_cast<T>(x);
-            });
-            return Array<T>(std::ranges::begin(converted), std::ranges::end(converted));
-        }
-    }
-
-    template<View ViewType>
-    auto collect(ViewType const &view)
-    {
-        return collect<typename ViewType::output_value_type>(view);
-    }
-
-    template<ArrayValue T, View ViewType>
     auto to(ViewType view)
     {
         if constexpr (std::is_same_v<T, view_value_type<ViewType>>) {
@@ -69,6 +49,23 @@ namespace cpt
                 }
             };
         }
+    }
+    
+    template<ArrayValue T, View ViewType>
+    Array<T> collect(ViewType const &view)
+    {
+        if constexpr (std::is_same_v<T, typename ViewType::output_value_type>) {
+            return Array<T>(std::ranges::begin(view), std::ranges::end(view));
+        }
+        else {
+            return collect<T>(to<T>(view));
+        }
+    }
+
+    template<View ViewType>
+    auto collect(ViewType const &view)
+    {
+        return collect<typename ViewType::output_value_type>(view);
     }
 
 } // namespace cpt
