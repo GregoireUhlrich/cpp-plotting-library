@@ -5,7 +5,6 @@
 #include "math_view.hpp"
 #include "generator_view.hpp"
 #include "zip_view.hpp"
-#include "math.hpp"
 
 namespace cpt
 {
@@ -14,6 +13,9 @@ namespace cpt
                 || cpt::is_math_view_v<T>
                 || cpt::is_zip_view_v<T>
                 || cpt::is_generator_view_v<T>;
+
+    template<View ViewType>
+    using view_value_type = typename ViewType::output_value_type;
 
     template<ArrayRange Range>
         requires (!View<Range>)
@@ -26,6 +28,12 @@ namespace cpt
     {
         return view;
     }
+
+    template<cpt::View ViewType, MathApplication<ViewType> FuncType>
+    constexpr auto apply_on_view(ViewType x, FuncType func) noexcept
+    {
+        return MathView{std::move(x), std::move(func)};
+    }    
 
     template<ArrayValue T, View ViewType>
     Array<T> collect(ViewType const &view)
@@ -45,6 +53,22 @@ namespace cpt
     auto collect(ViewType const &view)
     {
         return collect<typename ViewType::output_value_type>(view);
+    }
+
+    template<ArrayValue T, View ViewType>
+    auto to(ViewType view)
+    {
+        if constexpr (std::is_same_v<T, view_value_type<ViewType>>) {
+            return view;
+        }
+        else {
+            return MathView{
+                std::move(view),
+                [](auto x) {
+                    return static_cast<T>(x);
+                }
+            };
+        }
     }
 
 } // namespace cpt

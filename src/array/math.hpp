@@ -1,21 +1,11 @@
-#ifndef CPT_MATH_H_INCLUDED
-#define CPT_MATH_H_INCLUDED
+#ifndef CPT_MATH_FUNCTIONS_H_INCLUDED
+#define CPT_MATH_FUNCTIONS_H_INCLUDED
 
 #include <cmath>
-
-#include "array_view.hpp"
-#include "math_view.hpp"
-#include "zip_view.hpp"
 #include "view.hpp"
 
 namespace cpt
 {    
-    template<cpt::View ViewType, MathApplication<ViewType> FuncType>
-    constexpr auto apply_on_view(ViewType x, FuncType func) noexcept
-    {
-        return MathView{std::move(x), std::move(func)};
-    }    
-
     constexpr auto pow(cpt::View auto x, cpt::ArrayValue auto n) noexcept
     {
         return cpt::apply_on_view(

@@ -1,11 +1,4 @@
-#include "array/array.hpp"
-#include "array/array_view.hpp"
-#include "array/math.hpp"
-#include "array/builtins.hpp"
-#include "array/io.hpp"
-#include "array/view.hpp"
-#include "array/arithmetics.hpp"
-#include "array/generator_view.hpp"
+#include "views.hpp"
 
 // Utilities to apply a threshold on very small floating-point values
 constexpr static double threshold = 1e-10;
@@ -46,7 +39,6 @@ int main() {
     print(logspace<double>(0., 10., 10u, {.base = 2}));
     print(atan2(y2, y2));
     print(exp2(x));
-    print(MathView{GeneratorView{10, [](std::size_t i) { return 2*i; }}});
 
     print(collect(y2 - y3));
     print(collect<double>(y2 - y3));
