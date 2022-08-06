@@ -36,7 +36,7 @@ namespace cpt
     }    
 
     template<ArrayValue T, View ViewType>
-    auto view_cast(ViewType view)
+    constexpr auto view_cast(ViewType view) noexcept
     {
         if constexpr (std::is_same_v<T, view_value_type<ViewType>>) {
             return view;
@@ -54,7 +54,7 @@ namespace cpt
     template<ArrayValue T, View ViewType>
     Array<T> collect(ViewType const &view)
     {
-        if constexpr (std::is_same_v<T, typename ViewType::output_value_type>) {
+        if constexpr (std::is_same_v<T, view_value_type<ViewType>>) {
             return Array<T>(std::ranges::begin(view), std::ranges::end(view));
         }
         else {
@@ -65,7 +65,7 @@ namespace cpt
     template<View ViewType>
     auto collect(ViewType const &view)
     {
-        return collect<typename ViewType::output_value_type>(view);
+        return collect<view_value_type<ViewType>>(view);
     }
 
 } // namespace cpt

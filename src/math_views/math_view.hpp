@@ -4,6 +4,7 @@
 #include <ranges>
 #include <functional>
 #include "array_view.hpp"
+#include "iterator.hpp"
 
 namespace cpt
 {
@@ -27,7 +28,8 @@ namespace cpt
             >;
 
     template <ArrayRange Range, MathApplication<Range> Func>
-    class MathViewIterator: public MathViewIteratorBase<Range, Func> {
+    class MathViewIterator: private IteratorImpl,
+                            public MathViewIteratorBase<Range, Func> {
     public:
         using iterator_base = MathViewIteratorBase<Range, Func>;
         using range_t = Range;
@@ -50,52 +52,23 @@ namespace cpt
 
         }
 
-        constexpr auto operator*() const { return _func(*_it); }
-
-        constexpr MathViewIterator &operator++() noexcept
-        {
+        constexpr auto operator*() const { 
+            return _func(*_it); 
+        }
+        constexpr MathViewIterator &operator++() noexcept {
             ++_it;
             return *this;
-        }
-        constexpr MathViewIterator operator++(int) noexcept
-        {
-            MathViewIterator<Range, Func> cpy{*this};
-            ++(*this);
-            return cpy;
-        }
-             
-        constexpr MathViewIterator &operator--() noexcept
-        {
+        }   
+        constexpr MathViewIterator &operator--() noexcept {
             --_it;
             return *this;
         }
-        constexpr MathViewIterator operator--(int) noexcept
-        {
-            MathViewIterator<Range, Func> cpy{*this};
-            --(*this);
-            return cpy;
-        }
-
         constexpr bool operator==(MathViewIterator const &o) const noexcept {
             return o._it == _it;
         }
-        constexpr bool operator!=(MathViewIterator const &o) const noexcept {
-            return !(*this == o);
-        }
-
         constexpr bool operator<(MathViewIterator const &o) const noexcept {
             return _it < o._it;
         }
-        constexpr bool operator>(MathViewIterator const &o) const noexcept {
-            return (o < *this);
-        }
-        constexpr bool operator<=(MathViewIterator const &o) const noexcept {
-            return !(*this > o);
-        }
-        constexpr bool operator>=(MathViewIterator const &o) const noexcept {
-            return !(*this < o);
-        }
-
         constexpr auto &operator+=(difference_type diff) noexcept {
             _it += diff;
             return *this;
@@ -104,46 +77,20 @@ namespace cpt
             _it -= diff;
             return *this;
         }
-
-        constexpr auto it()   const noexcept { return _it; }
-        constexpr auto func() const noexcept { return _func; }
-
+        constexpr auto operator-(MathViewIterator const &o) const noexcept {
+            return _it - o._it;
+        }
         constexpr auto operator[](difference_type diff) const noexcept {
             return *(*this + diff);
         }
+
+        constexpr auto it()   const noexcept { return _it; }
+        constexpr auto func() const noexcept { return _func; }
 
     private:
         iterator _it;
         std::function<value_type(input_value_type)> _func;
     };
-
-    template <ArrayRange Range, MathApplication<Range> Func>
-    constexpr auto operator-(
-        MathViewIterator<Range, Func> const &l,
-        MathViewIterator<Range, Func> const &r) {
-        return l.it() - r.it();
-    }
-
-    template <ArrayRange Range, MathApplication<Range> Func>
-    constexpr auto operator-(
-        MathViewIterator<Range, Func> const &it,
-        typename MathViewIterator<Range, Func>::difference_type diff) {
-        return MathViewIterator<Range, Func>{it.it() - diff, it.func()};
-    }
-
-    template <ArrayRange Range, MathApplication<Range> Func>
-    constexpr auto operator+(
-        MathViewIterator<Range, Func> const &it,
-        typename MathViewIterator<Range, Func>::difference_type diff) {
-        return MathViewIterator<Range, Func>{it.it() + diff, it.func()};
-    }
-
-    template <ArrayRange Range, MathApplication<Range> Func>
-    constexpr auto operator+(
-        typename MathViewIterator<Range, Func>::difference_type diff,
-        MathViewIterator<Range, Func> const &it) {
-        return it + diff;
-    }
 
     class MathViewBase {};
 

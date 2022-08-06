@@ -4,6 +4,7 @@
 #include <ranges>
 #include <functional>
 #include "array_view.hpp"
+#include "iterator.hpp"
 
 namespace cpt
 {
@@ -26,7 +27,8 @@ namespace cpt
             >;
 
     template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
-    class ZipViewIterator: public ZipViewIteratorBase<LRange, RRange, Func> {
+    class ZipViewIterator: private IteratorImpl,
+                           public ZipViewIteratorBase<LRange, RRange, Func> {
 
     public:
         using iterator_base = ZipViewIteratorBase<LRange, RRange, Func>;
@@ -52,54 +54,30 @@ namespace cpt
 
         }
 
-        constexpr auto operator*() const { return _func(*_lit, *_rit); }
-
+        constexpr auto operator*() const noexcept { 
+            return _func(*_lit, *_rit); 
+        }
         constexpr ZipViewIterator &operator++() noexcept
         {
             ++_lit;
             ++_rit;
             return *this;
-        }
-        constexpr ZipViewIterator operator++(int) noexcept
-        {
-            ZipViewIterator<LRange, RRange, Func> cpy{*this};
-            ++(*this);
-            return cpy;
-        }
-             
+        }             
         constexpr ZipViewIterator &operator--() noexcept
         {
             --_lit;
             --_rit;
             return *this;
         }
-        constexpr ZipViewIterator operator--(int) noexcept
-        {
-            ZipViewIterator<LRange, RRange, Func> cpy{*this};
-            --(*this);
-            return cpy;
-        }
-
         constexpr bool operator==(ZipViewIterator const &o) const noexcept {
             return o._lit == _lit;
         }
-        constexpr bool operator!=(ZipViewIterator const &o) const noexcept {
-            return !(*this == o);
-        }
-
         constexpr bool operator<(ZipViewIterator const &o) const noexcept {
             return std::pair{_lit, _rit} < std::pair{o._lit, o._rit};
         }
-        constexpr bool operator>(ZipViewIterator const &o) const noexcept {
-            return (o < *this);
+        constexpr auto operator-(ZipViewIterator const &o) const noexcept {
+            return _lit - o._lit;
         }
-        constexpr bool operator<=(ZipViewIterator const &o) const noexcept {
-            return !(*this > o);
-        }
-        constexpr bool operator>=(ZipViewIterator const &o) const noexcept {
-            return !(*this < o);
-        }
-
         constexpr auto &operator+=(difference_type diff) noexcept {
             _lit += diff;
             _rit += diff;
@@ -110,48 +88,19 @@ namespace cpt
             _rit -= diff;
             return *this;
         }
+        constexpr auto operator[](difference_type diff) const noexcept {
+            return *(*this + diff);
+        }
 
         constexpr auto lit()  const noexcept { return _lit; }
         constexpr auto rit()  const noexcept { return _rit; }
         constexpr auto func() const noexcept { return _func; }
-
-        constexpr auto operator[](difference_type diff) const noexcept {
-            return *(*this + diff);
-        }
 
     private:
         literator _lit;
         riterator _rit;
         std::function<value_type(lvalue_type, rvalue_type)> _func;
     };
-
-    template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
-    constexpr auto operator-(
-        ZipViewIterator<LRange, RRange, Func> const &l,
-        ZipViewIterator<LRange, RRange, Func> const &r) noexcept {
-        return l.lit() - r.lit();
-    }
-
-    template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
-    constexpr auto operator+(
-        ZipViewIterator<LRange, RRange, Func> const &it,
-        typename ZipViewIterator<LRange, RRange, Func>::difference_type diff) noexcept {
-        return ZipViewIterator<LRange, RRange, Func>{it.lit() + diff, it.rit() + diff, it.func()};
-    }
-
-    template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
-    constexpr auto operator+(
-        typename ZipViewIterator<LRange, RRange, Func>::difference_type diff,
-        ZipViewIterator<LRange, RRange, Func> const &it) noexcept {
-        return it + diff;
-    }
-
-    template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
-    constexpr auto operator-(
-        ZipViewIterator<LRange, RRange, Func> const &it,
-        typename ZipViewIterator<LRange, RRange, Func>::difference_type diff) noexcept {
-        return ZipViewIterator<LRange, RRange, Func>{it.lit() - diff, it.rit() - diff, it.func()};
-    }
 
     class ZipViewBase {};
 

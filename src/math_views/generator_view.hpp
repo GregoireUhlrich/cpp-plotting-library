@@ -6,6 +6,7 @@
 #include <concepts>
 #include <functional>
 #include "array_view.hpp"
+#include "iterator.hpp"
 
 namespace cpt
 {
@@ -21,7 +22,8 @@ namespace cpt
             >;
 
     template<Generator G>
-    class GeneratorViewIterator: public GeneratorViewIteratorBase<G> {
+    class GeneratorViewIterator: private IteratorImpl,
+                                 public GeneratorViewIteratorBase<G> {
     public:
         using iterator_base = GeneratorViewIteratorBase<G>;
 
@@ -51,38 +53,15 @@ namespace cpt
             --_it;
             return *this;
         }
-
-        constexpr auto operator++(int) noexcept { 
-            auto cpy = *this;
-            ++(*this);
-            return cpy; 
-        }
-        constexpr auto operator--(int) noexcept { 
-            auto cpy = *this;
-            --(*this);
-            return cpy; 
-        }
-
         constexpr bool operator==(GeneratorViewIterator const &o) const noexcept {
             return o._it == _it;
         }
-        constexpr bool operator!=(GeneratorViewIterator const &o) const noexcept {
-            return !(*this == o);
-        }
-
         constexpr bool operator<(GeneratorViewIterator const &o) const noexcept {
             return _it < o._it;
         }
-        constexpr bool operator>(GeneratorViewIterator const &o) const noexcept {
-            return (o < *this);
+        constexpr auto operator-(GeneratorViewIterator const &o) const noexcept {
+            return _it - o._it;
         }
-        constexpr bool operator<=(GeneratorViewIterator const &o) const noexcept {
-            return !(*this > o);
-        }
-        constexpr bool operator>=(GeneratorViewIterator const &o) const noexcept {
-            return !(*this < o);
-        }
-
         constexpr auto &operator+=(difference_type diff) noexcept {
             _it += diff;
             return *this;
@@ -91,46 +70,17 @@ namespace cpt
             _it -= diff;
             return *this;
         }
-
-        constexpr auto it()        const noexcept { return _it; }
-        constexpr auto generator() const noexcept { return _generator; }
-
         constexpr auto operator[](difference_type diff) const noexcept {
             return *(*this + diff);
         }
+
+        constexpr auto it()        const noexcept { return _it; }
+        constexpr auto generator() const noexcept { return _generator; }
     
     private:
         std::size_t _it;
         std::function<value_type(std::size_t)> _generator;
     };
-        
-    template <Generator G>
-    constexpr auto operator-(
-        GeneratorViewIterator<G> const &l,
-        GeneratorViewIterator<G> const &r) {
-        return l.it() - r.it();
-    }
-
-    template <Generator G>
-    constexpr auto operator-(
-        GeneratorViewIterator<G> const &it,
-        typename GeneratorViewIterator<G>::difference_type diff) {
-        return GeneratorViewIterator<G>{it.it() - diff, it.generator()};
-    }
-
-    template <Generator G>
-    constexpr auto operator+(
-        GeneratorViewIterator<G> const &it,
-        typename GeneratorViewIterator<G>::difference_type diff) {
-        return GeneratorViewIterator<G>{it.it() + diff, it.generator()};
-    }
-
-    template <Generator G>
-    constexpr auto operator+(
-        typename GeneratorViewIterator<G>::difference_type diff,
-        GeneratorViewIterator<G> const &it) {
-        return it + diff;
-    }
 
     class GeneratorViewBase {};
 
