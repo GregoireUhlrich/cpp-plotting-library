@@ -5,6 +5,7 @@
 
 #include "array.hpp"
 #include "../utils/error.hpp"
+#include "generator_view.hpp"
 
 namespace cpt
 {
@@ -13,7 +14,7 @@ namespace cpt
     };
 
     template<std::integral T>
-    cpt::Array<T> range(
+    auto range(
         T start, 
         T end,
         T step = T{1})    
@@ -28,17 +29,17 @@ namespace cpt
                 "flipping the step sign."
             );
         }
-        cpt::Array<T> res((end - start) / step);
-        std::ranges::generate(res, [val=start, step=step]() mutable {
-            const T new_val = val;
-            val += step;
-            return new_val;
-        });
-        return res;
+        const auto n_points = (end - start) / step;
+        return GeneratorView{
+            static_cast<std::size_t>(n_points), 
+            [start=start, step=step](std::size_t i) {
+                return start + static_cast<T>(i)*step;
+            }
+        };
     }
 
     template<cpt::ArrayValue T>
-    cpt::Array<T> range(T end) {
+    auto range(T end) {
         return range<T>(T{0}, end);
     } 
 
@@ -47,7 +48,7 @@ namespace cpt
     };
 
     template<std::floating_point T = double>
-    cpt::Array<T> linspace(
+    auto linspace(
         cpt::ArrayValue  auto start,
         cpt::ArrayValue  auto end,
         std::integral    auto n_points,
@@ -60,25 +61,21 @@ namespace cpt
                 n_points, 
                 ").");
         }
-        if (n_points == 1) {
-            if (config.end_point) {
-                throw InvalidRangeError(
-                    "Cannot create linspace with end point "
-                    "using only one point."
-                    );
-            }
-            return {start};
+        if (n_points == 1 && config.end_point) {
+            throw InvalidRangeError(
+                "Cannot create linspace with end point "
+                "using only one point."
+                );
         }
         const auto n_intervals = config.end_point ? n_points - 1 : n_points;
-        cpt::Array<T> res(n_points);
         const auto step = (static_cast<T>(end) - static_cast<T>(start)) 
                          / static_cast<T>(n_intervals);
-        std::ranges::generate(res, [val=start, step=step]() mutable {
-            const T x = val;
-            val += step;
-            return x;
-        });
-        return res;
+        return GeneratorView{
+            static_cast<std::size_t>(n_points),
+            [start=static_cast<T>(start), step=step](std::size_t i) {
+                return start + step * static_cast<T>(i);
+            }
+        };
     }
 
     struct LogspaceConfig {
@@ -87,7 +84,7 @@ namespace cpt
     };
 
     template<std::floating_point T = double>
-    cpt::Array<T> logspace(
+    auto logspace(
         cpt::ArrayValue  auto start,
         cpt::ArrayValue  auto end,
         std::integral    auto n_points,
@@ -100,25 +97,21 @@ namespace cpt
                 n_points, 
                 ").");
         }
-        if (n_points == 1) {
-            if (config.end_point) {
-                throw InvalidRangeError(
-                    "Cannot create logspace with end point "
-                    "using only one point."
-                    );
-            }
-            return {start};
+        if (n_points == 1 && config.end_point) {
+            throw InvalidRangeError(
+                "Cannot create logspace with end point "
+                "using only one point."
+                );
         }
         const auto n_intervals = config.end_point ? n_points - 1 : n_points;
-        cpt::Array<T> res(n_points);
         const auto step = (static_cast<T>(end) - static_cast<T>(start)) 
                          / static_cast<T>(n_intervals);
-        std::ranges::generate(res, [val=start, step=step, base=static_cast<T>(config.base)]() mutable {
-            const T x = std::pow(base, val);
-            val += step;
-            return x;
-        });
-        return res;
+        return GeneratorView{
+            static_cast<std::size_t>(n_intervals),
+            [start=static_cast<T>(start), step=step, base=static_cast<T>(config.base)](std::size_t i) {
+                return std::pow(base, start + step*static_cast<T>(i));
+            }
+        };
     }
 
 } // namespace cpt
