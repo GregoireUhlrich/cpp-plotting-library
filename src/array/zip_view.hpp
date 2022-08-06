@@ -7,8 +7,6 @@
 
 namespace cpt
 {
-    class ZipViewBase {};
-
     template<class T, class LRange, class RRange>
     concept ZipApplication = 
         std::invocable<T, std::ranges::range_value_t<LRange>, std::ranges::range_value_t<RRange>>
@@ -155,6 +153,7 @@ namespace cpt
         return ZipViewIterator<LRange, RRange, Func>{it.lit() - diff, it.rit() - diff, it.func()};
     }
 
+    class ZipViewBase {};
 
     template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
         requires (std::ranges::view<LRange> && std::ranges::view<RRange>)
@@ -168,7 +167,7 @@ namespace cpt
 
         using iterator       = ZipViewIterator<LRange, RRange, Func>;
         using const_iterator = ZipViewIterator<LRange, RRange, Func>;
-        
+
         using lvalue_type  = std::ranges::range_value_t<LRange>;
         using rvalue_type  = std::ranges::range_value_t<RRange>;
         using output_value_type = std::invoke_result_t<Func, lvalue_type, rvalue_type>;
@@ -207,7 +206,7 @@ namespace cpt
 
     template<class T>
     struct is_zip_view {
-        constexpr static bool value = std::is_base_of_v<ZipViewBase, T>;
+        constexpr static bool value = std::is_base_of_v<ZipViewBase, std::remove_cvref_t<T>>;
     };
 
     template<class T>

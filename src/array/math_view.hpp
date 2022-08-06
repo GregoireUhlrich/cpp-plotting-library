@@ -8,9 +8,6 @@
 
 namespace cpt
 {
-    class MathViewBase {};
-
-
     template<class T, class Range>
     concept MathApplication = std::invocable<T, std::ranges::range_value_t<Range>>
         && ArrayValue<std::ranges::range_value_t<Range>>
@@ -149,6 +146,8 @@ namespace cpt
         return it + diff;
     }
 
+    class MathViewBase {};
+
     template <ArrayRange Range, MathApplication<Range> Func>
         requires std::ranges::view<Range>
     class MathView : private MathViewBase, 
@@ -181,20 +180,6 @@ namespace cpt
         constexpr auto begin() const noexcept { return MathViewIterator<Range, Func>(std::ranges::begin(_range), _func); }
         constexpr auto end()   const noexcept { return MathViewIterator<Range, Func>(std::ranges::end(_range), _func);   }
 
-        template<ArrayValue T = output_value_type>
-        Array<T> collect() const 
-        {
-            if constexpr (std::is_same_v<T, output_value_type>) {
-                return Array<T>(begin(), end());
-            }
-            else {
-                const auto converted = apply_on_view(*this, [](auto x) {
-                    return static_cast<T>(x);
-                });
-                return Array<T>(std::ranges::begin(converted), std::ranges::end(converted));
-            }
-        }
-
     private:
         Range _range;
         std::function<output_value_type(input_value_type)> _func;
@@ -205,7 +190,7 @@ namespace cpt
 
     template<class T>
     struct is_math_view {
-        constexpr static bool value = std::is_base_of_v<MathViewBase, T>;
+        constexpr static bool value = std::is_base_of_v<MathViewBase, std::remove_cvref_t<T>>;
     };
 
     template<class T>
