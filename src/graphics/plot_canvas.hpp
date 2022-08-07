@@ -26,10 +26,12 @@ namespace cpt
             _texture.create(width, height, settings);
         }
 
-        void plot(std::vector<cpt::LinePlotData<float>> const &lines)
+        template<std::ranges::range Lines>
+            requires std::same_as<cpt::LinePlotData<float>, std::ranges::range_value_t<Lines>>
+        void plot(Lines const &lines)
         {
             _texture.clear(config.background_color);
-            if (!lines.empty()) {
+            if (!std::ranges::empty(lines)) {
                 auto extent = get_extent(lines);
                 for (const auto &line : lines) {
                     plot(line, extent);
@@ -53,11 +55,14 @@ namespace cpt
             }
         }
 
-        static cpt::Extent<float> get_extent(std::vector<cpt::LinePlotData<float>> const &lines) noexcept
+        template<std::ranges::range Lines>
+            requires std::same_as<cpt::LinePlotData<float>, std::ranges::range_value_t<Lines>>
+        static cpt::Extent<float> get_extent(Lines const &lines) noexcept
         {
-            cpt::Extent<float> extent = lines[0].extent();
-            for (std::size_t i = 1; i != lines.size(); ++i) {
-                extent = combine(extent, lines[i].extent());
+            auto iter = std::ranges::begin(lines);
+            cpt::Extent<float> extent = (*iter++).extent();
+            for (; iter != std::ranges::end(lines); ++iter) {
+                extent = combine(extent, iter->extent());
             }
             ensure_non_zero_extent(extent.xmin, extent.xmax);
             ensure_non_zero_extent(extent.ymin, extent.ymax);

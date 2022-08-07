@@ -4,6 +4,8 @@
 #include "graphics/line_plot_data.hpp"
 #include "graphics/plot_canvas.hpp"
 
+using namespace cpt;
+
 int main()
 {
     sf::RenderWindow window(
@@ -12,24 +14,31 @@ int main()
         sf::Style::Titlebar | sf::Style::Close
         );
 
+    // Define the canvas size with respect to the window size
     float ratio = 0.9f;
     sf::Vector2f window_size = {static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y)};
     sf::Vector2u canvas_size = {
         static_cast<unsigned int>(ratio * window_size.x),
         static_cast<unsigned int>(ratio * window_size.y)
     };
-    cpt::PlotCanvas canvas(canvas_size.x, canvas_size.y);
 
+    // Define plot type
+    using line_plot = LinePlotData<float>;
+
+    // Create plot canvas and add three plots
+    PlotCanvas canvas(canvas_size.x, canvas_size.y);
     auto x = cpt::linspace(0, 10, 100);
-    auto y = cpt::exp(x);
-    std::vector<cpt::LinePlotData<float>> line_plots;
-    line_plots.reserve(3);
-    line_plots.emplace_back(x, cpt::cos(x), cpt::LinePlotDataConfig{.marker_size=1.5f,  .marker_color=sf::Color::Red});
-    line_plots.emplace_back(x, cpt::sin(x), cpt::LinePlotDataConfig{.marker_size=5.f, .marker_color=sf::Color::Green});
-    line_plots.emplace_back(x, 3*cpt::exp(-cpt::pow(x-5, 2)));
+    const auto line_plots = {
+        line_plot(x, cos(x), 
+                  {.marker_size = 1.5f, .marker_color = sf::Color::Red}),
+        line_plot(x, sin(x), 
+                  {.marker_size = 5.f,  .marker_color = sf::Color::Green}),
+        line_plot(x, 3*exp(-(x-5)*(x-5)))
+    };
     canvas.plot(line_plots);
-    window.clear();
 
+    // Draw final sprite on window
+    window.clear();
     sf::Sprite plot;
     plot.setTexture(canvas.get_texture());
     plot.setPosition(
