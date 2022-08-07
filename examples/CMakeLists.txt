@@ -6,6 +6,9 @@ target_link_libraries(plot_build
     PUBLIC graphics-obj
     PRIVATE sfml-graphics sfml-window sfml-system)
 
+add_executable(plot_view plot_view.cpp)
+target_link_libraries(plot_view sfml-graphics sfml-window sfml-system)
+
 add_executable(sample_error sample_error.cpp)
 target_link_libraries(sample_error sfml-graphics sfml-window sfml-system)
 
