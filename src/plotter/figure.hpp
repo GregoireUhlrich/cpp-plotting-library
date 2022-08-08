@@ -3,7 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <future>
+#include <mutex>
 #include "internal/x11_threads.hpp"
+#include "../utils/error.hpp"
 
 namespace cpt
 {
@@ -11,6 +13,10 @@ namespace cpt
     {
         return 96;
     }
+
+    class FigureConcurrencyError: public cpt::Exception {
+        using cpt::Exception::Exception;
+    };
 
     class Figure {
     
@@ -52,6 +58,11 @@ namespace cpt
 
         void show()
         {
+            if (_execution_result.valid()) {
+                throw FigureConcurrencyError(
+                    "Cannot show a figure twice (tried for \"",
+                    _name, "\")!");
+            }
             _execution_result = std::async(std::launch::async, &Figure::launch, this);
             if (_blocking) {
                 _execution_result.wait();
@@ -62,7 +73,9 @@ namespace cpt
 
         void launch()
         {
-            _window.create(
+            std::lock_guard<std::mutex> guard(_mutex);
+            Figure::create_window(
+                _window,
                 sf::VideoMode(_width*pixels_per_inch(), _height*pixels_per_inch()),
                 _name,
                 sf::Style::Close | sf::Style::Titlebar
@@ -76,6 +89,18 @@ namespace cpt
             }
         }
 
+        static void create_window(
+            sf::RenderWindow          &window,
+            sf::VideoMode       const &mode,
+            std::string         const &name,
+            uint32_t                   style,
+            sf::ContextSettings const &settings = sf::ContextSettings())
+        {
+            static std::mutex _mutex;
+            std::lock_guard<std::mutex> lock(_mutex);
+            window.create(mode, name, style, settings);
+        }
+
     private:
         std::string       _name;
         unsigned int      _width;
@@ -83,10 +108,12 @@ namespace cpt
         sf::RenderWindow  _window;
         bool              _blocking = false;
         std::future<void> _execution_result;
+        std::mutex        _mutex;
 
     private:
         static inline unsigned int n_figures = 0;
     };
+
 } // namespace cpt
 
 

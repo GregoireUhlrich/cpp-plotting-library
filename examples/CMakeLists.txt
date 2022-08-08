@@ -1,14 +1,10 @@
-add_executable(simple_window simple_window.cpp)
-target_link_libraries(simple_window sfml-graphics sfml-window sfml-system)
+function(add_cpt_executable NAME)
+    add_executable(${NAME} ${NAME}.cpp)
+    target_link_libraries(${NAME} cpt)
+endfunction()
 
-add_executable(plot_view plot_view.cpp)
-target_link_libraries(plot_view sfml-graphics sfml-window sfml-system)
-
-add_executable(sample_error sample_error.cpp)
-target_link_libraries(sample_error sfml-graphics sfml-window sfml-system)
-
-add_executable(sample_array sample_array.cpp)
-target_link_libraries(sample_array sfml-graphics sfml-window sfml-system)
-
-add_executable(sample_figure sample_figure.cpp)
-target_link_libraries(sample_figure pthread sfml-graphics sfml-window sfml-system)
+add_cpt_executable(simple_window)
+add_cpt_executable(plot_view)
+add_cpt_executable(sample_error)
+add_cpt_executable(sample_array)
+add_cpt_executable(sample_figure)
