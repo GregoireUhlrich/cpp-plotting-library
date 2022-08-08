@@ -1,3 +1,3 @@
 add_subdirectory(utils)
 add_subdirectory(math_views)
-add_subdirectory(graphics)
+add_subdirectory(plotter)

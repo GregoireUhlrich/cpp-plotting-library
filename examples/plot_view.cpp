@@ -1,8 +1,8 @@
 #include <SFML/Graphics.hpp>
 
 #include "math_views.hpp"
-#include "graphics/line_plot_data.hpp"
-#include "graphics/plot_canvas.hpp"
+#include "plotter/line_plot_data.hpp"
+#include "plotter/plot_canvas.hpp"
 
 using namespace cpt;
 
