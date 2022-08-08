@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <future>
-#include "x11_threads.hpp"
+#include "internal/x11_threads.hpp"
 
 namespace cpt
 {
