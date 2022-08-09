@@ -24,6 +24,11 @@ public:
 private:
     std::string _message;
 }; 
+
+class IndexError: public cpt::Exception {
+    using Exception::Exception;
+};
+
 } // namespace cpt
 
 

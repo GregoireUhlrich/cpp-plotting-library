@@ -22,7 +22,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 set(CXX_WARNINGS
-    "-Wall -Wextra -Wpedantic -Wconversion -Werror"
+    "-Wall -Wextra -Wpedantic -Wconversion"
 )
 set(CMAKE_CXX_FLAGS "${CXX_WARNINGS}")
 

@@ -43,6 +43,20 @@ namespace cpt
         return range<T>(T{0}, end);
     } 
 
+    template<cpt::ArrayValue T>
+    auto constant(
+        std::size_t n,
+        T           value
+    )
+    {
+        if (n == 0) {
+            throw InvalidRangeError("Cannot create 0-size view.");
+        }
+        return GeneratorView{
+            n, [value=value](std::size_t) { return value; }
+        };
+    }
+
     struct LinspaceConfig {
         bool end_point = true;
     };
