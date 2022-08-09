@@ -3,9 +3,11 @@
 
 namespace cpt
 {
-    class SubPlot {
-        SubPlot(SubPlot const &) = delete;
-        SubPlot(SubPlot &&) noexcept = default;
+    class Subplot {
+    public:
+        Subplot() = default;
+        Subplot(Subplot const &) = delete;
+        Subplot(Subplot &&) noexcept = default;
     };
 } // namespace cpt
 

@@ -1,57 +1,35 @@
 #ifndef CPT_FIGURE_H_INCLUDED
 #define CPT_FIGURE_H_INCLUDED
 
-#include <SFML/Graphics.hpp>
-#include <future>
-#include <mutex>
-#include "internal/x11_threads.hpp"
-#include "../utils/error.hpp"
+#include "subplot.hpp"
+#include "window.hpp"
 
 namespace cpt
 {
-    class FigureConcurrencyError: public cpt::Exception {
-        using cpt::Exception::Exception;
-    };
-
-    class Figure {
-    
+    class Figure: public Window {
     public:
+        Figure( 
+            std::size_t width, 
+            std::size_t height);
 
-        Figure(std::string_view name, unsigned int width, unsigned int height);
+        Figure(
+            std::string_view name, 
+            std::size_t width, 
+            std::size_t height);
 
-        Figure(unsigned int width, unsigned int height);
+        void create_subplots(std::size_t n_rows, std::size_t n_columns);
 
-        Figure(Figure const &) = delete;
+        Subplot &get_subplot(std::size_t i_row, std::size_t i_col);
+        Subplot const &get_subplot(std::size_t i_row, std::size_t i_col) const;
 
-        Figure(Figure &&) = default;
-
-        ~Figure();
-
-        bool is_blocking() const noexcept;
-
-        void set_blocking(bool blocking) noexcept;
-
-        void show();
-
-    protected:
-
-        void launch();
-
-        static void create_window(
-            sf::RenderWindow          &window,
-            sf::VideoMode       const &mode,
-            std::string         const &name,
-            uint32_t                   style,
-            sf::ContextSettings const &settings = sf::ContextSettings());
+        Subplot &get_subplot();
+        Subplot const &get_subplot() const;
 
     private:
-        std::string       _name;
-        unsigned int      _width;
-        unsigned int      _height;
-        sf::RenderWindow  _window;
-        bool              _blocking = false;
-        std::future<void> _execution_result;
-        std::mutex        _mutex;
+
+        std::size_t _n_rows;
+        std::size_t _n_columns;
+        std::vector<cpt::Subplot> _subplots;
 
     private:
         static inline unsigned int n_figures = 0;

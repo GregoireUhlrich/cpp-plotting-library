@@ -1,84 +1,75 @@
 #include "figure.hpp"
-
+#include "../utils/error.hpp"
 
 namespace cpt
 {
-    static unsigned int pixels_per_inch()
-    {
-        return 96;
-    }
-
-    Figure::Figure(std::string_view name, unsigned int width, unsigned int height)
-        : _name(name),
-            _width(width),
-            _height(height)
-    {
-
-    }
-
-    Figure::Figure(unsigned int width, unsigned int height)
+    
+    Figure::Figure( 
+        std::size_t width, 
+        std::size_t height)
         : Figure("Figure " + std::to_string(++n_figures), width, height)
     {
 
     }
 
-    Figure::~Figure()
+    Figure::Figure(
+        std::string_view name, 
+        std::size_t width, 
+        std::size_t height)
+        : Window(name, width, height)
     {
-        if (_execution_result.valid()) {
-            _execution_result.wait();
+        create_subplots(1, 1);
+    }
+
+    void Figure::create_subplots(
+        std::size_t n_rows, 
+        std::size_t n_columns)
+    {
+        _subplots = std::vector<Subplot>(n_rows * n_columns);
+        _n_rows = n_rows;
+        _n_columns = n_columns;
+    }
+
+    Subplot const &Figure::get_subplot(
+        std::size_t i_row, 
+        std::size_t i_col) const
+    {
+        if (i_row >= _n_rows) {
+            throw cpt::IndexError("Index ", i_row, " out of bounds ",
+            "of figure subplots with ", _n_rows, " rows.");
         }
-    }
-
-    bool Figure::is_blocking() const noexcept {
-        return _blocking;
-    }
-
-    void Figure::set_blocking(bool blocking) noexcept
-    {
-        _blocking = blocking;
-    }
-
-    void Figure::show()
-    {
-        if (_execution_result.valid()) {
-            throw FigureConcurrencyError(
-                "Cannot show a figure twice (tried for \"",
-                _name, "\")!");
+        if (i_col >= _n_columns) {
+            throw cpt::IndexError("Index ", i_col, " out of bounds ",
+            "of figure subplots with ", _n_columns, " columns.");
         }
-        _execution_result = std::async(std::launch::async, &Figure::launch, this);
-        if (_blocking) {
-            _execution_result.wait();
-        }
+        auto index = i_row * _n_columns + i_col;
+        return _subplots[index];
     }
 
-    void Figure::launch()
+    Subplot &Figure::get_subplot(
+        std::size_t i_row, 
+        std::size_t i_col)
     {
-        std::lock_guard<std::mutex> guard(_mutex);
-        Figure::create_window(
-            _window,
-            sf::VideoMode(_width*pixels_per_inch(), _height*pixels_per_inch()),
-            _name,
-            sf::Style::Close | sf::Style::Titlebar
+        return const_cast<Subplot&>(
+            const_cast<const Figure*>(this)->get_subplot(i_row, i_col)
             );
-        while (_window.isOpen()) {
-            sf::Event event;
-            while (_window.waitEvent(event)) {
-                if (event.type == sf::Event::Closed)
-                    _window.close();
-            }
-        }
     }
 
-    void Figure::create_window(
-        sf::RenderWindow          &window,
-        sf::VideoMode       const &mode,
-        std::string         const &name,
-        uint32_t                   style,
-        sf::ContextSettings const &settings)
+    Subplot const &Figure::get_subplot() const
     {
-        static std::mutex _mutex;
-        std::lock_guard<std::mutex> lock(_mutex);
-        window.create(mode, name, style, settings);
+        if (_n_rows > 1 || _n_columns > 1) {
+            throw cpt::IndexError("Cannot call Figure::get_subplot() ",
+            "with no index for a figure with more than one (",
+            _n_columns*_n_rows, ") subplots. Use ",
+            "Figure::getSubplot(std::size_t, std::size_t) instead.");
+        }
+        return _subplots[0];
     }
 
+    Subplot &Figure::get_subplot()
+    {
+        return const_cast<Subplot&>(
+            const_cast<const Figure*>(this)->get_subplot()
+            );
+    }
 } // namespace cpt
