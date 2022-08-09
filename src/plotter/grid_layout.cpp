@@ -40,7 +40,6 @@ namespace cpt
         cpt::Figure            &figure,
         GridLayoutConfig const &config)
     {
-        std::cout << figure.get_size().x << " " << figure.get_size().y << '\n';
         std::size_t n_rows = figure.get_n_rows();
         std::size_t n_columns = figure.get_n_columns();
         checkLayout(bounds, n_rows, n_columns, config);
