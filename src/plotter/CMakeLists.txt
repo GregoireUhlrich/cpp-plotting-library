@@ -1,6 +1,7 @@
 add_subdirectory(internal)
 
-set(plotter_sources 
+set(plotter_sources
+    window.cpp
     figure.cpp
 )
 
