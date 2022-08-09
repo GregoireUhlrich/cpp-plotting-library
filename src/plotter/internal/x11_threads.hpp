@@ -5,7 +5,7 @@
 
 namespace cpt
 {
-    bool _init_x11_threads()
+    inline bool _init_x11_threads()
     {
         XInitThreads();
         return true;
