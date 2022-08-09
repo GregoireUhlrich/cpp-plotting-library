@@ -23,11 +23,17 @@ namespace cpt
 
     void Figure::create_subplots(
         std::size_t n_rows, 
-        std::size_t n_columns)
+        std::size_t n_columns,
+        cpt::GridLayoutConfig const &config)
     {
         _subplots = std::vector<Subplot>(n_rows * n_columns);
         _n_rows = n_rows;
         _n_columns = n_columns;
+        sf::Vector2f size = get_size();
+        apply_grid_layout(
+            sf::FloatRect(0.f, 0.f, size.x, size.y),
+            *this,
+            config);
     }
 
     Subplot const &Figure::get_subplot(

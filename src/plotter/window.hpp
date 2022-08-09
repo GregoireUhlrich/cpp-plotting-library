@@ -31,6 +31,10 @@ namespace cpt
 
         void show();
 
+        sf::Vector2f get_size() const noexcept;
+
+        sf::Vector2u get_usize() const noexcept;
+
     protected:
 
         void launch();

@@ -22,6 +22,24 @@ namespace cpt
         }
     }
 
+
+    sf::Vector2f Window::get_size() const noexcept
+    {
+        auto size = get_usize();
+        return {
+            static_cast<float>(size.x),
+            static_cast<float>(size.y)
+        };
+    }
+
+    sf::Vector2u Window::get_usize() const noexcept
+    {
+        return {
+            static_cast<unsigned int>(_width) * pixels_per_inch(),
+            static_cast<unsigned int>(_height) * pixels_per_inch(),
+        };
+    }
+
     bool Window::is_blocking() const noexcept {
         return _blocking;
     }
@@ -47,11 +65,10 @@ namespace cpt
     void Window::launch()
     {
         std::lock_guard<std::mutex> guard(_mutex);
+        auto size = get_usize();
         Window::create_window(
             _window,
-            sf::VideoMode(
-                static_cast<unsigned int>(_width)*pixels_per_inch(),
-                static_cast<unsigned int>(_height)*pixels_per_inch()),
+            sf::VideoMode(size.x, size.y),
             _name,
             sf::Style::Close | sf::Style::Titlebar
             );

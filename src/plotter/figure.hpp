@@ -3,6 +3,7 @@
 
 #include "subplot.hpp"
 #include "window.hpp"
+#include "grid_layout.hpp"
 
 namespace cpt
 {
@@ -17,7 +18,13 @@ namespace cpt
             std::size_t width, 
             std::size_t height);
 
-        void create_subplots(std::size_t n_rows, std::size_t n_columns);
+        void create_subplots(
+            std::size_t n_rows, 
+            std::size_t n_columns,
+            cpt::GridLayoutConfig const &config = {});
+
+        std::size_t get_n_rows() const noexcept { return _n_rows; }
+        std::size_t get_n_columns() const noexcept { return _n_columns; }
 
         Subplot &get_subplot(std::size_t i_row, std::size_t i_col);
         Subplot const &get_subplot(std::size_t i_row, std::size_t i_col) const;

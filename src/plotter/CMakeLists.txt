@@ -3,6 +3,8 @@ add_subdirectory(internal)
 set(plotter_sources
     window.cpp
     figure.cpp
+    subplot.cpp
+    grid_layout.cpp
 )
 
 add_library(plotter-obj OBJECT ${plotter_sources})
