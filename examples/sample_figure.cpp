@@ -6,7 +6,6 @@ int main()
     cpt::Figure fig1(5, 5);
     cpt::Figure fign("My Fig", 10, 5);
     cpt::Figure fig2(5, 5);
-    fign.set_blocking(true);
     fign.create_subplots(2, 2);
     for (std::size_t i = 0; i != fign.get_n_rows(); ++i) {
         for (std::size_t j = 0; j != fign.get_n_columns(); ++j) {
@@ -21,7 +20,7 @@ int main()
 
     fig1.show();
     std::cout << "Figure 1 and My Fig should be there but that's all" << std::endl; 
-    fign.show();
+    fign.show(true);
 
     std::cout << "Here you should hae already close My Fig" << std::endl;
     fig2.show();

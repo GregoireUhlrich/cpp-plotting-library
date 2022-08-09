@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <future>
 #include <mutex>
+#include <functional>
 #include "internal/x11_threads.hpp"
 #include "../utils/error.hpp"
 
@@ -17,7 +18,11 @@ namespace cpt
     
     public:
 
-        Window(std::string_view name, std::size_t width, std::size_t height);
+        Window(
+            std::string_view name, 
+            std::size_t width, 
+            std::size_t height
+            );
 
         Window(Window const &) = delete;
 
@@ -29,15 +34,21 @@ namespace cpt
 
         void set_blocking(bool blocking) noexcept;
 
-        void show();
+        void show(
+            std::function<void(sf::RenderTarget&)> draw_callback
+            );
 
         sf::Vector2f get_size() const noexcept;
 
         sf::Vector2u get_usize() const noexcept;
 
+        void wait_for_close() const;
+
     protected:
 
-        void launch();
+        void launch(
+            std::function<void(sf::RenderTarget&)> draw_callback
+        );
 
         static void create_window(
             sf::RenderWindow          &window,

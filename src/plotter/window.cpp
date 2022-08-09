@@ -7,15 +7,23 @@ namespace cpt
         return 96;
     }
 
-    Window::Window(std::string_view name, std::size_t width, std::size_t height)
+    Window::Window(
+        std::string_view name, 
+        std::size_t width, 
+        std::size_t height)
         : _name(name),
-            _width(width),
-            _height(height)
+          _width(width),
+          _height(height)
     {
 
     }
 
     Window::~Window()
+    {
+        wait_for_close();
+    }
+
+    void Window::wait_for_close() const
     {
         if (_execution_result.valid()) {
             _execution_result.wait();
@@ -49,20 +57,23 @@ namespace cpt
         _blocking = blocking;
     }
 
-    void Window::show()
+    void Window::show(
+        std::function<void(sf::RenderTarget&)> draw_callback)
     {
         if (_execution_result.valid()) {
             throw WindowConcurrencyError(
                 "Cannot show a figure twice (tried for \"",
                 _name, "\")!");
         }
-        _execution_result = std::async(std::launch::async, &Window::launch, this);
+        _execution_result = std::async(std::launch::async, 
+            &Window::launch, this, draw_callback);
         if (_blocking) {
             _execution_result.wait();
         }
     }
 
-    void Window::launch()
+    void Window::launch(
+        std::function<void(sf::RenderTarget&)> draw_callback)
     {
         std::lock_guard<std::mutex> guard(_mutex);
         auto size = get_usize();
@@ -73,6 +84,9 @@ namespace cpt
             sf::Style::Close | sf::Style::Titlebar
             );
         while (_window.isOpen()) {
+            _window.clear();
+            draw_callback(_window);
+            _window.display();
             sf::Event event;
             while (_window.waitEvent(event)) {
                 if (event.type == sf::Event::Closed)

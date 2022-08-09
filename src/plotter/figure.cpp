@@ -16,9 +16,17 @@ namespace cpt
         std::string_view name, 
         std::size_t width, 
         std::size_t height)
-        : Window(name, width, height)
+        : _window(
+            name, 
+            width, 
+            height)
     {
         create_subplots(1, 1);
+    }
+
+    Figure::~Figure()
+    {
+        _window.wait_for_close();
     }
 
     void Figure::create_subplots(
@@ -29,7 +37,7 @@ namespace cpt
         _subplots = std::vector<Subplot>(n_rows * n_columns);
         _n_rows = n_rows;
         _n_columns = n_columns;
-        sf::Vector2f size = get_size();
+        sf::Vector2f size = _window.get_size();
         apply_grid_layout(
             sf::FloatRect(0.f, 0.f, size.x, size.y),
             *this,
@@ -90,4 +98,15 @@ namespace cpt
             const_cast<const Figure*>(this)->get_subplots()
             );
     }
+
+    void Figure::show(bool blocking) 
+    {
+        _window.set_blocking(blocking);
+        _window.show([this](sf::RenderTarget &target) {
+            for (const auto &subplot : _subplots) {
+                subplot.draw(target);
+            }
+        });
+    }
+
 } // namespace cpt

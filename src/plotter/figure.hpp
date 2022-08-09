@@ -7,7 +7,7 @@
 
 namespace cpt
 {
-    class Figure: public Window {
+    class Figure {
     public:
         Figure( 
             std::size_t width, 
@@ -17,6 +17,8 @@ namespace cpt
             std::string_view name, 
             std::size_t width, 
             std::size_t height);
+
+        ~Figure();
 
         void create_subplots(
             std::size_t n_rows, 
@@ -35,7 +37,11 @@ namespace cpt
         std::vector<Subplot> &get_subplots() noexcept;
         std::vector<Subplot> const &get_subplots() const noexcept;
 
+        void show(bool blocking = false);
+
     private:
+        cpt::Window _window;
+
         std::size_t _n_rows;
         std::size_t _n_columns;
         std::vector<cpt::Subplot> _subplots;

@@ -7,7 +7,7 @@ namespace cpt
 {
     class Subplot {
     public:
-        Subplot() = default;
+        Subplot();
         Subplot(Subplot const &) = delete;
         Subplot(Subplot &&) noexcept = default;
 
@@ -15,11 +15,14 @@ namespace cpt
         sf::Vector2f get_size() const noexcept;
 
         void set_position(float x, float y) noexcept;
-        void set_size(float sx, float sy) noexcept;
+        void set_size(float sx, float sy);
+        
+        void draw(sf::RenderTarget &target) const;
     
     private:
         sf::Vector2f _pos;
         sf::Vector2f _size;
+        mutable sf::RenderTexture _texture;
     };
 } // namespace cpt
 
