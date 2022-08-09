@@ -12,6 +12,7 @@ int main()
     cpt::Subplot &s2 = fign.get_subplot(0, 1);
     cpt::Subplot &s3 = fign.get_subplot(1, 0);
     cpt::Subplot &s4 = fign.get_subplot(1, 1);
+    std::vector<cpt::Subplot> &subs = fign.get_subplots();
 
     fig1.show();
     std::cout << "Figure 1 and My Fig should be there but that's all" << std::endl; 

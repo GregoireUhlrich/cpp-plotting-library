@@ -72,4 +72,16 @@ namespace cpt
             const_cast<const Figure*>(this)->get_subplot()
             );
     }
+
+    std::vector<Subplot> const &Figure::get_subplots() const noexcept
+    {
+        return _subplots;
+    }
+
+    std::vector<Subplot> &Figure::get_subplots() noexcept
+    {
+        return const_cast<std::vector<Subplot>&>(
+            const_cast<const Figure*>(this)->get_subplots()
+            );
+    }
 } // namespace cpt

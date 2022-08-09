@@ -25,8 +25,10 @@ namespace cpt
         Subplot &get_subplot();
         Subplot const &get_subplot() const;
 
-    private:
+        std::vector<Subplot> &get_subplots() noexcept;
+        std::vector<Subplot> const &get_subplots() const noexcept;
 
+    private:
         std::size_t _n_rows;
         std::size_t _n_columns;
         std::vector<cpt::Subplot> _subplots;
