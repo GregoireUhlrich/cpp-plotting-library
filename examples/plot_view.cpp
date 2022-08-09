@@ -28,6 +28,7 @@ int main()
     // Create plot canvas and add three plots
     PlotCanvas canvas(canvas_size.x, canvas_size.y);
     auto x = linspace(0, 10, 100);
+    
     const auto line_plots = {
         line_plot(x, cos(x), 
                   {.marker_size = 1.5f, .marker_color = sf::Color::Red}),
