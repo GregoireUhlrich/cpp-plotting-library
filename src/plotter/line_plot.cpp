@@ -1,4 +1,5 @@
 #include "line_plot.hpp"
+#include "plot_canvas.hpp"
 
 namespace cpt {
 
@@ -28,7 +29,7 @@ namespace cpt {
         return (lower ? _y.err_minus : _y.err_plus).value();
     }
 
-    cpt::Extent<float> LinePlot::extent() const noexcept {
+    cpt::Extent<float> LinePlot::get_extent() const {
         return _extent;
     }
 
@@ -90,5 +91,10 @@ namespace cpt {
             .ymin = y_extent.min,
             .ymax = y_extent.max
         };
+    }
+
+    void LinePlot::draw_plot(cpt::PlotCanvas &canvas) const 
+    {
+        canvas.plot(*this);
     }
 } // namespace cpt

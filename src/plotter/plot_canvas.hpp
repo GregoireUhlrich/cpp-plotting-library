@@ -7,71 +7,33 @@
 
 namespace cpt
 {
-    struct PlotCanvasConfig {
-        sf::Color background_color = sf::Color(186, 186, 186);
-        float     offset_ratio = 0.1f;
-    };
-
     class PlotCanvas {
     public:
-        explicit
-        PlotCanvas(
+
+        void create(
             unsigned int width,
-            unsigned int height,
-            PlotCanvasConfig const &config_ = {}) noexcept
-            :config(config_)
+            unsigned int height)
         {
             sf::ContextSettings settings;
             settings.antialiasingLevel = 4;
             _texture.create(width, height, settings);
         }
 
-        template<std::ranges::range Lines>
-            requires std::same_as<cpt::LinePlot, std::ranges::range_value_t<Lines>>
-        void plot(Lines const &lines)
-        {
-            _texture.clear(config.background_color);
-            if (!std::ranges::empty(lines)) {
-                auto extent = get_extent(lines);
-                for (const auto &line : lines) {
-                    plot(line, extent);
-                }
-            }
-            _texture.display();
+        Extent<float> get_extent() const noexcept {
+            return _extent;
         }
 
-        sf::Texture const &get_texture() const noexcept
-        {
-            return _texture.getTexture();
+        void set_extent(Extent<float> extent) noexcept {
+            _extent = std::move(extent);
         }
 
-    private:
-
-        template<std::floating_point T>
-        static void ensure_non_zero_extent(T &min, T &max) noexcept {
-            if (max - min < std::numeric_limits<T>::min()) {
-                min -= static_cast<T>(1.);
-                max += static_cast<T>(1.);
-            }
-        }
-
-        template<std::ranges::range Lines>
-            requires std::same_as<cpt::LinePlot, std::ranges::range_value_t<Lines>>
-        static cpt::Extent<float> get_extent(Lines const &lines) noexcept
+        void clear(sf::Color color = sf::Color::White)
         {
-            auto iter = std::ranges::begin(lines);
-            cpt::Extent<float> extent = (*iter++).extent();
-            for (; iter != std::ranges::end(lines); ++iter) {
-                extent = combine(extent, iter->extent());
-            }
-            ensure_non_zero_extent(extent.xmin, extent.xmax);
-            ensure_non_zero_extent(extent.ymin, extent.ymax);
-            return extent;
+            _texture.clear(color);
         }
 
         void plot(
-            cpt::LinePlot const &line, 
-            Extent<float> const &extent) noexcept 
+            cpt::LinePlot const &line) noexcept 
         {
             const sf::Vector2f target_size = {
                 static_cast<float>(_texture.getSize().x), 
@@ -79,18 +41,16 @@ namespace cpt
             };
             const auto &x = line.x();
             const auto &y = line.y();
-            const float lx = extent.xmax - extent.xmin;
-            const float ly = extent.ymax - extent.ymin;
-            const float offset_x = target_size.x * config.offset_ratio;
-            const float offset_y = target_size.y * config.offset_ratio;
-            const float x_aspect_ratio = std::abs((1 - 2*config.offset_ratio)*target_size.x / lx);
-            const float y_aspect_ratio = std::abs((1 - 2*config.offset_ratio)*target_size.y / ly);
+            const float lx = _extent.xmax - _extent.xmin;
+            const float ly = _extent.ymax - _extent.ymin;
+            const float x_aspect_ratio = std::abs(target_size.x / lx);
+            const float y_aspect_ratio = std::abs(target_size.y / ly);
 
             for (std::size_t i = 0; i != x.size(); ++i) {
                 sf::CircleShape circle(line.config.marker_size);
                 circle.setFillColor(line.config.marker_color);
-                const float xi = ((x[i] - extent.xmin) * x_aspect_ratio) + offset_x;
-                const float yi = ((y[i] - extent.ymin) * y_aspect_ratio) + offset_y;
+                const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
+                const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
                 circle.setPosition(
                     xi - line.config.marker_size/2.f, 
                     target_size.y - (yi - line.config.marker_size/2.f)
@@ -99,11 +59,23 @@ namespace cpt
             }
         }
 
-    public:
-        PlotCanvasConfig config;
+        void display()
+        {
+            _sprite = sf::Sprite();
+            _texture.display();
+            _final_texture = _texture.getTexture();
+            _sprite.setTexture(_final_texture);
+        }
+
+        sf::Sprite const &get_sprite() const { 
+            return _sprite;
+        }
 
     private:
         sf::RenderTexture _texture;
+        sf::Texture       _final_texture;
+        sf::Sprite        _sprite;
+        Extent<float>     _extent;
     };
 
 } // namespace cpt

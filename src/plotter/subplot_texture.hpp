@@ -2,6 +2,7 @@
 #define CPT_SUBPLOT_TEXTURE_H_INCLUDED
 
 #include <SFML/Graphics.hpp>
+#include "plot_canvas.hpp"
 
 namespace cpt
 {
@@ -19,10 +20,12 @@ namespace cpt
         
         void draw(sf::RenderTarget &target) const;
     
-    private:
+    protected:
         sf::Vector2f _pos;
         sf::Vector2f _size;
         mutable sf::RenderTexture _texture;
+
+        PlotCanvas _canvas;
     };
 } // namespace cpt
 

@@ -3,29 +3,35 @@
 
 int main()
 {
-    cpt::Figure fig1(5, 5);
-    cpt::Figure fign("My Fig", 10, 5);
-    cpt::Figure fig2(5, 5);
-    fign.create_subplots(2, 2);
-    for (std::size_t i = 0; i != fign.get_n_rows(); ++i) {
-        for (std::size_t j = 0; j != fign.get_n_columns(); ++j) {
-            cpt::Subplot &sub = fign.get_subplot(i, j);
-            auto pos  = sub.get_position();
-            auto size = sub.get_size();
-            std::cout << "Subplot (" << i << ", " << j << "):\n";
-            std::cout << "  -> pos  = (" << pos.x << ", " << pos.y << ")\n";
-            std::cout << "  -> size = (" << size.x << ", " << size.y << ")\n";
-        }
-    }
+    cpt::Figure fig("My Fig", 10, 5);
+    fig.create_subplots(2, 2);
 
-    fig1.show();
-    std::cout << "Figure 1 and My Fig should be there but that's all" << std::endl; 
-    fign.show(true);
+    auto x = cpt::linspace(0, 10, 100);
 
-    std::cout << "Here you should hae already close My Fig" << std::endl;
-    fig2.show();
+    cpt::Subplot &top_left = fig.get_subplot(0, 0);
+    top_left.plot_line(x, cpt::cos(x));
+    top_left.plot_line(x, 5*cpt::exp(-(x-5)*(x-5)), 
+                      {
+                        .marker_size = 4.f,
+                        .marker_color = sf::Color::Red
+                      });
 
-    std::cout << "End of program" << std::endl;
+    cpt::Subplot &top_right = fig.get_subplot(0, 1);
+    top_right.plot_line(x, cpt::sin(x)*cpt::sin(x),
+                       {.marker_color = sf::Color::Green});
+    top_right.set_extent({
+        .xmin = -10.f, .xmax = 20.f,
+        .ymin = -5.f,  .ymax = 5.f
+    });
+
+    cpt::Subplot &bottom_left = fig.get_subplot(1, 0);
+    bottom_left.plot_line(x, cpt::atan(x),
+                          {.marker_color = sf::Color::Blue});
+
+    cpt::Subplot &bottom_right = fig.get_subplot(1, 1);
+    bottom_right.plot_line(x, cpt::exp(x));
+
+    fig.show();
 
     return 0;
 }

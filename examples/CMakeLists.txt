@@ -4,7 +4,6 @@ function(add_cpt_executable NAME)
 endfunction()
 
 add_cpt_executable(simple_window)
-add_cpt_executable(plot_view)
 add_cpt_executable(sample_error)
 add_cpt_executable(sample_array)
 add_cpt_executable(sample_figure)

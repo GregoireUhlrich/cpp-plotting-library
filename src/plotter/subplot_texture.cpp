@@ -30,15 +30,19 @@ namespace cpt
             static_cast<unsigned int>(sx),
             static_cast<unsigned int>(sy)
             );
-        _texture.clear(sf::Color::Green);
-        _texture.display();
+        _canvas.create(
+            static_cast<unsigned int>(sx),
+            static_cast<unsigned int>(sy)
+        );
     }
 
     void SubplotTexture::draw(sf::RenderTarget &target) const
     {
         sf::Sprite sprite;
         _texture.clear(sf::Color::Green);
+        _texture.draw(_canvas.get_sprite());
         _texture.display();
+
         sprite.setTexture(_texture.getTexture());
         sprite.setPosition(get_position());
         target.draw(sprite);

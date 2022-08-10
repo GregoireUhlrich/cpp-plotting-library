@@ -6,6 +6,7 @@
 #include "../math_views.hpp"
 #include "extent.hpp"
 #include "science_data_array.hpp"
+#include "plot_data.hpp"
 
 #include <concepts>
 #include <numeric>
@@ -22,7 +23,7 @@ namespace cpt
         sf::Color marker_color = sf::Color(0, 64, 128);
     };
 
-    class LinePlot {
+    class LinePlot: public cpt::PlotData {
     public:
 
         LinePlot(
@@ -45,7 +46,9 @@ namespace cpt
         cpt::Array<float> const &xerr(bool lower = false) const;
         cpt::Array<float> const &yerr(bool lower = false) const;
 
-        cpt::Extent<float> extent() const noexcept;
+        cpt::Extent<float> get_extent() const override;
+
+        void draw_plot(cpt::PlotCanvas &canvas) const override;
 
     protected:
 
