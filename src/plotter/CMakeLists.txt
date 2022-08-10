@@ -6,6 +6,7 @@ set(plotter_sources
     subplot.cpp
     subplot_texture.cpp
     grid_layout.cpp
+    axis.cpp
 
     line_plot.cpp
 )
