@@ -1,45 +1,72 @@
 #include "subplot.hpp"
-#include <iostream>
-namespace cpt
-{
-    Subplot::Subplot()
+
+namespace cpt {
+
+    void Subplot::plot_line(
+        ScienceDataArray<float> x,
+        ScienceDataArray<float> y,
+        LinePlotConfig   const &config
+    )
     {
-        set_size(50.f, 50.f);
+        _plots.push_back(std::make_shared<LinePlot>(
+            std::move(x),
+            std::move(y),
+            config
+        ));
     }
 
-    sf::Vector2f Subplot::get_position() const noexcept
+    void Subplot::set_extent(Extent<float> extent) noexcept
     {
-        return _pos;
+        _extent = std::move(extent);
+        _user_extent = true;
     }
 
-    sf::Vector2f Subplot::get_size() const noexcept
+    Extent<float> Subplot::get_extent()
     {
-        return _size;
+        if (_user_extent) {
+            return _extent;
+        }
+        compute_extent();
+        return _extent;
     }
 
-    void Subplot::set_position(float x, float y) noexcept
-    {
-        _pos = {x, y};
+    template<std::floating_point T>
+    static void ensure_non_zero_extent(T &min, T &max) noexcept {
+        if (max - min < std::numeric_limits<T>::min()) {
+            min -= static_cast<T>(1.);
+            max += static_cast<T>(1.);
+        }
     }
 
-    void Subplot::set_size(float sx, float sy)
+    void Subplot::compute_extent() 
     {
-        _size = {sx, sy};
-        _texture.create(
-            static_cast<unsigned int>(sx),
-            static_cast<unsigned int>(sy)
-            );
-        _texture.clear(sf::Color::Green);
-        _texture.display();
+        if (_plots.empty()) {
+            _extent = {-1.f, 1.f, -1.f, 1.f};
+            return;
+        }
+        auto iter = _plots.begin();
+        _extent = (**iter).get_extent();
+        while (++iter != _plots.end()) {
+            _extent = combine(_extent, (**iter).get_extent());
+        }
+        ensure_non_zero_extent(_extent.xmin, _extent.xmax);
+        ensure_non_zero_extent(_extent.ymin, _extent.ymax);
+        auto dx = _extent.xmax - _extent.xmin;
+        auto dy = _extent.ymax - _extent.ymin;
+        _extent.xmin -= 0.1f * dx;
+        _extent.xmax += 0.1f * dx;
+        _extent.ymin -= 0.1f * dy;
+        _extent.ymax += 0.1f * dy;
     }
 
-    void Subplot::draw(sf::RenderTarget &target) const
+    void Subplot::display()
     {
-        sf::Sprite sprite;
-        _texture.clear(sf::Color::Green);
-        _texture.display();
-        sprite.setTexture(_texture.getTexture());
-        sprite.setPosition(get_position());
-        target.draw(sprite);
+        _canvas.clear();
+        _canvas.set_extent(get_extent());
+        for (const auto &plot : _plots) {
+            plot->draw_plot(_canvas);
+        }
+        _canvas.display();
     }
+
 } // namespace cpt

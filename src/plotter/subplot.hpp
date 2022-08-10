@@ -1,28 +1,44 @@
 #ifndef CPT_SUBPLOT_H_INCLUDED
 #define CPT_SUBPLOT_H_INCLUDED
 
-#include <SFML/Graphics.hpp>
+#include "subplot_texture.hpp"
+#include "plot_data.hpp"
+#include "plot_canvas.hpp"
+#include "line_plot.hpp"
+#include <vector>
+#include <memory>
 
 namespace cpt
 {
-    class Subplot {
+    class Subplot: public SubplotTexture {
+
     public:
-        Subplot();
-        Subplot(Subplot const &) = delete;
-        Subplot(Subplot &&) noexcept = default;
+        Subplot()               = default;
+        Subplot(Subplot const&) = delete;
+        Subplot(Subplot &&)     = default;
 
-        sf::Vector2f get_position() const noexcept;
-        sf::Vector2f get_size() const noexcept;
+        void plot_line(
+            ScienceDataArray<float> x,
+            ScienceDataArray<float> y,
+            LinePlotConfig const &config = {}
+        );
 
-        void set_position(float x, float y) noexcept;
-        void set_size(float sx, float sy);
-        
-        void draw(sf::RenderTarget &target) const;
-    
+        bool has_auto_extent() const noexcept { return !_user_extent; }
+        void set_auto_extent() noexcept       { _user_extent = false; }
+
+        void set_extent(Extent<float> extent) noexcept;
+
+        Extent<float> get_extent();
+
+        void display();
+
     private:
-        sf::Vector2f _pos;
-        sf::Vector2f _size;
-        mutable sf::RenderTexture _texture;
+        void compute_extent();
+
+    private:
+        bool          _user_extent = false;
+        Extent<float> _extent;
+        std::vector<std::shared_ptr<cpt::PlotData>> _plots;
     };
 } // namespace cpt
 

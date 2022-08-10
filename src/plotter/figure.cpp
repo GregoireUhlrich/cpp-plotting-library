@@ -102,6 +102,9 @@ namespace cpt
     void Figure::show(bool blocking) 
     {
         _window.set_blocking(blocking);
+        for (auto &subplot : _subplots) {
+            subplot.display();
+        }
         _window.show([this](sf::RenderTarget &target) {
             for (const auto &subplot : _subplots) {
                 subplot.draw(target);
