@@ -6,6 +6,8 @@ set(plotter_sources
     subplot.cpp
     subplot_texture.cpp
     grid_layout.cpp
+
+    line_plot.cpp
 )
 
 add_library(plotter-obj OBJECT ${plotter_sources})

@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "math_views.hpp"
-#include "plotter/line_plot_data.hpp"
+#include "plotter/line_plot.hpp"
 #include "plotter/plot_canvas.hpp"
 
 using namespace cpt;
@@ -23,18 +23,17 @@ int main()
     };
 
     // Define plot type
-    using line_plot = LinePlotData;
 
     // Create plot canvas and add three plots
     PlotCanvas canvas(canvas_size.x, canvas_size.y);
     auto x = linspace(0, 10, 100);
     
     const auto line_plots = {
-        line_plot(x, cos(x), 
-                  {.marker_size = 1.5f, .marker_color = sf::Color::Red}),
-        line_plot(x, sin(x), 
-                  {.marker_size = 5.f,  .marker_color = sf::Color::Green}),
-        line_plot(x, 3*exp(-(x-5)*(x-5)))
+        LinePlot(x, cos(x), 
+                 {.marker_size = 1.5f, .marker_color = sf::Color::Red}),
+        LinePlot(x, sin(x), 
+                 {.marker_size = 5.f,  .marker_color = sf::Color::Green}),
+        LinePlot(x, 3*exp(-(x-5)*(x-5)))
     };
     canvas.plot(line_plots);
 
