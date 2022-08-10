@@ -27,7 +27,7 @@ namespace cpt
         }
 
         template<std::ranges::range Lines>
-            requires std::same_as<cpt::LinePlotData<float>, std::ranges::range_value_t<Lines>>
+            requires std::same_as<cpt::LinePlotData, std::ranges::range_value_t<Lines>>
         void plot(Lines const &lines)
         {
             _texture.clear(config.background_color);
@@ -56,7 +56,7 @@ namespace cpt
         }
 
         template<std::ranges::range Lines>
-            requires std::same_as<cpt::LinePlotData<float>, std::ranges::range_value_t<Lines>>
+            requires std::same_as<cpt::LinePlotData, std::ranges::range_value_t<Lines>>
         static cpt::Extent<float> get_extent(Lines const &lines) noexcept
         {
             auto iter = std::ranges::begin(lines);
@@ -70,7 +70,7 @@ namespace cpt
         }
 
         void plot(
-            cpt::LinePlotData<float> const &line, 
+            cpt::LinePlotData const &line, 
             Extent<float> const &extent) noexcept 
         {
             const sf::Vector2f target_size = {

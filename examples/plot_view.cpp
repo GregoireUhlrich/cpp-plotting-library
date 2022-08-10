@@ -23,7 +23,7 @@ int main()
     };
 
     // Define plot type
-    using line_plot = LinePlotData<float>;
+    using line_plot = LinePlotData;
 
     // Create plot canvas and add three plots
     PlotCanvas canvas(canvas_size.x, canvas_size.y);

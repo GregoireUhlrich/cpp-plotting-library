@@ -4,7 +4,7 @@
 #include "../utils/error.hpp"
 #include "../math_views.hpp"
 #include "extent.hpp"
-#include "plot_data.hpp"
+#include "science_data_array.hpp"
 
 #include <concepts>
 #include <numeric>
@@ -21,13 +21,12 @@ namespace cpt
         sf::Color marker_color = sf::Color(0, 64, 128);
     };
 
-    template<std::floating_point T>
     class LinePlotData {
     public:
 
         LinePlotData(
-            PlotData<T> x,
-            PlotData<T> y,
+            ScienceDataArray<float> x,
+            ScienceDataArray<float> y,
             LinePlotDataConfig const &config_ = {})
             : _x(std::move(x)),
               _y(std::move(y)),
@@ -76,28 +75,40 @@ namespace cpt
                     "same dimension for x and y, ",
                     _x.data.size(), " and ", _y.data.size(), " found.");
             }
-            /*if (_xerr.has_value() && _x.size() != _xerr.value().size()) {
+            if (_x.err_plus.has_value() && _x.size() != _x.err_plus.value().size()) {
                 throw InvalidLinePlotData(
                     "A line plot data must have the ",
                     "same dimension for x and xerr, ",
-                    _x.size(), " and ", _xerr.value().size(), " found.");
+                    _x.size(), " and ", _x.err_plus.value().size(), " found.");
             }
-            if (_yerr.has_value() && _y.size() != _yerr.value().size()) {
+            if (_x.err_minus.has_value() && _x.size() != _x.err_minus.value().size()) {
+                throw InvalidLinePlotData(
+                    "A line plot data must have the ",
+                    "same dimension for x and xerr, ",
+                    _x.size(), " and ", _x.err_minus.value().size(), " found.");
+            }
+            if (_y.err_plus.has_value() && _y.size() != _y.err_plus.value().size()) {
                 throw InvalidLinePlotData(
                     "A line plot data must have the ",
                     "same dimension for y and yerr, ",
-                    _y.size(), " and ", _yerr.value().size(), " found.");
-            }*/
+                    _y.size(), " and ", _y.err_plus.value().size(), " found.");
+            }
+            if (_y.err_minus.has_value() && _y.size() != _y.err_minus.value().size()) {
+                throw InvalidLinePlotData(
+                    "A line plot data must have the ",
+                    "same dimension for y and yerr, ",
+                    _y.size(), " and ", _y.err_minus.value().size(), " found.");
+            }
         }
 
-        static auto compute_extent(cpt::Array<T> const &arr) noexcept 
+        static auto compute_extent(cpt::Array<float> const &arr) noexcept 
         {
-            struct MinMax { T min, max; };
+            struct MinMax { float min, max; };
             MinMax res {
-                .min = std::numeric_limits<T>::max(),
-                .max = std::numeric_limits<T>::lowest()
+                .min = std::numeric_limits<float>::max(),
+                .max = std::numeric_limits<float>::lowest()
             };
-            for (T val : arr) {
+            for (float val : arr) {
                 if (val < res.min) res.min = val;
                 if (val > res.max) res.max = val;
             }
@@ -117,10 +128,10 @@ namespace cpt
         }
 
     private:
-        PlotData<T> _x;
-        PlotData<T> _y;
+        ScienceDataArray<float> _x;
+        ScienceDataArray<float> _y;
 
-        cpt::Extent<T> _extent;
+        cpt::Extent<float> _extent;
 
     public:
         LinePlotDataConfig config;
