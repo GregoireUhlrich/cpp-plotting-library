@@ -4,6 +4,7 @@ set(plotter_sources
     window.cpp
     figure.cpp
     subplot.cpp
+    subplot_texture.cpp
     grid_layout.cpp
 )
 
