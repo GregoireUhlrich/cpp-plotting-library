@@ -21,7 +21,7 @@ namespace cpt
     struct LinePlotConfig {
         float     marker_size  = 3.5f;
         sf::Color marker_color = sf::Color(0, 64, 128);
-        float     line_width   = 1.f;
+        float     line_width   = 2.f;
         sf::Color line_color   = sf::Color(0, 64, 128);
     };
 

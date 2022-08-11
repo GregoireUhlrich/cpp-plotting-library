@@ -18,7 +18,8 @@ int main()
 
     cpt::Subplot &top_right = fig.get_subplot(0, 1);
     top_right.plot_line(x, cpt::sin(x)*cpt::sin(x),
-                       {.marker_color = sf::Color::Green});
+                       {.marker_size = 1.f, 
+                        .marker_color = sf::Color::Red});
     top_right.set_extent({
         .xmin = -10.f, .xmax = 20.f,
         .ymin = -5.f,  .ymax = 5.f

@@ -7,7 +7,7 @@ namespace cpt
         unsigned int height)
     {
         sf::ContextSettings settings;
-        settings.antialiasingLevel = 4;
+        settings.antialiasingLevel = 8;
         _texture.create(width, height, settings);
     }
 
@@ -30,36 +30,53 @@ namespace cpt
         const float x_aspect_ratio = std::abs(target_size.x / lx);
         const float y_aspect_ratio = std::abs(target_size.y / ly);
 
-        sf::CircleShape circle(line.config.marker_size / 2.f);
-        circle.setFillColor(line.config.marker_color);
-        circle.setOrigin(line.config.marker_size / 2.f,
-                            line.config.marker_size / 2.f);
+        // draw the line first
+        sf::CircleShape point(line.config.line_width / 2.f);
+        point.setFillColor(line.config.line_color);
+        point.setOrigin(line.config.line_width / 2.f,
+                        line.config.line_width / 2.f);
         float x_prev, y_prev;
         for (std::size_t i = 0; i != x.size(); ++i) {
             const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
             const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
-            circle.setPosition(
+            point.setPosition(
                 xi, 
                 target_size.y - yi
             );
-            // _texture.draw(circle);
+            _texture.draw(point);  
             if (i > 0) {
                 const float dist = std::sqrt(
-                    (xi - x_prev)*(xi - x_prev)
-                    + (yi - y_prev)*(yi - y_prev));
-                const float angle = -std::atan2(yi - y_prev, xi - x_prev);
+                    std::pow(xi - x_prev, 2.f)
+                    + std::pow(yi - y_prev, 2.f));
+                const float angle = std::atan2(-yi + y_prev, xi - x_prev);
                 sf::RectangleShape rect({
                     dist,
                     line.config.line_width});
                 rect.setOrigin({0.f, line.config.line_width / 2.f});
-                rect.setPosition(xi, target_size.y - yi);
-                rect.rotate(180.f * angle / std::numbers::pi_v<float>);
+                rect.setPosition(x_prev, target_size.y - y_prev);
+                rect.setRotation(180.f * angle / std::numbers::pi_v<float>);
                 rect.setFillColor(line.config.line_color);
                 _texture.draw(rect);
             }
             x_prev = xi;
             y_prev = yi;
         }
+
+        // markers on top
+        sf::CircleShape marker(line.config.marker_size / 2.f);
+        marker.setFillColor(line.config.marker_color);
+        marker.setOrigin(line.config.marker_size / 2.f,
+                         line.config.marker_size / 2.f);
+        for (std::size_t i = 0; i != x.size(); ++i) {
+            const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
+            const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
+            marker.setPosition(
+                xi, 
+                target_size.y - yi
+            );
+            _texture.draw(marker);
+        }
+
         draw_outline();
     }
 
