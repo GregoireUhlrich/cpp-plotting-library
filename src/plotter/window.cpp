@@ -84,7 +84,7 @@ namespace cpt
             sf::Style::Close | sf::Style::Titlebar
             );
         while (_window.isOpen()) {
-            _window.clear();
+            _window.clear(sf::Color::White);
             draw_callback(_window);
             _window.display();
             sf::Event event;

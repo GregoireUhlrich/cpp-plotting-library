@@ -27,9 +27,8 @@ namespace cpt
         arrow.rotate(90.f);
         switch (_dir) {
             case Up:
-            line.rotate(90.f);
+            line.rotate(-90.f);
             arrow.rotate(-90.f);
-            line.move(0.f, -rect_length);
             arrow.setPosition(_pos.x, _pos.y - rect_length);
             break;
             
@@ -41,7 +40,7 @@ namespace cpt
 
             case Left:
             arrow.rotate(180.f);
-            line.move(-rect_length, 0.f);
+            line.rotate(180.f);
             arrow.setPosition(_pos.x - rect_length, _pos.y);
             break;
 

@@ -2,7 +2,9 @@
 
 int main() {
 
-    sf::RenderWindow window(sf::VideoMode(300, 300), "SFML works!");
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    sf::RenderWindow window(sf::VideoMode(300, 300), "SFML works!", sf::Style::Close | sf::Style::Resize, settings);
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
     cpt::Axis right(cpt::Axis::Right, 50.f, {.line_width = 1.f});
@@ -14,6 +16,13 @@ int main() {
     left.set_position(150.f, 150.f);
     up.set_position(150.f, 150.f);
     down.set_position(150.f, 150.f);
+
+    sf::RectangleShape hwitness(sf::Vector2f{100.f, 1.f});
+    hwitness.setPosition(100.f, 157.f);
+    hwitness.setFillColor(sf::Color::Red);
+    sf::RectangleShape vwitness(sf::Vector2f{1.f, 100.f});
+    vwitness.setPosition(157.f, 100.f);
+    vwitness.setFillColor(sf::Color::Red);
 
     while (window.isOpen())
     {
@@ -29,6 +38,8 @@ int main() {
         right.draw(window);
         up.draw(window);
         down.draw(window);
+        window.draw(hwitness);
+        window.draw(vwitness);
         window.display();
     }
 
