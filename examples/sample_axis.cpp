@@ -2,15 +2,21 @@
 #include "plotter/ticks.hpp"
 #include "math_views.hpp"
 
+void test_ticks(float xmin, float xmax)
+{
+    auto res = cpt::calculate_ticks(xmin, xmax);
+    std::cout << res.size() << " ticks for [" << xmin << ", " << xmax << "] : \t";
+    cpt::print(res);
+}
 int main() {
 
-    cpt::print(cpt::calculate_ticks(-3.5f, 0.0f));
-    cpt::print(cpt::calculate_ticks(-1.f, 1.f));
-    cpt::print(cpt::calculate_ticks(0.f, 20.f));
-    cpt::print(cpt::calculate_ticks(1.5f, 5.7f));
-    cpt::print(cpt::calculate_ticks(1e-2f, 3e2f));
+    test_ticks(-3.5f, 0.0f);
+    test_ticks(-1.f, 1.f);
+    test_ticks(0.f, 20.f);
+    test_ticks(1.5f, 5.7f);
+    test_ticks(1e-2f, 3e2f);
     std::cout.precision(8);
-    cpt::print(cpt::calculate_ticks(1e3f, 1e3f + 1e-2f));
+    test_ticks(1e3f, 1e3f + 1e-2f);
     return 0;
 
     sf::ContextSettings settings;
