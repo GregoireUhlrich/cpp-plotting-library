@@ -1,4 +1,4 @@
-#include "plotter/figure.hpp"
+#include "interface/figure.hpp"
 #include <iostream>
 
 int main()

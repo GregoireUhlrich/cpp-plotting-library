@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <numeric>
-#include "line_plot.hpp"
+#include "../plots/line_plot.hpp"
 
 namespace cpt
 {

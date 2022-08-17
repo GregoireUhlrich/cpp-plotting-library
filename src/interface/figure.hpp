@@ -2,7 +2,7 @@
 #define CPT_FIGURE_H_INCLUDED
 
 #include "subplot.hpp"
-#include "window.hpp"
+#include "../graphics/figure_window.hpp"
 #include "grid_layout.hpp"
 
 namespace cpt
@@ -40,7 +40,7 @@ namespace cpt
         void show(bool blocking = false);
 
     private:
-        cpt::Window _window;
+        cpt::FigureWindow _window;
 
         std::size_t _n_rows;
         std::size_t _n_columns;

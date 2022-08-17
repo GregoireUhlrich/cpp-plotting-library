@@ -41,6 +41,9 @@ namespace cpt
         sf::Sprite sprite;
         _texture.clear(sf::Color::Green);
         _texture.draw(_canvas.get_sprite());
+        for (const auto &[_, axis] : _axis) {
+            axis.draw(_texture);
+        }
         _texture.display();
 
         sprite.setTexture(_texture.getTexture());

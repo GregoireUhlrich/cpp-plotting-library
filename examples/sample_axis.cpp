@@ -1,5 +1,5 @@
-#include "plotter/axis.hpp"
-#include "plotter/ticks.hpp"
+#include "interface/axis.hpp"
+#include "interface/ticks.hpp"
 #include "math_views.hpp"
 
 void test_ticks(float xmin, float xmax)

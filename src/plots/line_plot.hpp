@@ -4,9 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include "../utils/error.hpp"
 #include "../math_views.hpp"
-#include "extent.hpp"
-#include "science_data_array.hpp"
-#include "plot_data.hpp"
+#include "../utils/extent.hpp"
+#include "../utils/science_data_array.hpp"
+#include "../utils/plot_data.hpp"
 
 #include <concepts>
 #include <numeric>

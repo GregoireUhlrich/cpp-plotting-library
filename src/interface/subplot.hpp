@@ -1,10 +1,10 @@
 #ifndef CPT_SUBPLOT_H_INCLUDED
 #define CPT_SUBPLOT_H_INCLUDED
 
-#include "subplot_texture.hpp"
-#include "plot_data.hpp"
-#include "plot_canvas.hpp"
-#include "line_plot.hpp"
+#include "../graphics/subplot_texture.hpp"
+#include "../graphics/plot_canvas.hpp"
+#include "../plots/line_plot.hpp"
+#include "../utils/plot_data.hpp"
 #include <vector>
 #include <memory>
 
