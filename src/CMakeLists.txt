@@ -6,10 +6,10 @@ set(cpt_libs
     plots-obj)
     
 add_library(cpt SHARED)
-target_link_libraries(cpt ${cpt_libs} X11 ${sfml_libs} pthread)
+target_link_libraries(cpt ${cpt_libs} ${X11} ${sfml_libs} ${PTHREAD})
 
 add_library(cpt-static STATIC)
-target_link_libraries(cpt-static ${cpt_libs} X11 ${sfml_libs} pthread)
+target_link_libraries(cpt-static ${cpt_libs} ${X11} ${sfml_libs} ${PTHREAD})
 
 add_subdirectory(utils)
 add_subdirectory(math_views)

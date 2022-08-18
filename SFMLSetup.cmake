@@ -7,7 +7,7 @@ endfunction()
 if(BUILD_SFML_SHARED_LIBS)
     set(BUILD_SHARED_LIBS ${BUILD_SHARED_SFML_LIBS})
 else()
-    set(BUILD_SHARED_LIBS 1)
+    set(BUILD_SHARED_LIBS 0)
 endif()
 
 include(FetchContent)

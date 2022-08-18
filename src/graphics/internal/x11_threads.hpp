@@ -1,4 +1,4 @@
-#ifndef CPT_X11_THREADS_H_INCLUDED
+#if (not defined _WIN32 && not defined CPT_X11_THREADS_H_INCLUDED)
 #define CPT_X11_THREADS_H_INCLUDED
 
 #include <X11/Xlib.h>

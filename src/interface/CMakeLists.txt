@@ -7,5 +7,5 @@ set(interface_sources
 )
 
 add_library(interface-obj OBJECT ${interface_sources})
-target_link_libraries(interface-obj ${sfml_libs} pthread)
+target_link_libraries(interface-obj ${sfml_libs} ${PTHREAD})
 set_target_properties(interface-obj PROPERTIES POSITION_INDEPENDENT_CODE 1)

@@ -8,22 +8,31 @@ endif()
 
 include(SFMLSetup.cmake)
 
+message(NOTICE "-- Fetching GoogleTest ...")
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG release-1.12.1
 )
 FetchContent_MakeAvailable(googletest)
-
-find_package(Doxygen REQUIRED dot)
+message(NOTICE "-- GoogleTest setup successful!")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if (WIN32)
+    set(PTHREAD "")
+    set(X11 "")
+    set(CXX_WARNINGS "")
+    set(CMAKE_CXX_FLAGS "/EHsc")
+else()
+    set(PTHREAD pthread)
+    set(X11     x11)
+    set(CXX_WARNINGS
+        "-Wall -Wextra -Wpedantic -Wconversion"
+    )
+endif()
 
-set(CXX_WARNINGS
-    "-Wall -Wextra -Wpedantic -Wconversion"
-)
 set(CMAKE_CXX_FLAGS "${CXX_WARNINGS}")
 
 # Setup testing
@@ -41,4 +50,9 @@ add_subdirectory(src)
 add_subdirectory(examples)
 add_subdirectory(tests)
 
-doxygen_add_docs(doc src)
+find_package(Doxygen COMPONENTS dot)
+if (Doxygen_FOUND)
+    doxygen_add_docs(doc src)
+else()
+    message(WARNING "Doxygen has not been found and the target \"doc\" could not be generated.")
+endif()
