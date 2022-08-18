@@ -20,12 +20,14 @@ namespace cpt
     class ZipView;
 
     template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
-    using ZipViewIteratorBase = std::iterator<
-            std::random_access_iterator_tag,
-            std::invoke_result_t<Func, std::ranges::range_value_t<LRange>, std::ranges::range_value_t<RRange>>,
-            std::ranges::range_difference_t<LRange>
-            >;
-
+    struct ZipViewIteratorBase {
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type = std::invoke_result_t<Func, std::ranges::range_value_t<LRange>, std::ranges::range_value_t<RRange>>;
+        using reference  = value_type&;
+        using pointer    = value_type*;
+        using difference_type = std::ranges::range_difference_t<LRange>;
+    };
+    
     template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
     class ZipViewIterator: private IteratorImpl,
                            public ZipViewIteratorBase<LRange, RRange, Func> {

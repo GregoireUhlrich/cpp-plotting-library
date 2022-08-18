@@ -21,11 +21,13 @@ namespace cpt
     class MathView;
 
     template <ArrayRange Range, MathApplication<Range> Func>
-    using MathViewIteratorBase = std::iterator< 
-            std::random_access_iterator_tag,
-            std::invoke_result_t<Func, std::ranges::range_value_t<Range>>,
-            std::ranges::range_difference_t<Range>
-            >;
+    struct MathViewIteratorBase {
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type = std::invoke_result_t<Func, std::ranges::range_value_t<Range>>;
+        using reference  = value_type&;
+        using pointer    = value_type*;
+        using difference_type = std::ranges::range_difference_t<Range>;
+    };
 
     template <ArrayRange Range, MathApplication<Range> Func>
     class MathViewIterator: private IteratorImpl,
