@@ -15,7 +15,6 @@ namespace cpt
     public:
         Subplot()               = default;
         Subplot(Subplot const&) = delete;
-        Subplot(Subplot &&)     = default;
 
         void plot_line(
             ScienceDataArray<float> x,

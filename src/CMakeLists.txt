@@ -1,5 +1,3 @@
-set(sfml_libs sfml-graphics sfml-window sfml-system)
-
 set(cpt_libs 
     interface-obj 
     graphics-obj 

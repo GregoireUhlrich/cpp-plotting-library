@@ -26,8 +26,6 @@ namespace cpt
 
         FigureWindow(FigureWindow const &) = delete;
 
-        FigureWindow(FigureWindow &&) = default;
-
         ~FigureWindow();
 
         bool is_blocking() const noexcept;

@@ -7,6 +7,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 include(SFMLSetup.cmake)
+set(sfml_libs sfml-graphics sfml-window sfml-system)
 
 message(NOTICE "-- Fetching GoogleTest ...")
 FetchContent_Declare(
@@ -24,7 +25,6 @@ if (WIN32)
     set(PTHREAD "")
     set(X11 "")
     set(CXX_WARNINGS "")
-    set(CMAKE_CXX_FLAGS "/EHsc")
 else()
     set(PTHREAD pthread)
     set(X11     x11)

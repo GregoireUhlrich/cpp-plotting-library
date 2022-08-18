@@ -12,7 +12,6 @@ namespace cpt
     public:
         SubplotTexture();
         SubplotTexture(SubplotTexture const &) = delete;
-        SubplotTexture(SubplotTexture &&) noexcept = default;
 
         sf::Vector2f get_position() const noexcept;
         sf::Vector2f get_size() const noexcept;

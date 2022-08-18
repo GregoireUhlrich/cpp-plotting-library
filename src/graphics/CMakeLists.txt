@@ -2,6 +2,7 @@ add_subdirectory(internal)
 
 set(graphics_sources
     figure_window.cpp
+    subplot_texture.hpp
     subplot_texture.cpp
     plot_canvas.cpp
 )
