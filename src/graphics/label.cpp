@@ -1,6 +1,6 @@
 #include "label.hpp"
 #include "../utils/printable.hpp"
-
+#include <utility>
 namespace cpt {
 
     Label::Label(std::string const &text, sf::Font const &font)
@@ -43,6 +43,7 @@ namespace cpt {
                 return _text.getLocalBounds().height;
             default:
                 _throw_invalid_axis_error(axis);
+                std::unreachable();
         }
     }
 
