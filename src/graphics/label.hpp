@@ -39,6 +39,10 @@ namespace cpt
         sf::Font     _font;
         sf::Text     _text;
     };
+
+    // PS: For some reason fonts are unusable on Windows.
+    // Thx, back to Linux :)
+
 } // namespace cpt
 
 
