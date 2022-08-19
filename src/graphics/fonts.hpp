@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <filesystem>
+#include <string>
+#include <array>
 #include "../utils/error.hpp"
 
 namespace cpt::font
@@ -32,37 +34,34 @@ namespace cpt::font
         )
             : _family_name(family_name)
         {
-            load_font(_family[Regular],    family.regular);
-            load_font(_family[Bold],       family.bold);
-            load_font(_family[Italic],     family.italic);
-            load_font(_family[ItalicBold], family.italic_bold);
+            _family[Regular]    = (absolute_path_location / _family_name / family.regular).string();
+            _family[Bold]       = (absolute_path_location / _family_name / family.bold).string();
+            _family[Italic]     = (absolute_path_location / _family_name / family.italic).string();
+            _family[ItalicBold] = (absolute_path_location / _family_name / family.italic_bold).string();
         }
 
         std::string const &get_family_name() const noexcept {
             return _family_name;
         }
         
-        sf::Font const &get_font(Class class_) const {
+        std::string const &get_font_file_name(Class class_) const {
             return _family[class_];
         }
 
     private:
         std::string _family_name;
-        sf::Font    _family[4];
-
-    private:
-        void load_font(sf::Font &font, std::string_view file_name)
-        {
-            std::string path 
-                = (absolute_path_location / _family_name / file_name).string();
-            if (!font.loadFromFile(path)) {
-                throw InvalidFontFileError(
-                    std::quoted(path),
-                    " does not exist or is an invalid font file."
-                );
-            }
-        }
+	    std::array<std::string, 4> _family;
     };
+
+    inline void load(sf::Font &font, std::string const &file_name)
+    {
+        if (!font.loadFromFile(file_name)) {
+            throw InvalidFontFileError(
+                std::quoted(file_name),
+                " does not exist or is an invalid font file."
+            );
+        }
+    }
 
     inline const FontFamily arial(
         "arial",
@@ -74,6 +73,14 @@ namespace cpt::font
         }
     );
 
+} // namespace cpt::font
+
+namespace cpt
+{
+    struct Font {
+        cpt::font::FontFamily const &family = cpt::font::arial;
+        cpt::font::Class             class_ = cpt::font::Regular;
+    };
 } // namespace cpt
 
 

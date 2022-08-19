@@ -10,16 +10,12 @@ namespace cpt
 {
     class Label {
     public:
-
-        static inline sf::Font const &default_font 
-            =  cpt::font::arial.get_font(cpt::font::Regular);
-    
         Label(
             std::string const &text = "",
-            sf::Font    const &font = default_font
+            cpt::Font   const &font = {}
         );
 
-        void set_font(sf::Font const &font);
+        void set_font(cpt::Font const &font);
 
         void set_text(std::string const &text);
 
@@ -40,6 +36,7 @@ namespace cpt
     private:
 
         unsigned int _font_size;
+        sf::Font     _font;
         sf::Text     _text;
     };
 } // namespace cpt

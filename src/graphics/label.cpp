@@ -3,7 +3,7 @@
 
 namespace cpt {
 
-    Label::Label(std::string const &text, sf::Font const &font)
+    Label::Label(std::string const &text, cpt::Font const &font)
     {
         set_font(font);
         set_text(text);
@@ -11,9 +11,10 @@ namespace cpt {
         set_fill_color(sf::Color::Black);
     }
 
-    void Label::set_font(sf::Font const &font)
+    void Label::set_font(cpt::Font const &font)
     {
-        _text.setFont(font);
+        cpt::font::load(_font, font.family.get_font_file_name(font.class_));
+        _text.setFont(_font);
     }
 
     void Label::set_text(std::string const &text)
