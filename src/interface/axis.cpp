@@ -3,19 +3,19 @@
 
 namespace cpt
 {
-    Axis::Axis(Anchor anchor, float size)
+    AxisRenderer::AxisRenderer(Anchor anchor, float size)
         : _anchor(anchor),
           _size(size)
     {
 
     }
 
-    void Axis::draw(sf::RenderTarget &target) const 
+    void AxisRenderer::draw(sf::RenderTarget &target) const 
     {
         
     }
 
-    void Axis::set_extent(float mini, float maxi)
+    void AxisRenderer::set_extent(float mini, float maxi)
     {
        auto ticks = calculate_ticks(mini, maxi); 
        //set_ticks(ticks, ticks);

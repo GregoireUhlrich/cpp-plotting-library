@@ -23,7 +23,7 @@ namespace cpt
         
         template<ArrayRange Range1, ArrayRange Range2> 
         void set_ticks(
-            cpt::Axis::Anchor anchor,
+            cpt::AxisRenderer::Anchor anchor,
             Range1     const &positions, 
             Range2     const &values);
     
@@ -31,18 +31,18 @@ namespace cpt
         sf::Vector2f _pos;
         sf::Vector2f _size;
         mutable sf::RenderTexture _texture;
-        std::map<cpt::Axis::Anchor, cpt::Axis> _axis;
+        std::map<cpt::AxisRenderer::Anchor, cpt::AxisRenderer> _axis;
 
         PlotCanvas _canvas;
     };
 
     template<ArrayRange Range1, ArrayRange Range2> 
     void SubplotTexture::set_ticks(
-        cpt::Axis::Anchor anchor,
+        cpt::AxisRenderer::Anchor anchor,
         Range1     const &positions, 
         Range2     const &values)
     {
-        auto &ax = (_axis[anchor] = cpt::Axis(anchor));
+        auto &ax = (_axis[anchor] = cpt::AxisRenderer(anchor));
         ax.set_ticks(positions, values);
     }
 

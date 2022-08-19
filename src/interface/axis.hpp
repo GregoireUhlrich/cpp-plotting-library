@@ -6,11 +6,11 @@
 
 namespace cpt
 {
-    class Axis {
+    class AxisRenderer {
     public:
         enum Anchor { Up, Down, Left, Right };
 
-        Axis(Anchor anchor, float size);
+        AxisRenderer(Anchor anchor, float size);
 
         sf::Vector2f get_position()  const noexcept { return _pos; }
         float        get_size()      const noexcept { return _size; }
@@ -36,7 +36,7 @@ namespace cpt
     };
 
     template<ArrayRange Range1, ArrayRange Range2> 
-    void Axis::set_ticks(Range1 const &positions, Range2 const &values)
+    void AxisRenderer::set_ticks(Range1 const &positions, Range2 const &values)
     {
         _ticks_positions = cpt::collect<float>(positions);
         _ticks_names.resize(std::ranges::size(values));
