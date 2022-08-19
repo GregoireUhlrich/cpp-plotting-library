@@ -80,6 +80,12 @@ namespace cpt
             _texture.draw(marker);
         }
 
+        // Text labels
+        cpt::Label label("Hello World!", cpt::font::arial.get_font(cpt::font::ItalicBold));
+        label.set_position(10.f, 50.f);
+        label.set_font_size(30);
+        label.draw(_texture);
+
         draw_outline();
     }
 

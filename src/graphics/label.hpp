@@ -23,6 +23,9 @@ namespace cpt
 
         void set_text(std::string const &text);
 
+        sf::Color get_fill_color() const;
+        void set_fill_color(sf::Color color);
+
         sf::Vector2f get_size()               const noexcept;
         float        get_size(cpt::Axis axis) const noexcept;
 

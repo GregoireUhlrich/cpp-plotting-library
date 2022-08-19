@@ -1,6 +1,6 @@
 #include "label.hpp"
 #include "../utils/printable.hpp"
-#include <utility>
+
 namespace cpt {
 
     Label::Label(std::string const &text, sf::Font const &font)
@@ -8,6 +8,7 @@ namespace cpt {
         set_font(font);
         set_text(text);
         set_font_size(10);
+        set_fill_color(sf::Color::Black);
     }
 
     void Label::set_font(sf::Font const &font)
@@ -21,18 +22,28 @@ namespace cpt {
     }
 
     template<class AxisType>
-    static void _throw_invalid_axis_error(AxisType axis) 
+    [[noreturn]] static void _throw_invalid_axis_error(AxisType axis) 
         requires (std::same_as<AxisType, cpt::Axis> && cpt::Printable<AxisType>)
     {
         throw InvalidAxisError("Axis ", axis, " not recognized");
     }
 
     template<class AxisType>
-    static void _throw_invalid_axis_error(AxisType axis) 
+    [[noreturn]] static void _throw_invalid_axis_error(AxisType axis) 
         requires (std::same_as<AxisType, cpt::Axis> && !cpt::Printable<AxisType>)
     {
         throw InvalidAxisError("Axis ", static_cast<int>(axis), " not recognized");
     }
+
+    sf::Color Label::get_fill_color() const 
+    {
+        return _text.getFillColor();
+    }
+
+    void Label::set_fill_color(sf::Color color)
+    {
+        _text.setFillColor(color);
+    } 
 
     float Label::get_size(cpt::Axis axis) const noexcept
     {
@@ -43,7 +54,6 @@ namespace cpt {
                 return _text.getLocalBounds().height;
             default:
                 _throw_invalid_axis_error(axis);
-                std::unreachable();
         }
     }
 
