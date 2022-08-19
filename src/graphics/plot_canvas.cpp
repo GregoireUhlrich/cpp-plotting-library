@@ -1,5 +1,7 @@
 #include "plot_canvas.hpp"
 #include <numbers>
+#include "label.hpp"
+#include "fonts.hpp"
 
 namespace cpt
 {
