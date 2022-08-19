@@ -9,15 +9,6 @@ endif()
 include(SFMLSetup.cmake)
 set(sfml_libs sfml-graphics sfml-window sfml-system)
 
-message(NOTICE "-- Fetching GoogleTest ...")
-FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG release-1.12.1
-)
-FetchContent_MakeAvailable(googletest)
-message(NOTICE "-- GoogleTest setup successful!")
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

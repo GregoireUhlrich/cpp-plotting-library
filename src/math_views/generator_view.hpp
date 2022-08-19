@@ -30,10 +30,10 @@ namespace cpt
 
         using generator_t = G;
         
-        using difference_type = iterator_base::difference_type;
-        using value_type      = iterator_base::value_type;
-        using reference       = iterator_base::reference;
-        using pointer         = iterator_base::pointer;
+        using difference_type = typename iterator_base::difference_type;
+        using value_type      = typename iterator_base::value_type;
+        using reference       = typename iterator_base::reference;
+        using pointer         = typename iterator_base::pointer;
 
         GeneratorViewIterator() = default;
 

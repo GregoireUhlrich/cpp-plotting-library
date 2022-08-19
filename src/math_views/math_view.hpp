@@ -39,10 +39,10 @@ namespace cpt
         using iterator = std::ranges::iterator_t<Range>;
         using input_value_type = std::ranges::range_value_t<Range>;
 
-        using difference_type = iterator_base::difference_type;
-        using value_type      = iterator_base::value_type;
-        using reference       = iterator_base::reference;
-        using pointer         = iterator_base::pointer;
+        using difference_type = typename iterator_base::difference_type;
+        using value_type      = typename iterator_base::value_type;
+        using reference       = typename iterator_base::reference;
+        using pointer         = typename iterator_base::pointer;
 
         constexpr MathViewIterator() = default;
 
