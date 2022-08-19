@@ -1,6 +1,6 @@
 function(add_cpt_executable NAME)
     add_executable(${NAME} ${NAME}.cpp)
-    target_link_libraries(${NAME} cpt-static ${sfml_libs} ${X11} ${PTHREAD})
+    target_link_libraries(${NAME} cpt ${sfml_libs} ${X11} ${PTHREAD})
 endfunction()
 
 add_cpt_executable(simple_window)
