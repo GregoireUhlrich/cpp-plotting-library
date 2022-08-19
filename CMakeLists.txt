@@ -18,7 +18,7 @@ if (WIN32)
     set(CXX_WARNINGS "-Wall")
 else()
     set(PTHREAD pthread)
-    set(X11     x11)
+    set(X11     X11)
     set(CXX_WARNINGS
         "-Wall -Wextra -Wpedantic -Wconversion"
     )
