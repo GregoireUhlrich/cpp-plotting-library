@@ -1,4 +1,4 @@
-#include "api/axis.hpp"
+#include "graphics/axis_renderer.hpp"
 #include "api/ticks.hpp"
 #include "math_views.hpp"
 

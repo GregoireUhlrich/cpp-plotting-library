@@ -4,7 +4,7 @@
 #include <map>
 #include <SFML/Graphics.hpp>
 #include "plot_canvas.hpp"
-#include "../api/axis.hpp"
+#include "axis_renderer.hpp"
 
 namespace cpt
 {
@@ -23,22 +23,22 @@ namespace cpt
         
         template<ArrayRange Range1, ArrayRange Range2> 
         void set_ticks(
-            cpt::AxisRenderer::Anchor anchor,
-            Range1     const &positions, 
-            Range2     const &values);
+            cpt::Anchor   anchor,
+            Range1 const &positions, 
+            Range2 const &values);
     
     protected:
         sf::Vector2f _pos;
         sf::Vector2f _size;
         mutable sf::RenderTexture _texture;
-        std::map<cpt::AxisRenderer::Anchor, cpt::AxisRenderer> _axis;
+        std::map<cpt::Anchor, cpt::AxisRenderer> _axis;
 
         PlotCanvas _canvas;
     };
 
     template<ArrayRange Range1, ArrayRange Range2> 
     void SubplotTexture::set_ticks(
-        cpt::AxisRenderer::Anchor anchor,
+        cpt::Anchor       anchor,
         Range1     const &positions, 
         Range2     const &values)
     {

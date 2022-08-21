@@ -6,6 +6,7 @@ set(graphics_sources
     subplot_texture.hpp
     subplot_texture.cpp
     plot_canvas.cpp
+    axis_renderer.cpp
 )
 
 add_library(graphics-obj OBJECT ${graphics_sources})

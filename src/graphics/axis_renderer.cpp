@@ -1,5 +1,4 @@
-#include "axis.hpp"
-#include "ticks.hpp"
+#include "axis_renderer.hpp"
 
 namespace cpt
 {
@@ -13,12 +12,6 @@ namespace cpt
     void AxisRenderer::draw(sf::RenderTarget &target) const 
     {
         
-    }
-
-    void AxisRenderer::set_extent(float mini, float maxi)
-    {
-       auto ticks = calculate_ticks(mini, maxi); 
-       //set_ticks(ticks, ticks);
     }
 
 } // namespace cpt

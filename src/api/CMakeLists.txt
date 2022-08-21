@@ -1,7 +1,6 @@
 set(api_sources
     figure.cpp
     subplot.cpp
-    axis.cpp
     ticks.cpp
     grid_layout.cpp
 )
