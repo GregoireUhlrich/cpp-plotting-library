@@ -1,5 +1,5 @@
-#include "interface/axis.hpp"
-#include "interface/ticks.hpp"
+#include "api/axis.hpp"
+#include "api/ticks.hpp"
 #include "math_views.hpp"
 
 void test_ticks(float xmin, float xmax)

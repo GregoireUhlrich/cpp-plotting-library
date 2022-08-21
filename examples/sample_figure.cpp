@@ -1,4 +1,4 @@
-#include "interface/figure.hpp"
+#include "api/figure.hpp"
 #include <iostream>
 
 int main()

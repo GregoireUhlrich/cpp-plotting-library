@@ -4,7 +4,7 @@
 #include <map>
 #include <SFML/Graphics.hpp>
 #include "plot_canvas.hpp"
-#include "../interface/axis.hpp"
+#include "../api/axis.hpp"
 
 namespace cpt
 {

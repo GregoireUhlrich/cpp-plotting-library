@@ -1,5 +1,5 @@
 set(cpt_libs 
-    interface-obj 
+    api-obj 
     graphics-obj 
     plots-obj)
     
@@ -10,4 +10,4 @@ add_subdirectory(utils)
 add_subdirectory(math_views)
 add_subdirectory(plots)
 add_subdirectory(graphics)
-add_subdirectory(interface)
+add_subdirectory(api)
