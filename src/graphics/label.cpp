@@ -1,5 +1,6 @@
 #include "label.hpp"
 #include "../utils/printable.hpp"
+#include "../utils/error.hpp"
 
 namespace cpt {
 
@@ -9,6 +10,7 @@ namespace cpt {
         set_text(text);
         set_font_size(10);
         set_fill_color(sf::Color::Black);
+        set_alignement(Alignement::Centered);
     }
 
     void Label::set_font(sf::Font const &font)
@@ -46,9 +48,23 @@ namespace cpt {
         _text.setFillColor(color);
     } 
 
-    sf::FloatRect Label::get_bounds() const noexcept
+    sf::Vector2f Label::get_size() const
     {
-        return _text.getGlobalBounds();
+        auto bounds = _text.getGlobalBounds();
+        return {
+            bounds.width,
+            bounds.height
+        };
+    }
+
+    sf::Vector2f Label::get_text_offset() const 
+    {
+        auto bounds = _text.getGlobalBounds();
+        auto pos = _text.getPosition();
+        return {
+            bounds.left - pos.x,
+            bounds.top  - pos.y
+        };
     }
 
     sf::Vector2f Label::get_position() const 
@@ -70,6 +86,78 @@ namespace cpt {
     {
         _font_size = font_size;
         _text.setCharacterSize(font_size);
+    }
+
+    float Label::get_rotation() const
+    {
+        return _text.getRotation();
+    }
+
+    void Label::set_rotation(float angle)
+    {
+        _text.setRotation(angle);
+    }
+
+    void Label::rotate(float angle)
+    {
+        _text.rotate(angle);
+    }
+
+    Label::Alignement Label::get_alignement() const noexcept
+    {
+        return _alignement;
+    }
+
+    static float relative_position(Label::Alignement align, bool x_axis)
+    {
+        if (x_axis) {
+            switch(align) {
+                case Label::Centered:
+                case Label::Top:
+                case Label::Bottom:
+                    return 0.5f;
+                case Label::Left:
+                case Label::TopLeft:
+                case Label::BottomLeft:
+                    return 0.f;
+                case Label::Right:
+                case Label::TopRight:
+                case Label::BottomRight:
+                    return 1.f;
+            }
+        }
+        else {
+            switch(align) {
+                case Label::Centered:
+                case Label::Left:
+                case Label::Right:
+                    return 0.5f;
+                case Label::Top:
+                case Label::TopLeft:
+                case Label::TopRight:
+                    return 0.f;
+                case Label::Bottom:
+                case Label::BottomLeft:
+                case Label::BottomRight:
+                    return 1.f;
+            }
+        }
+        class AlignementError: public cpt::Exception {
+            using cpt::Exception::Exception;
+        }; 
+        throw AlignementError("Alignement of value ", align, " is invalid.");
+    }
+
+    void Label::set_alignement(Label::Alignement alignement)
+    {
+        sf::Vector2f origin = get_text_offset();
+        sf::Vector2f size   = get_size();
+        sf::Vector2f new_origin = {
+            origin.x + relative_position(alignement, 1) * size.x,
+            origin.y + relative_position(alignement, 0) * size.y
+        };
+        _text.setOrigin(new_origin);
+        _alignement = alignement;
     }
 
     void Label::draw(sf::RenderTarget &target) const
