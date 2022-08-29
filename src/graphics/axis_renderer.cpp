@@ -68,6 +68,13 @@ namespace cpt
         }
     }
 
+    void AxisRenderer::set_font(sf::Font const &font)
+    {
+        for (auto &label : _ticks_labels) {
+            label.set_font(font);
+        }
+    }
+
     void AxisRenderer::draw(sf::RenderTarget &target) const
     {
         draw_ticks(target);

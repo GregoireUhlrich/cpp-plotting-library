@@ -24,20 +24,6 @@ namespace cpt {
         _text.setString(sf::String(text));
     }
 
-    template<class AxisType>
-    [[noreturn]] static void _throw_invalid_axis_error(AxisType axis) 
-        requires (std::same_as<AxisType, cpt::Axis> && cpt::Printable<AxisType>)
-    {
-        throw InvalidAxisError("Axis ", axis, " not recognized");
-    }
-
-    template<class AxisType>
-    [[noreturn]] static void _throw_invalid_axis_error(AxisType axis) 
-        requires (std::same_as<AxisType, cpt::Axis> && !cpt::Printable<AxisType>)
-    {
-        throw InvalidAxisError("Axis ", static_cast<int>(axis), " not recognized");
-    }
-
     sf::Color Label::get_fill_color() const 
     {
         return _text.getFillColor();
