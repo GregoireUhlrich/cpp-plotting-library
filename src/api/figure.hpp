@@ -2,8 +2,9 @@
 #define CPT_FIGURE_H_INCLUDED
 
 #include "subplot.hpp"
-#include "../graphics/figure_window.hpp"
 #include "grid_layout.hpp"
+#include "../graphics/figure_window.hpp"
+#include "../graphics/font_manager.hpp"
 
 namespace cpt
 {
@@ -36,6 +37,8 @@ namespace cpt
 
         std::vector<Subplot> &get_subplots() noexcept;
         std::vector<Subplot> const &get_subplots() const noexcept;
+
+        void set_font(sf::Font const &font);
 
         void show(bool blocking = false);
 

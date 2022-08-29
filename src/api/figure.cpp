@@ -1,5 +1,6 @@
 #include "figure.hpp"
 #include "../utils/error.hpp"
+#include "../graphics/fonts.hpp"
 
 namespace cpt
 {
@@ -96,6 +97,13 @@ namespace cpt
         return const_cast<std::vector<Subplot>&>(
             const_cast<const Figure*>(this)->get_subplots()
             );
+    }
+
+    void Figure::set_font(sf::Font const &font)
+    {
+        for (auto &subplot : _subplots) {
+            subplot.set_font(font);
+        }
     }
 
     void Figure::show(bool blocking) 
