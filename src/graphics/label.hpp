@@ -10,20 +10,21 @@ namespace cpt
 {
     class Label {
     public:
+        Label() = default;
+
         Label(
-            std::string const &text = "",
-            cpt::Font   const &font = {}
+            std::string const &text,
+            sf::Font    const &font
         );
 
-        void set_font(cpt::Font const &font);
+        void set_font(sf::Font const &font);
 
         void set_text(std::string const &text);
 
         sf::Color get_fill_color() const;
         void set_fill_color(sf::Color color);
 
-        sf::Vector2f get_size()               const noexcept;
-        float        get_size(cpt::Axis axis) const noexcept;
+        sf::FloatRect get_bounds() const noexcept;
 
         sf::Vector2f get_position() const;
         void set_position(float x, float y);
@@ -35,9 +36,9 @@ namespace cpt
 
     private:
 
-        unsigned int _font_size;
-        sf::Font     _font;
-        sf::Text     _text;
+        unsigned int    _font_size;
+        sf::Font const *_font;
+        sf::Text        _text;
     };
 
     // PS: For some reason fonts are unusable on Windows.

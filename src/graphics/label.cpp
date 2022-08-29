@@ -3,7 +3,7 @@
 
 namespace cpt {
 
-    Label::Label(std::string const &text, cpt::Font const &font)
+    Label::Label(std::string const &text, sf::Font const &font)
     {
         set_font(font);
         set_text(text);
@@ -11,10 +11,10 @@ namespace cpt {
         set_fill_color(sf::Color::Black);
     }
 
-    void Label::set_font(cpt::Font const &font)
+    void Label::set_font(sf::Font const &font)
     {
-        cpt::font::load(_font, font.family.get_font_file_name(font.class_));
-        _text.setFont(_font);
+        _font = &font;
+        _text.setFont(*_font);
     }
 
     void Label::set_text(std::string const &text)
@@ -46,24 +46,9 @@ namespace cpt {
         _text.setFillColor(color);
     } 
 
-    float Label::get_size(cpt::Axis axis) const noexcept
+    sf::FloatRect Label::get_bounds() const noexcept
     {
-        switch (axis) {
-            case cpt::Axis::X: 
-                return _text.getLocalBounds().width;
-            case cpt::Axis::Y: 
-                return _text.getLocalBounds().height;
-            default:
-                _throw_invalid_axis_error(axis);
-        }
-    }
-
-    sf::Vector2f Label::get_size() const noexcept 
-    {
-        return sf::Vector2f{ 
-            get_size(cpt::Axis::X), 
-            get_size(cpt::Axis::Y)
-        };
+        return _text.getGlobalBounds();
     }
 
     sf::Vector2f Label::get_position() const 
