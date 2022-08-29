@@ -45,6 +45,10 @@ namespace cpt
         void set_size(float size)             noexcept { _size = size; } 
         void set_anchor(Anchor anchor)        noexcept { _anchor = anchor; }
 
+        bool is_x_axis() const {
+            return _anchor == Anchor::Up || _anchor == Anchor::Down;
+        }
+
         void set_ticks(
             std::vector<float>      ticks_positions,
             std::vector<cpt::Label> ticks_labels
@@ -53,9 +57,12 @@ namespace cpt
         void draw(sf::RenderTarget &target) const;
 
     private:
-        void draw_ticks(sf::RenderTarget &target, bool x_axis) const;
-        void draw_witness_line(sf::RenderTarget &target, bool x_axis) const;
-        void draw_labels(sf::RenderTarget &target, bool x_axis) const;
+
+        void update_ticks_labels();
+
+        void draw_ticks(sf::RenderTarget &target) const;
+        void draw_witness_line(sf::RenderTarget &target) const;
+        void draw_labels(sf::RenderTarget &target) const;
 
     private:
         Anchor         _anchor;

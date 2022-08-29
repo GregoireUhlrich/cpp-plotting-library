@@ -35,39 +35,59 @@ namespace cpt
         }
         _ticks_positions = std::move(ticks_position);
         _ticks_labels    = std::move(ticks_labels);
+        update_ticks_labels();
+    }
+
+    void AxisRenderer::update_ticks_labels()
+    {
+        const float spacing = _config.tick_length + _config.spacing;
+        const float sign = 
+            (_anchor == Anchor::Down || _anchor == Anchor::Right) ? 
+            +1.f : -1.f;
+        const Label::Alignement alignement = 
+            (_anchor == Anchor::Left || _anchor == Anchor::Down) ? 
+            Label::Right : Label::Left;
         for (size_t i = 0; i != _ticks_labels.size(); ++i) {
-            sf::FloatRect bounds = _ticks_labels[i].get_bounds();
-            float xr = bounds.left + bounds.width;
-            float ym = bounds.top  + bounds.height / 2.f;
-            _ticks_labels[i].set_position(
-                _pos.x - xr - _config.spacing - _config.tick_length,
-                _pos.y - ym + _size * _ticks_positions[i]
-                );
+            _ticks_labels[i].set_alignement(alignement);
+            if (is_x_axis()) {
+                _ticks_labels[i].set_rotation(-90.f);
+            }
+            float scaled_pos = _size * _ticks_positions[i];
+            if (is_x_axis()) {
+                _ticks_labels[i].set_position(
+                    _pos.x + scaled_pos,
+                    _pos.y + sign * spacing
+                    );
+            }
+            else {
+                _ticks_labels[i].set_position(
+                    _pos.x + sign * spacing,
+                    _pos.y + scaled_pos
+                    );
+            }
         }
     }
 
     void AxisRenderer::draw(sf::RenderTarget &target) const
     {
-        const bool is_x_axis = (_anchor == Anchor::Down || _anchor == Anchor::Up);
-        draw_ticks(target, is_x_axis);
-        draw_witness_line(target, is_x_axis);
-        draw_labels(target, is_x_axis);
+        draw_ticks(target);
+        draw_witness_line(target);
+        draw_labels(target);
     }
 
     void AxisRenderer::draw_ticks(
-            sf::RenderTarget &target,
-            bool              is_x_axis
+            sf::RenderTarget &target
             ) const 
     {
         const float displacement 
             = (_anchor == Anchor::Left || _anchor == Anchor::Up) ? -1.f: 0.f;
         sf::RectangleShape tick({_config.tick_length, _config.tick_width});
         tick.setFillColor(sf::Color::Black);
-        tick.rotate(90.f * static_cast<float>(is_x_axis));
+        tick.rotate(90.f * static_cast<float>(is_x_axis()));
         for (std::size_t i = 0; i != _ticks_positions.size(); ++i) {
             float x_rel, y_rel;
             float pos = _ticks_positions[i] * _size;
-            if (is_x_axis) {
+            if (is_x_axis()) {
                 x_rel = pos + _config.tick_width / 2.f;
                 y_rel = _config.tick_length * displacement;
             }
@@ -81,13 +101,12 @@ namespace cpt
     }
 
     void AxisRenderer::draw_witness_line(
-            sf::RenderTarget &target, 
-            bool              is_x_axis
+            sf::RenderTarget &target
             ) const
     {
         sf::RectangleShape witness({_size, 1.f});
         witness.setFillColor(sf::Color::Black);
-        witness.rotate(90.f * static_cast<float>(!is_x_axis));
+        witness.rotate(90.f * static_cast<float>(!is_x_axis()));
         witness.setPosition({
             _pos.x,
             _pos.y
@@ -96,9 +115,8 @@ namespace cpt
     }
 
     void AxisRenderer::draw_labels(
-            sf::RenderTarget &target,
-            bool              is_x_axis
-            ) const
+            sf::RenderTarget &target
+        ) const
     {
         for (const auto &label : _ticks_labels) {
             label.draw(target);
