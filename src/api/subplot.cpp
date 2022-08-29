@@ -15,12 +15,6 @@ namespace cpt {
         ));
     }
 
-    void Subplot::set_extent(Extent<float> extent) noexcept
-    {
-        _extent = std::move(extent);
-        _user_extent = true;
-    }
-
     Extent<float> Subplot::get_extent()
     {
         if (_user_extent) {
@@ -28,6 +22,12 @@ namespace cpt {
         }
         compute_extent();
         return _extent;
+    }
+
+    void Subplot::set_extent(Extent<float> extent) noexcept
+    {
+        _extent = std::move(extent);
+        _user_extent = true;
     }
 
     template<std::floating_point T>
@@ -57,6 +57,13 @@ namespace cpt {
         _extent.xmax += 0.1f * dx;
         _extent.ymin -= 0.1f * dy;
         _extent.ymax += 0.1f * dy;
+    }
+
+    void Subplot::set_font(sf::Font const &font)
+    {
+        for (auto &ax : axis) {
+            ax.set_font(font);
+        }
     }
 
     void Subplot::display()
