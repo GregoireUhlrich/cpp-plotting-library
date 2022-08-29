@@ -10,7 +10,7 @@
 namespace cpt
 {
     struct AxisRendererConfig {
-        float spacing     = 3.f;
+        float spacing     = 5.f;
         float tick_width  = 3.f;
         float tick_length = 7.f;
     };
@@ -51,6 +51,11 @@ namespace cpt
             );
 
         void draw(sf::RenderTarget &target) const;
+
+    private:
+        void draw_ticks(sf::RenderTarget &target, bool x_axis) const;
+        void draw_witness_line(sf::RenderTarget &target, bool x_axis) const;
+        void draw_labels(sf::RenderTarget &target, bool x_axis) const;
 
     private:
         Anchor         _anchor;

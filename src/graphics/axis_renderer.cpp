@@ -35,11 +35,30 @@ namespace cpt
         }
         _ticks_positions = std::move(ticks_position);
         _ticks_labels    = std::move(ticks_labels);
+        for (size_t i = 0; i != _ticks_labels.size(); ++i) {
+            sf::FloatRect bounds = _ticks_labels[i].get_bounds();
+            float xr = bounds.left + bounds.width;
+            float ym = bounds.top  + bounds.height / 2.f;
+            _ticks_labels[i].set_position(
+                _pos.x - xr - _config.spacing - _config.tick_length,
+                _pos.y - ym + _size * _ticks_positions[i]
+                );
+        }
     }
 
-    void AxisRenderer::draw(sf::RenderTarget &target) const 
+    void AxisRenderer::draw(sf::RenderTarget &target) const
     {
         const bool is_x_axis = (_anchor == Anchor::Down || _anchor == Anchor::Up);
+        draw_ticks(target, is_x_axis);
+        draw_witness_line(target, is_x_axis);
+        draw_labels(target, is_x_axis);
+    }
+
+    void AxisRenderer::draw_ticks(
+            sf::RenderTarget &target,
+            bool              is_x_axis
+            ) const 
+    {
         const float displacement 
             = (_anchor == Anchor::Left || _anchor == Anchor::Up) ? -1.f: 0.f;
         sf::RectangleShape tick({_config.tick_length, _config.tick_width});
@@ -59,6 +78,13 @@ namespace cpt
             tick.setPosition(_pos.x + x_rel, _pos.y + y_rel);
             target.draw(tick);
         }
+    }
+
+    void AxisRenderer::draw_witness_line(
+            sf::RenderTarget &target, 
+            bool              is_x_axis
+            ) const
+    {
         sf::RectangleShape witness({_size, 1.f});
         witness.setFillColor(sf::Color::Black);
         witness.rotate(90.f * static_cast<float>(!is_x_axis));
@@ -67,6 +93,16 @@ namespace cpt
             _pos.y
         });
         target.draw(witness);
+    }
+
+    void AxisRenderer::draw_labels(
+            sf::RenderTarget &target,
+            bool              is_x_axis
+            ) const
+    {
+        for (const auto &label : _ticks_labels) {
+            label.draw(target);
+        }
     }
 
 } // namespace cpt
