@@ -30,7 +30,7 @@ namespace cpt
     bool is_better_n_ticks(
         int n, 
         int n_old,
-        AutoTicksCongifuration const &config
+        AutoTicksConfiguration const &config
     )
     {
         auto is_valid = [&config](int n) {
@@ -53,7 +53,7 @@ namespace cpt
     static float calculate_best_dx(
         float xmin,
         float xmax,
-        AutoTicksCongifuration const &config
+        AutoTicksConfiguration const &config
     )
     {
         constexpr static auto next_greater = {2.f, 2.5f, 5.f};
@@ -84,7 +84,7 @@ namespace cpt
     cpt::Array<float> calculate_ticks(
         float xmin,
         float xmax,
-        AutoTicksCongifuration const &config
+        AutoTicksConfiguration const &config
     )
     {
         if (xmax < xmin) { 

@@ -10,7 +10,7 @@ namespace cpt
         using cpt::Exception::Exception;
     };
 
-    struct AutoTicksCongifuration {
+    struct AutoTicksConfiguration {
         int min_n_ticks   = 2;
         int ideal_n_ticks = 6;
         int max_n_ticks   = 10;
@@ -19,7 +19,7 @@ namespace cpt
     cpt::Array<float> calculate_ticks(
         float xmin, 
         float xmax,
-        AutoTicksCongifuration const &config = {}
+        AutoTicksConfiguration const &config = {}
         );
         
 } // namespace cpt
