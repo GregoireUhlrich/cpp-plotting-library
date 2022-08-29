@@ -9,10 +9,6 @@ namespace cpt
         Up, Down, Left, Right
     };
 
-    enum class Axis {
-        X, Y
-    };
-
     class InvalidAnchorError: public cpt::Exception {
         using cpt::Exception::Exception;
     };
