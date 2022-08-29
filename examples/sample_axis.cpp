@@ -1,7 +1,9 @@
 #include "graphics/axis_renderer.hpp"
 #include "graphics/label.hpp"
+#include "graphics/font_manager.hpp"
 #include "api/ticks.hpp"
 #include "math_views.hpp"
+
 
 void test_ticks(float xmin, float xmax)
 {
@@ -10,11 +12,22 @@ void test_ticks(float xmin, float xmax)
     cpt::print(res);
 }
 
+auto axis_label(std::string str, cpt::FontManager &manager)
+{
+    cpt::Label label;
+    label.set_text(std::move(str));
+    label.set_font(manager.get_font(cpt::font::arial, cpt::font::Italic));
+    label.set_font_size(15);
+    label.set_fill_color(sf::Color::Red);
+    return label;
+}
+
 int main() {
 
     sf::ContextSettings settings;
-    settings.antialiasingLevel = 8;
-    sf::RenderWindow window(sf::VideoMode(300, 300), "SFML works!", sf::Style::Close | sf::Style::Resize, settings);
+    settings.antialiasingLevel = 4;
+    cpt::FontManager manager;
+    sf::RenderWindow window(sf::VideoMode(300, 300), "i3float", sf::Style::Close | sf::Style::Resize, settings);
     cpt::AxisRenderer y (cpt::Anchor::Left,  200.f);
     cpt::AxisRenderer x (cpt::Anchor::Down,  200.f);
     cpt::AxisRenderer yc(
@@ -27,8 +40,15 @@ int main() {
     x.set_position (50.f,  250.f);
     yc.set_position(250.f, 50.f);
     xc.set_position(50.f,  50.f);
-    y.set_ticks({0.25f, 0.75f}, {cpt::Label(), cpt::Label()});
-    x.set_ticks({0.25f, 0.5f, 0.75f}, {cpt::Label(), cpt::Label(), cpt::Label()});
+    y.set_ticks({0.25f, 0.5f, 0.75f}, 
+            {
+            axis_label("0.1", manager), 
+            axis_label("0.2", manager), 
+            axis_label("0.3", manager)
+            });
+    x.set_ticks(
+            {0.25f, 0.5f, 0.75f}, 
+            {cpt::Label(), cpt::Label(), cpt::Label()});
     xc.set_ticks({0.33f, 0.66f}, {cpt::Label(), cpt::Label()});
     yc.set_ticks({0.1f, 0.9f}, {cpt::Label(), cpt::Label()});
     while (window.isOpen())
