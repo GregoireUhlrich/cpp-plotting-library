@@ -3,6 +3,7 @@ set(api_sources
     subplot.cpp
     ticks.cpp
     grid_layout.cpp
+    axis.cpp
 )
 
 add_library(api-obj OBJECT ${api_sources})
