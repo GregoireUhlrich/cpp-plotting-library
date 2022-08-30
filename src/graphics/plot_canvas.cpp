@@ -10,7 +10,7 @@ namespace cpt
         unsigned int height)
     {
         sf::ContextSettings settings;
-        settings.antialiasingLevel = 8;
+        settings.antialiasingLevel = sf::RenderTexture::getMaximumAntialiasingLevel();
         _texture.create(width, height, settings);
     }
 
