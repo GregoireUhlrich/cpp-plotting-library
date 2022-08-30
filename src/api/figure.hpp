@@ -8,20 +8,26 @@
 
 namespace cpt
 {
+    class Session;
+    
     class Figure {
 
     public:
         Figure( 
+            Session    &session,
             std::size_t width, 
             std::size_t height);
 
         Figure(
+            Session         &session,
             std::string_view name, 
-            std::size_t width, 
-            std::size_t height);
+            std::size_t      width, 
+            std::size_t      height);
 
         Figure(Figure const &) = delete;
         Figure(Figure &&) = default;
+
+    public:
 
         ~Figure();
 
@@ -52,9 +58,6 @@ namespace cpt
         std::size_t _n_rows;
         std::size_t _n_columns;
         std::vector<cpt::Subplot> _subplots;
-
-    private:
-        static inline unsigned int n_figures = 0;
     };
 } // namespace cpt
 

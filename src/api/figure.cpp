@@ -1,27 +1,34 @@
 #include "figure.hpp"
+#include "session.hpp"
 #include "../utils/error.hpp"
 #include "../graphics/fonts.hpp"
 
 namespace cpt
 {
     Figure::Figure( 
+        Session    &session,
         std::size_t width, 
         std::size_t height)
-        : Figure("Figure " + std::to_string(++n_figures), width, height)
+        : Figure(
+            session, 
+            "Figure " + std::to_string(session.get_n_figures()), 
+            width, height)
     {
 
     }
 
     Figure::Figure(
+        Session         &session,
         std::string_view name, 
-        std::size_t width, 
-        std::size_t height)
+        std::size_t      width, 
+        std::size_t      height)
         : _window(
             name, 
             width, 
             height)
     {
         create_subplots(1, 1);
+        set_font(session.get_main_font());
     }
 
     Figure::~Figure()

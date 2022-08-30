@@ -14,13 +14,15 @@ namespace cpt
 
         Session();
 
+        sf::Font const &get_main_font() const;
+
         sf::Font const &get_font(
-            cpt::font::FontFamily const &family = cpt::font::arial,
+            cpt::font::FontFamily const &family,
             cpt::font::Class             class_ = cpt::font::Regular
             );
 
         void set_main_font(
-            cpt::font::FontFamily const &family = cpt::font::arial,
+            cpt::font::FontFamily const &family,
             cpt::font::Class             class_ = cpt::font::Regular
             );
 
@@ -33,20 +35,16 @@ namespace cpt
         Figure const &get_figure(size_t i) const;
 
         template<class ...FigArgs>
-            requires std::constructible_from<cpt::Figure, FigArgs...>
+            requires std::constructible_from<cpt::Figure, cpt::Session&, FigArgs...>
         Figure &create_figure(FigArgs &&...args)
         {
             auto insertion_result = _figures.try_emplace(
                 _n_figures++, 
+                *this,
                 std::forward<FigArgs>(args)...);
             cpt::Figure &fig = (insertion_result.first)->second;
-            setup_figure(fig);
             return fig;
         }
-
-    private:
-
-        void setup_figure(cpt::Figure &figure);
 
     private:
 

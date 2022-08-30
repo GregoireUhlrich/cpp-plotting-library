@@ -5,7 +5,7 @@ namespace cpt
 {
     Session::Session()
     {
-        get_font();
+        set_main_font(cpt::font::arial, cpt::font::Regular);
     }
 
     sf::Font const &Session::get_font(
@@ -14,6 +14,11 @@ namespace cpt
         )
     {
         return _font_manager.get_font(family, class_);
+    }
+
+    sf::Font const &Session::get_main_font() const 
+    {
+        return *_main_font;
     }
 
     void Session::set_main_font(
@@ -39,11 +44,6 @@ namespace cpt
     {
         return const_cast<cpt::Figure&>(
             const_cast<Session const*>(this)->get_figure(i));
-    }
-
-    void Session::setup_figure(cpt::Figure &figure)
-    {
-        figure.set_font(*_main_font);
     }
 
 } // namespace cpt

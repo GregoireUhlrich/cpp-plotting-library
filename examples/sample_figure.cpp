@@ -5,8 +5,8 @@
 int main()
 {
     cpt::Session session;
-    //cpt::Figure &fig = session.create_figure("My Fig", 10, 5);
-    cpt::Figure fig("My Fig", 10, 5);
+    cpt::Figure &fig = session.create_figure("My Fig", 10, 5);
+
     fig.create_subplots(2, 2);
 
     auto x = cpt::linspace(0, 10, 100);
