@@ -1,4 +1,5 @@
 set(api_sources
+    session.cpp
     figure.cpp
     subplot.cpp
     ticks.cpp

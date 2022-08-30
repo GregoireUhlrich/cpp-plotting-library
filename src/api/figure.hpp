@@ -9,6 +9,7 @@
 namespace cpt
 {
     class Figure {
+
     public:
         Figure( 
             std::size_t width, 
@@ -18,6 +19,9 @@ namespace cpt
             std::string_view name, 
             std::size_t width, 
             std::size_t height);
+
+        Figure(Figure const &) = delete;
+        Figure(Figure &&) = default;
 
         ~Figure();
 
