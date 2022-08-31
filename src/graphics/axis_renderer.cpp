@@ -68,6 +68,40 @@ namespace cpt
         }
     }
 
+    sf::FloatRect AxisRenderer::get_bounds() const
+    {
+        float line_width = 1.f;
+        float length = _size;
+        float rwidth = line_width / 2.f;
+        float lwidth = line_width / 2.f + _config.tick_length + _config.spacing;
+        float max_label_length = 0.f;
+        for (const auto &label : _ticks_labels) {
+            sf::Vector2f label_size = label.get_size();
+            float label_length = (std::abs(label.get_rotation()) > 45.f) ?
+                label_size.y : label_size.x;
+            if (label_length > max_label_length) {
+                max_label_length = label_length;
+            }
+        }
+        lwidth += max_label_length;
+        float total_width = lwidth + rwidth;
+        switch (_anchor) {
+            case Anchor::Left:
+                return sf::FloatRect(_pos.x - lwidth, _pos.y, total_width, length);
+            case Anchor::Right:
+                return sf::FloatRect(_pos.x - rwidth, _pos.y, total_width, length);
+            case Anchor::Up:
+                return sf::FloatRect(_pos.x, _pos.y - lwidth, length, total_width);
+            case Anchor::Down:
+                return sf::FloatRect(_pos.x, _pos.y - rwidth, length, total_width);
+            default:
+                throw InvalidAnchorError(
+                    "Anchor with value ", 
+                    static_cast<int>(_anchor), 
+                    " is unknown.");
+        }
+    }
+
     void AxisRenderer::set_font(sf::Font const &font)
     {
         for (auto &label : _ticks_labels) {

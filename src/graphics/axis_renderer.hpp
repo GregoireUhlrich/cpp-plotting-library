@@ -45,6 +45,8 @@ namespace cpt
         float        get_size()      const noexcept { return _size; }
         Anchor       get_anchor()    const noexcept { return _anchor; }
 
+        sf::FloatRect get_bounds() const;
+
         void set_position(float sx, float sy) noexcept { _pos = {sx, sy}; }
         void set_size(float size)             noexcept { _size = size; } 
         void set_anchor(Anchor anchor)        noexcept { _anchor = anchor; }

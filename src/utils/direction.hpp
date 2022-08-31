@@ -12,10 +12,6 @@ namespace cpt
     class InvalidAnchorError: public cpt::Exception {
         using cpt::Exception::Exception;
     };
-
-    class InvalidAxisError: public cpt::Exception {
-        using cpt::Exception::Exception;
-    };
 } // namespace cpt
 
 #endif
