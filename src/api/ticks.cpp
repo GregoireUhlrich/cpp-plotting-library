@@ -74,6 +74,7 @@ namespace cpt
             n_ticks = new_n_ticks;
             previous_guess = factor * dx_guess;
         }
+        return previous_guess;
         throw InvalidTicksConfiguration(
             "Could not calculate ticks between ", xmin, " and ", xmax,
             " for a configuration requiring n_ticks in [", config.min_n_ticks,
@@ -81,7 +82,7 @@ namespace cpt
         );
     }
 
-    cpt::Array<float> calculate_ticks(
+    std::vector<float> calculate_ticks(
         float xmin,
         float xmax,
         AutoTicksConfiguration const &config
@@ -94,7 +95,7 @@ namespace cpt
         auto [first, last] = calculate_ticks_bounds(xmin, xmax, dx);
         std::size_t n_ticks = static_cast<std::size_t>(
             calculate_n_ticks(xmin, xmax, dx));
-        cpt::Array<float> res(n_ticks);
+        std::vector<float> res(n_ticks);
         for (std::size_t i = 0; i != n_ticks; ++i) {
             res[i] = first + dx*static_cast<float>(i);
         }

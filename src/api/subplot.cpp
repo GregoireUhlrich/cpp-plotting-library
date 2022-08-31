@@ -1,6 +1,15 @@
 #include "subplot.hpp"
+#include "ticks.hpp"
+#include <sstream>
+#include <algorithm>
+#include <iomanip>
 
 namespace cpt {
+
+    Subplot::Subplot()
+    {
+
+    }
 
     void Subplot::plot_line(
         ScienceDataArray<float> x,
@@ -59,17 +68,68 @@ namespace cpt {
         _extent.ymax += 0.1f * dy;
     }
 
-    void Subplot::set_font(sf::Font const &font)
+    static std::vector<cpt::Label> create_labels(
+        std::vector<float> const &ticks,
+        sf::Font           const &font,
+        unsigned int              font_size
+        )
     {
-        for (auto &ax : axis) {
-            ax.set_font(font);
+        if (ticks.empty()) {
+            return {};
         }
+        std::vector<cpt::Label> ticks_labels(ticks.size());
+        int n_digits = 0;
+        if (ticks.size() > 1) {
+            auto log = -std::log10(std::abs(ticks[1] - ticks[0]));
+            n_digits = static_cast<int>(std::max(0.f, 1.f + std::ceil(log)));
+        }
+        else {
+            n_digits = static_cast<int>(std::max(0.f, - std::floor(std::log10(ticks[0]))));
+        }
+        for (size_t i = 0; i != ticks.size(); ++i) {
+            std::ostringstream sout;
+            sout.precision(n_digits);
+            sout << std::fixed << ticks[i];
+            ticks_labels[i].set_text(sout.str());
+            ticks_labels[i].set_font(font);
+            ticks_labels[i].set_font_size(font_size);
+            ticks_labels[i].set_fill_color(sf::Color::Black);
+        }
+        return ticks_labels;
+    }
+
+    static void set_relative_position(
+        std::vector<float> &x,
+        float               xmin,
+        float               xmax
+        )
+    {
+        for (float &xi : x) {
+            xi = (xi - xmin) / (xmax - xmin);
+        }
+    }
+
+    void Subplot::setup_default_axis(cpt::Extent<float> const &extent)
+    {
+        std::vector<float> x_ticks = calculate_ticks(extent.xmin, extent.xmax);
+        std::vector<float> y_ticks = calculate_ticks(extent.ymin, extent.ymax);
+        std::vector<cpt::Label> x_ticks_labels = create_labels(x_ticks, get_font(), 15);
+        std::vector<cpt::Label> y_ticks_labels = create_labels(y_ticks, get_font(), 15);
+        set_relative_position(x_ticks, extent.xmin, extent.xmax);
+        set_relative_position(y_ticks, extent.ymin, extent.ymax);
+        set_ticks(Anchor::Down, std::move(x_ticks), std::move(x_ticks_labels));
+        set_ticks(Anchor::Left, std::move(y_ticks), std::move(y_ticks_labels));
     }
 
     void Subplot::display()
     {
+        cpt::Extent<float> extent = get_extent();
+        setup_default_axis(extent);
+
+        SubplotTexture::create();
+        setup_default_axis(extent);
         _canvas.clear();
-        _canvas.set_extent(get_extent());
+        _canvas.set_extent(extent);
         for (const auto &plot : _plots) {
             plot->draw_plot(_canvas);
         }

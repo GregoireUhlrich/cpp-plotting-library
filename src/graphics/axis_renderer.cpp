@@ -159,8 +159,8 @@ namespace cpt
             sf::RenderTarget &target
         ) const
     {
-        for (const auto &label : _ticks_labels) {
-            label.draw(target);
+        for (size_t i = 0; i != _ticks_labels.size(); ++i) {
+            _ticks_labels[i].draw(target);
         }
     }
 

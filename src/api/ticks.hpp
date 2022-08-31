@@ -1,8 +1,8 @@
 #ifndef CPT_TICKS_H_INCLUDED
 #define CPT_TICKS_H_INCLUDED
 
-#include "../math_views/array_view.hpp"
 #include "../utils/error.hpp"
+#include <vector>
 
 namespace cpt
 {
@@ -16,7 +16,7 @@ namespace cpt
         int max_n_ticks   = 10;
     };
 
-    cpt::Array<float> calculate_ticks(
+    std::vector<float> calculate_ticks(
         float xmin, 
         float xmax,
         AutoTicksConfiguration const &config = {}

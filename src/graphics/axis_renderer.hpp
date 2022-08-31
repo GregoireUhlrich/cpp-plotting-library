@@ -73,7 +73,6 @@ namespace cpt
         sf::Vector2f   _pos;
         float          _size;
 
-        sf::Font                _font;
         std::vector<float>      _ticks_positions;
         std::vector<cpt::Label> _ticks_labels;
 

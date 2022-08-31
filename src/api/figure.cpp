@@ -42,6 +42,9 @@ namespace cpt
         cpt::GridLayoutConfig const &config)
     {
         _subplots = std::vector<Subplot>(n_rows * n_columns);
+        for (auto &subplot : _subplots) {
+            subplot.set_font(get_font());
+        }
         _n_rows = n_rows;
         _n_columns = n_columns;
         sf::Vector2f size = _window.get_size();
@@ -106,8 +109,14 @@ namespace cpt
             );
     }
 
+    sf::Font const &Figure::get_font() const 
+    {
+        return *_font;
+    }
+
     void Figure::set_font(sf::Font const &font)
     {
+        _font = &font;
         for (auto &subplot : _subplots) {
             subplot.set_font(font);
         }

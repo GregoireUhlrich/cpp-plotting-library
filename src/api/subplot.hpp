@@ -7,14 +7,14 @@
 #include "../plots/line_plot.hpp"
 #include "../utils/plot_data.hpp"
 #include <vector>
-#include <memory>
+#include <map>
 
 namespace cpt
 {
     class Subplot: public SubplotTexture {
 
     public:
-        Subplot()               = default;
+        Subplot();
         Subplot(Subplot const&) = delete;
 
         void plot_line(
@@ -29,17 +29,15 @@ namespace cpt
         Extent<float> get_extent();
         void set_extent(Extent<float> extent) noexcept;
 
-        void set_font(sf::Font const &font);
-
         void display();
 
     private:
         void compute_extent();
+        void setup_default_axis(cpt::Extent<float> const &extent);
 
     private:
         bool          _user_extent = false;
         Extent<float> _extent;
-        std::vector<cpt::Axis> axis;
         std::vector<std::shared_ptr<cpt::PlotData>> _plots;
     };
 } // namespace cpt
