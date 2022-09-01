@@ -7,14 +7,16 @@
 
 namespace cpt {
 
-    class rand {
+    class RandomDevice {
     public:
 
-        rand() = delete;
+        RandomDevice()                     = default;
+        RandomDevice(RandomDevice const &) = delete;
+        RandomDevice(RandomDevice &&)      = delete;
 
         template <std::integral IntegralType = int>
-        static 
-        IntegralType rand_int(
+        auto rand_int(
+            std::size_t        n,
             std::integral auto first, 
             std::integral auto last
             )
@@ -22,12 +24,22 @@ namespace cpt {
             std::uniform_int_distribution<IntegralType> distrib(
                 static_cast<IntegralType>(first), 
                 static_cast<IntegralType>(last));
-            return distrib(rand::_device);
+            return this->rand(n, distrib);
+        }
+
+        template <std::integral IntegralType = int>
+        IntegralType rand_int(
+            std::integral auto first, 
+            std::integral auto last
+            )
+        {
+            auto view = this->rand_int<IntegralType>(1, first, last);
+            return *view.begin();
         }
 
         template <std::floating_point FloatingType = float>
-        static 
-        FloatingType rand_real(
+        auto rand_real(
+            std::size_t              n,
             std::floating_point auto first, 
             std::floating_point auto last
             )
@@ -35,28 +47,36 @@ namespace cpt {
             std::uniform_real_distribution<FloatingType> distrib(
                 static_cast<FloatingType>(first), 
                 static_cast<FloatingType>(last));
-            return distrib(rand::_device);
+            return this->rand(n, distrib);
         }
 
-        template<class RandomDevice, class Distribution>
-        static
-        auto random(
-            std::size_t n, 
-            RandomDevice &device, 
-            Distribution &distrib
+        template <std::floating_point FloatingType = float>
+        FloatingType rand_real(
+            std::floating_point auto first, 
+            std::floating_point auto last
+            )
+        {
+            auto view = this->rand_real<FloatingType>(1, first, last);
+            return *view.begin();
+        }
+
+        template<class Distribution>
+        auto rand(
+            std::size_t    n, 
+            Distribution &&distrib
             )
         {
             return cpt::GeneratorView {
                 n, 
-                [&](std::size_t)
+                [this, distrib=distrib](std::size_t) mutable
                 {
-                    return distrib(device);
+                    return distrib(this->_device);
                 }
             };
         }
 
     private:
-        static inline std::random_device _device;
+        std::random_device _device;
     };
 
 } // namespace cpt

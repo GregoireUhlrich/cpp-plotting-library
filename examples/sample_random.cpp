@@ -3,12 +3,13 @@
 
 int main() {
 
-    std::random_device rd;
-    std::uniform_int_distribution<int> i(0, 10);
-    std::uniform_real_distribution<float> r(-1.f, 1.f);
-
-    cpt::print(cpt::rand::random(50, rd, i));
-    cpt::print(cpt::rand::random(50, rd, r));
+    cpt::RandomDevice rand;
+    cpt::print(rand.rand_int(50, 0, 10));
+    cpt::print(rand.rand_int<long unsigned int>(50, 0, 10));
+    cpt::print(rand.rand_real(50, -1.f, 1.f));
+    cpt::print(rand.rand_real<double>(50, -1.f, 1.f));
+    std::cout << rand.rand_int(0, 10) << std::endl;
+    std::cout << rand.rand_real(-1.f, 1.f) << std::endl;
 
     return 0;
 }
