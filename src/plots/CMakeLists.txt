@@ -1,5 +1,6 @@
 set(plots_sources
     line_plot.cpp
+    histogram.cpp
 )
 
 add_library(plots-obj OBJECT ${plots_sources})
