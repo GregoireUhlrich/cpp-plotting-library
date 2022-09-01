@@ -4,9 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include "../utils/error.hpp"
 #include "../math_views.hpp"
-#include "extent.hpp"
-#include "science_data_array.hpp"
-#include "plot_data.hpp"
+#include "../utils/extent.hpp"
+#include "../utils/science_data_array.hpp"
+#include "../utils/plot_data.hpp"
 
 #include <concepts>
 #include <numeric>
@@ -19,8 +19,10 @@ namespace cpt
     };
 
     struct LinePlotConfig {
-        float     marker_size = 3.5f;
+        float     marker_size  = 3.5f;
         sf::Color marker_color = sf::Color(0, 64, 128);
+        float     line_width   = 2.f;
+        sf::Color line_color   = sf::Color(0, 64, 128);
     };
 
     class LinePlot: public cpt::PlotData {

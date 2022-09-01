@@ -10,25 +10,23 @@
 
 namespace cpt
 {
-   class WindowConcurrencyError: public cpt::Exception {
+   class FigureConcurrencyError: public cpt::Exception {
         using cpt::Exception::Exception;
     };
 
-    class Window {
+    class FigureWindow {
     
     public:
 
-        Window(
+        FigureWindow(
             std::string_view name, 
             std::size_t width, 
             std::size_t height
             );
 
-        Window(Window const &) = delete;
+        FigureWindow(FigureWindow const &) = delete;
 
-        Window(Window &&) = default;
-
-        ~Window();
+        ~FigureWindow();
 
         bool is_blocking() const noexcept;
 

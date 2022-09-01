@@ -4,11 +4,14 @@ function(set_sfml_module_properties NAME)
     set_target_properties(${NAME} PROPERTIES CXX_STANDARD 98 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
 endfunction()
 
-if(BUILD_SFML_SHARED_LIBS)
-    set(BUILD_SHARED_LIBS ${BUILD_SHARED_SFML_LIBS})
-else()
-    set(BUILD_SHARED_LIBS 1)
-endif()
+# Uncomment and use when shared libs will be enabled
+#if(BUILD_SFML_SHARED_LIBS)
+#    set(BUILD_SHARED_LIBS ${BUILD_SHARED_SFML_LIBS})
+#else()
+#    set(BUILD_SHARED_LIBS 0)
+#endif()
+
+set(BUILD_SHARED_LIBS 0)
 
 include(FetchContent)
 FetchContent_Declare(

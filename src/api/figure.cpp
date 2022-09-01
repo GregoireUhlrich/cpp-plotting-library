@@ -1,27 +1,34 @@
 #include "figure.hpp"
+#include "session.hpp"
 #include "../utils/error.hpp"
+#include "../graphics/fonts.hpp"
 
 namespace cpt
 {
-    
     Figure::Figure( 
+        Session    &session,
         std::size_t width, 
         std::size_t height)
-        : Figure("Figure " + std::to_string(++n_figures), width, height)
+        : Figure(
+            session, 
+            "Figure " + std::to_string(session.get_n_figures()), 
+            width, height)
     {
 
     }
 
     Figure::Figure(
+        Session         &session,
         std::string_view name, 
-        std::size_t width, 
-        std::size_t height)
+        std::size_t      width, 
+        std::size_t      height)
         : _window(
             name, 
             width, 
             height)
     {
         create_subplots(1, 1);
+        set_font(session.get_main_font());
     }
 
     Figure::~Figure()
@@ -35,6 +42,9 @@ namespace cpt
         cpt::GridLayoutConfig const &config)
     {
         _subplots = std::vector<Subplot>(n_rows * n_columns);
+        for (auto &subplot : _subplots) {
+            subplot.set_font(get_font());
+        }
         _n_rows = n_rows;
         _n_columns = n_columns;
         sf::Vector2f size = _window.get_size();
@@ -99,6 +109,19 @@ namespace cpt
             );
     }
 
+    sf::Font const &Figure::get_font() const 
+    {
+        return *_font;
+    }
+
+    void Figure::set_font(sf::Font const &font)
+    {
+        _font = &font;
+        for (auto &subplot : _subplots) {
+            subplot.set_font(font);
+        }
+    }
+
     void Figure::show(bool blocking) 
     {
         _window.set_blocking(blocking);
@@ -107,7 +130,7 @@ namespace cpt
         }
         _window.show([this](sf::RenderTarget &target) {
             for (const auto &subplot : _subplots) {
-                subplot.draw(target);
+                target.draw(subplot.get_sprite());
             }
         });
     }

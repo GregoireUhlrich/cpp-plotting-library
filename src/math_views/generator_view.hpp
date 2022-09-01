@@ -13,13 +13,14 @@ namespace cpt
     template<class T>
     concept Generator = std::invocable<T, std::size_t>
         && ArrayValue<std::invoke_result_t<T, std::size_t>>;
-
-    template<Generator G>
-    using GeneratorViewIteratorBase = std::iterator<
-            std::random_access_iterator_tag,
-            std::invoke_result_t<G, std::size_t>,
-            std::ptrdiff_t
-            >;
+    template <Generator G>
+    struct GeneratorViewIteratorBase {
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type = std::invoke_result_t<G, std::size_t>;
+        using reference  = value_type&;
+        using pointer    = value_type*;
+        using difference_type = std::ptrdiff_t;
+    };
 
     template<Generator G>
     class GeneratorViewIterator: private IteratorImpl,
@@ -29,10 +30,10 @@ namespace cpt
 
         using generator_t = G;
         
-        using difference_type = iterator_base::difference_type;
-        using value_type      = iterator_base::value_type;
-        using reference       = iterator_base::reference;
-        using pointer         = iterator_base::pointer;
+        using difference_type = typename iterator_base::difference_type;
+        using value_type      = typename iterator_base::value_type;
+        using reference       = typename iterator_base::reference;
+        using pointer         = typename iterator_base::pointer;
 
         GeneratorViewIterator() = default;
 

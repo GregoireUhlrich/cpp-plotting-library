@@ -27,14 +27,14 @@ namespace cpt
 
     template<class T>
     concept IncrementableIterator = Iterator<T>
-        && requires(T a, T::difference_type diff) {
+        && requires(T a, typename T::difference_type diff) {
                { ++a };
                { a += diff };
            };
 
     template<class T>
     concept DecrementableIterator = Iterator<T>
-        && requires(T a, T::difference_type diff) {
+        && requires(T a, typename T::difference_type diff) {
                { --a };
                { a -= diff };
            };

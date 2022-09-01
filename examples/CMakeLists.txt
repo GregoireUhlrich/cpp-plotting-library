@@ -1,9 +1,10 @@
 function(add_cpt_executable NAME)
     add_executable(${NAME} ${NAME}.cpp)
-    target_link_libraries(${NAME} cpt)
+    target_link_libraries(${NAME} cpt ${sfml_libs} ${X11} ${PTHREAD})
 endfunction()
 
 add_cpt_executable(simple_window)
 add_cpt_executable(sample_error)
 add_cpt_executable(sample_array)
 add_cpt_executable(sample_figure)
+add_cpt_executable(sample_axis)

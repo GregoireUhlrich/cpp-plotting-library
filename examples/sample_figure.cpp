@@ -1,9 +1,12 @@
-#include "plotter/figure.hpp"
+#include "api/figure.hpp"
+#include "api/session.hpp"
 #include <iostream>
 
 int main()
 {
-    cpt::Figure fig("My Fig", 10, 5);
+    cpt::Session session;
+    cpt::Figure &fig = session.create_figure("My Fig", 10, 5);
+
     fig.create_subplots(2, 2);
 
     auto x = cpt::linspace(0, 10, 100);
@@ -18,7 +21,8 @@ int main()
 
     cpt::Subplot &top_right = fig.get_subplot(0, 1);
     top_right.plot_line(x, cpt::sin(x)*cpt::sin(x),
-                       {.marker_color = sf::Color::Green});
+                       {.marker_size = 1.f, 
+                        .marker_color = sf::Color::Red});
     top_right.set_extent({
         .xmin = -10.f, .xmax = 20.f,
         .ymin = -5.f,  .ymax = 5.f

@@ -1,5 +1,5 @@
 #include "line_plot.hpp"
-#include "plot_canvas.hpp"
+#include "../graphics/plot_canvas.hpp"
 
 namespace cpt {
 

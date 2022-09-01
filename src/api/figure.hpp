@@ -2,21 +2,32 @@
 #define CPT_FIGURE_H_INCLUDED
 
 #include "subplot.hpp"
-#include "window.hpp"
 #include "grid_layout.hpp"
+#include "../graphics/figure_window.hpp"
+#include "../graphics/font_manager.hpp"
 
 namespace cpt
 {
+    class Session;
+    
     class Figure {
+
     public:
         Figure( 
+            Session    &session,
             std::size_t width, 
             std::size_t height);
 
         Figure(
+            Session         &session,
             std::string_view name, 
-            std::size_t width, 
-            std::size_t height);
+            std::size_t      width, 
+            std::size_t      height);
+
+        Figure(Figure const &) = delete;
+        Figure(Figure &&) = default;
+
+    public:
 
         ~Figure();
 
@@ -37,17 +48,19 @@ namespace cpt
         std::vector<Subplot> &get_subplots() noexcept;
         std::vector<Subplot> const &get_subplots() const noexcept;
 
+        sf::Font const &get_font() const;
+        void set_font(sf::Font const &font);
+
         void show(bool blocking = false);
 
     private:
-        cpt::Window _window;
+        cpt::FigureWindow _window;
 
         std::size_t _n_rows;
         std::size_t _n_columns;
         std::vector<cpt::Subplot> _subplots;
 
-    private:
-        static inline unsigned int n_figures = 0;
+        sf::Font const *_font;
     };
 } // namespace cpt
 

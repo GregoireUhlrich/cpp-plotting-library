@@ -20,12 +20,14 @@ namespace cpt
     class ZipView;
 
     template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
-    using ZipViewIteratorBase = std::iterator<
-            std::random_access_iterator_tag,
-            std::invoke_result_t<Func, std::ranges::range_value_t<LRange>, std::ranges::range_value_t<RRange>>,
-            std::ranges::range_difference_t<LRange>
-            >;
-
+    struct ZipViewIteratorBase {
+        using iterator_category = std::random_access_iterator_tag;
+        using value_type = std::invoke_result_t<Func, std::ranges::range_value_t<LRange>, std::ranges::range_value_t<RRange>>;
+        using reference  = value_type&;
+        using pointer    = value_type*;
+        using difference_type = std::ranges::range_difference_t<LRange>;
+    };
+    
     template <ArrayRange LRange, ArrayRange RRange, ZipApplication<LRange, RRange> Func>
     class ZipViewIterator: private IteratorImpl,
                            public ZipViewIteratorBase<LRange, RRange, Func> {
@@ -40,10 +42,10 @@ namespace cpt
         using lvalue_type = std::ranges::range_value_t<LRange>;
         using rvalue_type = std::ranges::range_value_t<RRange>;
 
-        using difference_type = iterator_base::difference_type;
-        using value_type      = iterator_base::value_type;
-        using reference       = iterator_base::reference;
-        using pointer         = iterator_base::pointer;
+        using difference_type = typename iterator_base::difference_type;
+        using value_type      = typename iterator_base::value_type;
+        using reference       = typename iterator_base::reference;
+        using pointer         = typename iterator_base::pointer;
 
         constexpr ZipViewIterator() = default;
 
@@ -142,8 +144,10 @@ namespace cpt
         constexpr auto end() const noexcept { 
             const auto sz = size();
             return ZipViewIterator<LRange, RRange, Func>(
-                std::ranges::begin(_lrange) + static_cast<LRange::iterator::difference_type>(sz), 
-                std::ranges::begin(_rrange) + static_cast<RRange::iterator::difference_type>(sz),
+                std::ranges::begin(_lrange) 
+                    + static_cast<typename LRange::iterator::difference_type>(sz), 
+                std::ranges::begin(_rrange) 
+                    + static_cast<typename RRange::iterator::difference_type>(sz),
                 _func); 
         }
 

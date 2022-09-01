@@ -1,4 +1,4 @@
-#include "window.hpp"
+#include "figure_window.hpp"
 
 namespace cpt
 {
@@ -7,7 +7,7 @@ namespace cpt
         return 96;
     }
 
-    Window::Window(
+    FigureWindow::FigureWindow(
         std::string_view name, 
         std::size_t width, 
         std::size_t height)
@@ -18,12 +18,12 @@ namespace cpt
 
     }
 
-    Window::~Window()
+    FigureWindow::~FigureWindow()
     {
         wait_for_close();
     }
 
-    void Window::wait_for_close() const
+    void FigureWindow::wait_for_close() const
     {
         if (_execution_result.valid()) {
             _execution_result.wait();
@@ -31,7 +31,7 @@ namespace cpt
     }
 
 
-    sf::Vector2f Window::get_size() const noexcept
+    sf::Vector2f FigureWindow::get_size() const noexcept
     {
         auto size = get_usize();
         return {
@@ -40,7 +40,7 @@ namespace cpt
         };
     }
 
-    sf::Vector2u Window::get_usize() const noexcept
+    sf::Vector2u FigureWindow::get_usize() const noexcept
     {
         return {
             static_cast<unsigned int>(_width) * pixels_per_inch(),
@@ -48,43 +48,43 @@ namespace cpt
         };
     }
 
-    bool Window::is_blocking() const noexcept {
+    bool FigureWindow::is_blocking() const noexcept {
         return _blocking;
     }
 
-    void Window::set_blocking(bool blocking) noexcept
+    void FigureWindow::set_blocking(bool blocking) noexcept
     {
         _blocking = blocking;
     }
 
-    void Window::show(
+    void FigureWindow::show(
         std::function<void(sf::RenderTarget&)> draw_callback)
     {
         if (_execution_result.valid()) {
-            throw WindowConcurrencyError(
+            throw FigureConcurrencyError(
                 "Cannot show a figure twice (tried for \"",
                 _name, "\")!");
         }
         _execution_result = std::async(std::launch::async, 
-            &Window::launch, this, draw_callback);
+            &FigureWindow::launch, this, draw_callback);
         if (_blocking) {
             _execution_result.wait();
         }
     }
 
-    void Window::launch(
+    void FigureWindow::launch(
         std::function<void(sf::RenderTarget&)> draw_callback)
     {
         std::lock_guard<std::mutex> guard(_mutex);
         auto size = get_usize();
-        Window::create_window(
+        FigureWindow::create_window(
             _window,
             sf::VideoMode(size.x, size.y),
             _name,
             sf::Style::Close | sf::Style::Titlebar
             );
         while (_window.isOpen()) {
-            _window.clear();
+            _window.clear(sf::Color::White);
             draw_callback(_window);
             _window.display();
             sf::Event event;
@@ -95,7 +95,7 @@ namespace cpt
         }
     }
 
-    void Window::create_window(
+    void FigureWindow::create_window(
         sf::RenderWindow          &window,
         sf::VideoMode       const &mode,
         std::string         const &name,
