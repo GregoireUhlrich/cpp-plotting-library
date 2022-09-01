@@ -9,7 +9,7 @@ int main()
 
     fig.create_subplots(1, 1);
 
-    auto x = cpt::linspace(0, 10, 100);
+    auto x = cpt::linspace(0, 10, 20);
 
     cpt::Subplot &top_left = fig.get_subplot(0, 0);
     top_left.histogram(x,
