@@ -43,11 +43,13 @@ namespace cpt
     void SubplotTexture::set_position(float x, float y) noexcept
     {
         _pos = {x, y};
+        acknowledge_change();
     }
 
     void SubplotTexture::set_size(float sx, float sy)
     {
         _size = {sx, sy};
+        acknowledge_change();
     }
 
     void SubplotTexture::set_font(sf::Font const &font)
@@ -56,9 +58,42 @@ namespace cpt
         for (auto &ax : _axis) {
             ax.second.set_font(*_font);
         }
+        acknowledge_change();
     }
 
-    sf::FloatRect SubplotTexture::calculate_canvas_bounds()
+    void SubplotTexture::set_ticks(
+        cpt::Anchor             anchor,
+        std::vector<float>      positions, 
+        std::vector<cpt::Label> values)
+    {
+        int size = (anchor == Anchor::Up || anchor == Anchor::Down) ?
+            _canvas_bounds.width : _canvas_bounds.height;
+        auto &ax = (
+            _axis[anchor] = cpt::AxisRenderer(
+                anchor, 
+                static_cast<float>(size))
+        );
+        ax.set_ticks(std::move(positions), std::move(values));
+        acknowledge_change();
+    }
+
+    void SubplotTexture::acknowledge_change()
+    {
+        _up_to_date = false;
+    }
+
+    void SubplotTexture::update()
+    {
+        if (!_up_to_date) {
+            update_axis(); // calculate a first time axis bounds 
+            update_canvas_bounds(); // setup the canvas from axis bounds
+            update_textures();
+            update_axis(); // recalculate axis pos and size from axis bounds
+            _up_to_date = true;
+        }
+    }
+
+    void SubplotTexture::update_canvas_bounds()
     {
         AxisRenderer const *left_axis   = get_axis(Anchor::Left);
         AxisRenderer const *right_axis  = get_axis(Anchor::Right);
@@ -69,72 +104,89 @@ namespace cpt
         float top_space    = top_axis    ?    top_axis->get_bounds().height : 0.f;
         float bottom_space = bottom_axis ? bottom_axis->get_bounds().height : 0.f;
 
-        return sf::FloatRect(
-            left_space, 
-            top_space, 
-            _size.x - (left_space + right_space), 
-            _size.y - (top_space + bottom_space)
+        _canvas_bounds = sf::IntRect(
+            static_cast<int>(left_space), 
+            static_cast<int>(top_space), 
+            static_cast<int>(std::floor(_size.x - (left_space + right_space))), 
+            static_cast<int>(std::floor(_size.y - (top_space + bottom_space)))
         );
     }
 
-    void SubplotTexture::set_ticks(
-        cpt::Anchor             anchor,
-        std::vector<float>      positions, 
-        std::vector<cpt::Label> values)
-    {
-        float size = (anchor == Anchor::Up || anchor == Anchor::Down) ?
-            _canvas_bounds.width : _canvas_bounds.height;
-        auto &ax = (_axis[anchor] = cpt::AxisRenderer(anchor, size));
-        ax.set_font(get_font());
-        switch (anchor) {
-            case Anchor::Left:
-            case Anchor::Up:
-                ax.set_position(_canvas_bounds.left, _canvas_bounds.top);
-                break;
-            case Anchor::Down:
-                ax.set_position(_canvas_bounds.left, _canvas_bounds.top + _canvas_bounds.height);
-                break;
-            case Anchor::Right:
-                ax.set_position(_canvas_bounds.left + _canvas_bounds.width, _canvas_bounds.top);
-                break;
-            default:
-                throw InvalidAnchorError(
-                    "Anchor of value ",
-                    static_cast<int>(anchor),
-                    " is inknown."
-                );
-        }
-        ax.set_ticks(std::move(positions), std::move(values));
-    }
-
-    void SubplotTexture::create()
+    void SubplotTexture::update_textures()
     {
         _texture.create(
             static_cast<unsigned int>(_size.x),
             static_cast<unsigned int>(_size.y)
             );
-        _canvas_bounds = calculate_canvas_bounds();
         _canvas.create(
-            static_cast<unsigned int>(_canvas_bounds.width),
-            static_cast<unsigned int>(_canvas_bounds.height)
+            _canvas_bounds.width,
+            _canvas_bounds.height
         );
+        _texture.clear(sf::Color::White);
+        _canvas.clear(sf::Color::White);
     }
 
-    void SubplotTexture::draw(sf::RenderTarget &target) const
+    void SubplotTexture::update_axis()
     {
-        sf::Sprite sprite;
+        for (auto &p : _axis) {
+            AxisRenderer &ax = p.second;
+            bool horizontal = ax.get_anchor() == Anchor::Up || ax.get_anchor() == Anchor::Down;
+            int size = horizontal ? _canvas_bounds.width : _canvas_bounds.height;
+            ax.set_size(static_cast<float>(size));
+            ax.set_font(get_font());
+            switch (ax.get_anchor()) {
+                case Anchor::Left:
+                case Anchor::Up:
+                    ax.set_position(
+                        static_cast<float>(_canvas_bounds.left), 
+                        static_cast<float>(_canvas_bounds.top));
+                    break;
+                case Anchor::Down:
+                    ax.set_position(
+                        static_cast<float>(_canvas_bounds.left), 
+                        static_cast<float>(_canvas_bounds.top + _canvas_bounds.height));
+                    break;
+                case Anchor::Right:
+                    ax.set_position(
+                        static_cast<float>(_canvas_bounds.left + _canvas_bounds.width), 
+                        static_cast<float>(_canvas_bounds.top));
+                    break;
+                default:
+                    throw InvalidAnchorError(
+                        "Anchor of value ",
+                        static_cast<int>(ax.get_anchor()),
+                        " is inknown."
+                    );
+            }
+            ax.update();
+        }
+    }
 
-        _texture.clear(sf::Color::White);
+    void SubplotTexture::assert_up_to_date() const 
+    {
+        if (!_up_to_date) {
+            throw InvalidSubplotTextureError(
+                "Invalid use of a modified SubplotTexture.",
+                "Please call .update() before."
+            );
+        }
+    }
+
+    void SubplotTexture::display()
+    {
+        assert_up_to_date();
+        _canvas.display();
         sf::Sprite canvas_sprite = _canvas.get_sprite();
-        canvas_sprite.setPosition(_canvas_bounds.left, _canvas_bounds.top);
+        canvas_sprite.setPosition(
+            static_cast<float>(_canvas_bounds.left), 
+            static_cast<float>(_canvas_bounds.top));
         _texture.draw(canvas_sprite);
         for (const auto &[_, axis] : _axis) {
             axis.draw(_texture);
         }
         _texture.display();
-
-        sprite.setTexture(_texture.getTexture());
-        sprite.setPosition(get_position());
-        target.draw(sprite);
+        _final_texture = _texture.getTexture();
+        _sprite.setTexture(_final_texture);
+        _sprite.setPosition(_pos.x, _pos.y);
     }
 } // namespace cpt

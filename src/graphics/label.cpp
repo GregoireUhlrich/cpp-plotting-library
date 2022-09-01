@@ -34,7 +34,18 @@ namespace cpt {
         _text.setFillColor(color);
     } 
 
-    sf::Vector2f Label::get_size() const
+    sf::Vector2f Label::get_text_size() const
+    {
+        sf::Text cpy = _text;
+        cpy.setRotation(0.f);
+        auto bounds = cpy.getGlobalBounds();
+        return {
+            bounds.width,
+            bounds.height
+        };
+    }
+
+    sf::Vector2f Label::get_graphics_size() const
     {
         auto bounds = _text.getGlobalBounds();
         return {
@@ -45,11 +56,14 @@ namespace cpt {
 
     sf::Vector2f Label::get_text_offset() const 
     {
-        auto bounds = _text.getGlobalBounds();
-        auto pos = _text.getPosition();
+        sf::Text cpy = _text;
+        cpy.setRotation(0.f);
+        auto bounds = cpy.getGlobalBounds();
+        auto pos    = cpy.getPosition();
+        auto origin = cpy.getOrigin();
         return {
-            bounds.left - pos.x,
-            bounds.top  - pos.y
+            bounds.left - (pos.x - origin.x),
+            bounds.top  - (pos.y - origin.y)
         };
     }
 
@@ -137,7 +151,7 @@ namespace cpt {
     void Label::set_alignement(Label::Alignement alignement)
     {
         sf::Vector2f origin = get_text_offset();
-        sf::Vector2f size   = get_size();
+        sf::Vector2f size   = get_text_size();
         sf::Vector2f new_origin = {
             origin.x + relative_position(alignement, 1) * size.x,
             origin.y + relative_position(alignement, 0) * size.y

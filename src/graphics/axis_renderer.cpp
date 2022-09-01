@@ -13,6 +13,44 @@ namespace cpt
 
     }
 
+    sf::FloatRect const &AxisRenderer::get_bounds() const 
+    {
+        assert_up_to_date();
+        return _bounds;
+    }
+    
+    void AxisRenderer::set_font(sf::Font const &font)
+    {
+        for (auto &label : _ticks_labels) {
+            label.set_font(font);
+        }
+        acknowledge_change();
+    }
+
+    void AxisRenderer::set_position(float x, float y)
+    {
+        _pos = {x, y};
+        acknowledge_change();
+    }
+
+    void AxisRenderer::set_size(float size)
+    {
+        _size = size;
+        acknowledge_change();
+    }
+
+    void AxisRenderer::set_anchor(Anchor anchor)
+    {
+        _anchor = anchor;
+        acknowledge_change();
+    }
+    
+    void AxisRenderer::set_config(AxisRendererConfig const &config)
+    {
+        _config = config;
+        acknowledge_change();
+    }
+
     void AxisRenderer::set_ticks(
         std::vector<float>      ticks_position,
         std::vector<cpt::Label> ticks_labels
@@ -35,7 +73,20 @@ namespace cpt
         }
         _ticks_positions = std::move(ticks_position);
         _ticks_labels    = std::move(ticks_labels);
-        update_ticks_labels();
+    }
+
+    void AxisRenderer::acknowledge_change()
+    {
+        _up_to_date = false;
+    }
+
+    void AxisRenderer::update()
+    {
+        if (!_up_to_date) {
+            update_ticks_labels();
+            update_bounds();
+            _up_to_date = true;
+        }
     }
 
     void AxisRenderer::update_ticks_labels()
@@ -68,7 +119,7 @@ namespace cpt
         }
     }
 
-    sf::FloatRect AxisRenderer::get_bounds() const
+    void AxisRenderer::update_bounds()
     {
         float line_width = 1.f;
         float length = _size;
@@ -76,7 +127,7 @@ namespace cpt
         float lwidth = line_width / 2.f + _config.tick_length + _config.spacing;
         float max_label_length = 0.f;
         for (const auto &label : _ticks_labels) {
-            sf::Vector2f label_size = label.get_size();
+            sf::Vector2f label_size = label.get_graphics_size();
             float label_length = (std::abs(label.get_rotation()) > 45.f) ?
                 label_size.y : label_size.x;
             if (label_length > max_label_length) {
@@ -87,13 +138,17 @@ namespace cpt
         float total_width = lwidth + rwidth;
         switch (_anchor) {
             case Anchor::Left:
-                return sf::FloatRect(_pos.x - lwidth, _pos.y, total_width, length);
+                _bounds = sf::FloatRect(_pos.x - lwidth, _pos.y, total_width, length);
+                break;
             case Anchor::Right:
-                return sf::FloatRect(_pos.x - rwidth, _pos.y, total_width, length);
+                _bounds = sf::FloatRect(_pos.x - rwidth, _pos.y, total_width, length);
+                break;
             case Anchor::Up:
-                return sf::FloatRect(_pos.x, _pos.y - lwidth, length, total_width);
+                _bounds = sf::FloatRect(_pos.x, _pos.y - lwidth, length, total_width);
+                break;
             case Anchor::Down:
-                return sf::FloatRect(_pos.x, _pos.y - rwidth, length, total_width);
+                _bounds = sf::FloatRect(_pos.x, _pos.y - rwidth, length, total_width);
+                break;
             default:
                 throw InvalidAnchorError(
                     "Anchor with value ", 
@@ -102,17 +157,20 @@ namespace cpt
         }
     }
 
-    void AxisRenderer::set_font(sf::Font const &font)
+    void AxisRenderer::assert_up_to_date() const 
     {
-        for (auto &label : _ticks_labels) {
-            label.set_font(font);
+        if (!_up_to_date) {
+            throw InvalidAxisRendererError(
+                "Invalid use of a modified AxisRenderer.",
+                "Please call .update() before."
+            );
         }
     }
 
     void AxisRenderer::draw(sf::RenderTarget &target) const
     {
+        assert_up_to_date();
         draw_ticks(target);
-        draw_witness_line(target);
         draw_labels(target);
     }
 
@@ -141,26 +199,25 @@ namespace cpt
         }
     }
 
-    void AxisRenderer::draw_witness_line(
-            sf::RenderTarget &target
-            ) const
-    {
-        sf::RectangleShape witness({_size, 1.f});
-        witness.setFillColor(sf::Color::Black);
-        witness.rotate(90.f * static_cast<float>(!is_x_axis()));
-        witness.setPosition({
-            _pos.x,
-            _pos.y
-        });
-        target.draw(witness);
-    }
-
     void AxisRenderer::draw_labels(
             sf::RenderTarget &target
         ) const
     {
-        for (size_t i = 0; i != _ticks_labels.size(); ++i) {
-            _ticks_labels[i].draw(target);
+        const bool horizontal = is_x_axis();
+        auto get = [&](sf::Vector2f vec) {
+            return horizontal ? vec.x : vec.y;
+        };
+        auto label_in_box = [&](Label const &label) {
+            float pos_label  = get(label.get_position()) - get(_pos);
+            float size_label = get(label.get_graphics_size());
+            float mini = pos_label - size_label / 2.f;
+            float maxi = pos_label + size_label / 2.f;
+            return mini >= 0.f && maxi <= _size;
+        };
+        for (auto const &label : _ticks_labels) {
+            if (label_in_box(label)) {
+                label.draw(target);
+            }
         }
     }
 

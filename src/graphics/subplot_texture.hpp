@@ -24,33 +24,43 @@ namespace cpt
         sf::Vector2f get_position() const noexcept;
         sf::Vector2f get_size() const noexcept;
 
+        sf::Sprite const &get_sprite() const noexcept {
+            return _sprite;
+        }
+
         void set_position(float x, float y) noexcept;
         void set_size(float sx, float sy);
 
-        void set_font(sf::Font const &font);
-        
-        void create();
-
-        void draw(sf::RenderTarget &target) const;
-        
+        void set_font(sf::Font const &font); 
         void set_ticks(
             cpt::Anchor             anchor,
             std::vector<float>      positions, 
             std::vector<cpt::Label> labels);
-
+        
+        void update();
+        void display();
+       
     private:
+        void update_axis();
+        void update_canvas_bounds();
+        void update_textures();
 
-        sf::FloatRect calculate_canvas_bounds();
+        void acknowledge_change();
+        void assert_up_to_date() const;
     
     protected:
+        bool _up_to_date = false;
+
         sf::Vector2f _pos;
         sf::Vector2f _size;
         sf::Font           const *_font = nullptr;
-        mutable sf::RenderTexture _texture;
+        sf::RenderTexture _texture;
+        sf::Texture       _final_texture;
+        sf::Sprite        _sprite;
         std::map<cpt::Anchor, cpt::AxisRenderer> _axis;
 
-        sf::FloatRect _canvas_bounds;
-        PlotCanvas    _canvas;
+        sf::IntRect _canvas_bounds;
+        PlotCanvas  _canvas;
     };
 
 } // namespace cpt

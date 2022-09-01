@@ -37,7 +37,8 @@ namespace cpt
         sf::Color get_fill_color() const;
         void set_fill_color(sf::Color color);
 
-        sf::Vector2f get_size() const;
+        sf::Vector2f get_text_size() const;
+        sf::Vector2f get_graphics_size() const;
 
         sf::Vector2f get_text_offset() const;
 

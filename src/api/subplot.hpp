@@ -1,7 +1,6 @@
 #ifndef CPT_SUBPLOT_H_INCLUDED
 #define CPT_SUBPLOT_H_INCLUDED
 
-#include "axis.hpp"
 #include "../graphics/subplot_texture.hpp"
 #include "../graphics/plot_canvas.hpp"
 #include "../plots/line_plot.hpp"

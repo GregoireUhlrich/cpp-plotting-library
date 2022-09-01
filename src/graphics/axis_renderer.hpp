@@ -19,6 +19,10 @@ namespace cpt
         using cpt::Exception::Exception;
     };
 
+    class InvalidAxisRendererError: public cpt::Exception {
+        using cpt::Exception::Exception;
+    };
+
     class AxisRenderer {
 
     public:
@@ -33,10 +37,6 @@ namespace cpt
             return _config;
         }
 
-        void set_config(AxisRendererConfig const &config) noexcept {
-            _config = config;
-        }
-
         bool is_x_axis() const {
             return _anchor == Anchor::Up || _anchor == Anchor::Down;
         }
@@ -45,34 +45,39 @@ namespace cpt
         float        get_size()      const noexcept { return _size; }
         Anchor       get_anchor()    const noexcept { return _anchor; }
 
-        sf::FloatRect get_bounds() const;
+        sf::FloatRect const &get_bounds() const;
 
-        void set_position(float sx, float sy) noexcept { _pos = {sx, sy}; }
-        void set_size(float size)             noexcept { _size = size; } 
-        void set_anchor(Anchor anchor)        noexcept { _anchor = anchor; }
-
+        void set_font(sf::Font const &font);
+        void set_config(AxisRendererConfig const &config);
+        void set_position(float sx, float sy);
+        void set_size(float size);
+        void set_anchor(Anchor anchor);
         void set_ticks(
             std::vector<float>      ticks_positions,
             std::vector<cpt::Label> ticks_labels
             );
 
-        void set_font(sf::Font const &font);
-
+        void update();
         void draw(sf::RenderTarget &target) const;
 
     private:
 
+        void acknowledge_change();
         void update_ticks_labels();
+        void update_bounds();
+        void assert_up_to_date() const;
 
         void draw_ticks(sf::RenderTarget &target) const;
-        void draw_witness_line(sf::RenderTarget &target) const;
         void draw_labels(sf::RenderTarget &target) const;
 
     private:
+        bool _up_to_date = false;
+
         Anchor         _anchor;
         sf::Vector2f   _pos;
         float          _size;
 
+        sf::FloatRect           _bounds;
         std::vector<float>      _ticks_positions;
         std::vector<cpt::Label> _ticks_labels;
 

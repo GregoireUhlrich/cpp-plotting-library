@@ -130,7 +130,7 @@ namespace cpt
         }
         _window.show([this](sf::RenderTarget &target) {
             for (const auto &subplot : _subplots) {
-                subplot.draw(target);
+                target.draw(subplot.get_sprite());
             }
         });
     }

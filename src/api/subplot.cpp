@@ -105,7 +105,7 @@ namespace cpt {
         )
     {
         for (float &xi : x) {
-            xi = (xi - xmin) / (xmax - xmin);
+            xi = 1.f - (xi - xmin) / (xmax - xmin);
         }
     }
 
@@ -126,14 +126,12 @@ namespace cpt {
         cpt::Extent<float> extent = get_extent();
         setup_default_axis(extent);
 
-        SubplotTexture::create();
-        setup_default_axis(extent);
-        _canvas.clear();
+        SubplotTexture::update();
         _canvas.set_extent(extent);
         for (const auto &plot : _plots) {
             plot->draw_plot(_canvas);
         }
-        _canvas.display();
+        SubplotTexture::display();
     }
 
 } // namespace cpt
