@@ -3,3 +3,4 @@
 #include "math_views/functions.hpp"
 #include "math_views/print.hpp"
 #include "math_views/builtins.hpp"
+#include "math_views/random.hpp"
