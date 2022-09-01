@@ -29,13 +29,13 @@ int main() {
     cpt::FontManager manager;
     sf::RenderWindow window(sf::VideoMode(300, 300), "i3float", sf::Style::Close | sf::Style::Resize, settings);
     cpt::AxisRenderer y (cpt::Anchor::Left,  200.f);
-    cpt::AxisRenderer x (cpt::Anchor::Down,  200.f);
+    cpt::AxisRenderer x (cpt::Anchor::Bottom,  200.f);
     cpt::AxisRenderer yc(
             cpt::Anchor::Right, 
             200.f, 
             {.tick_width=1.f, 
             .tick_length=10.f});
-    cpt::AxisRenderer xc(cpt::Anchor::Up,    200.f);
+    cpt::AxisRenderer xc(cpt::Anchor::Top,    200.f);
     y.set_position (50.f,  50.f);
     x.set_position (50.f,  250.f);
     yc.set_position(250.f, 50.f);

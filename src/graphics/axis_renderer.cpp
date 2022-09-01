@@ -93,16 +93,30 @@ namespace cpt
     {
         const float spacing = _config.tick_length + _config.spacing;
         const float sign = 
-            (_anchor == Anchor::Down || _anchor == Anchor::Right) ? 
+            (_anchor == Anchor::Bottom || _anchor == Anchor::Right) ? 
             +1.f : -1.f;
-        const Label::Alignement alignement = 
-            (_anchor == Anchor::Left || _anchor == Anchor::Down) ? 
-            Label::Right : Label::Left;
+        Label::Alignement alignement;
+        switch (_anchor) {
+            case Anchor::Left: 
+                alignement = Label::Right;
+                break;
+            case Anchor::Right: 
+                alignement = Label::Left;
+                break;
+            case Anchor::Top: 
+                alignement = Label::Bottom;
+                break;
+            case Anchor::Bottom: 
+                alignement = Label::Top;
+                break;
+            default:
+                throw InvalidAnchorError(
+                    "Anchor of value ", static_cast<int>(_anchor),
+                    " is unknown."
+                );
+        }
         for (size_t i = 0; i != _ticks_labels.size(); ++i) {
             _ticks_labels[i].set_alignement(alignement);
-            if (is_x_axis()) {
-                _ticks_labels[i].set_rotation(-90.f);
-            }
             float scaled_pos = _size * _ticks_positions[i];
             if (is_x_axis()) {
                 _ticks_labels[i].set_position(
@@ -143,10 +157,10 @@ namespace cpt
             case Anchor::Right:
                 _bounds = sf::FloatRect(_pos.x - rwidth, _pos.y, total_width, length);
                 break;
-            case Anchor::Up:
+            case Anchor::Top:
                 _bounds = sf::FloatRect(_pos.x, _pos.y - lwidth, length, total_width);
                 break;
-            case Anchor::Down:
+            case Anchor::Bottom:
                 _bounds = sf::FloatRect(_pos.x, _pos.y - rwidth, length, total_width);
                 break;
             default:
@@ -179,7 +193,7 @@ namespace cpt
             ) const 
     {
         const float displacement 
-            = (_anchor == Anchor::Left || _anchor == Anchor::Up) ? -1.f: 0.f;
+            = (_anchor == Anchor::Left || _anchor == Anchor::Top) ? -1.f: 0.f;
         sf::RectangleShape tick({_config.tick_length, _config.tick_width});
         tick.setFillColor(sf::Color::Black);
         tick.rotate(90.f * static_cast<float>(is_x_axis()));

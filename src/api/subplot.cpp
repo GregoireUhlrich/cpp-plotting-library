@@ -121,7 +121,7 @@ namespace cpt {
         std::vector<cpt::Label> y_ticks_labels = create_labels(y_ticks, get_font(), 15);
         set_relative_position(x_ticks, extent.xmin, extent.xmax, false);
         set_relative_position(y_ticks, extent.ymin, extent.ymax, true);
-        set_ticks(Anchor::Down, std::move(x_ticks), std::move(x_ticks_labels));
+        set_ticks(Anchor::Bottom, std::move(x_ticks), std::move(x_ticks_labels));
         set_ticks(Anchor::Left, std::move(y_ticks), std::move(y_ticks_labels));
     }
 

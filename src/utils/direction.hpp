@@ -6,7 +6,7 @@
 namespace cpt
 {
     enum class Anchor {
-        Up, Down, Left, Right
+        Top, Bottom, Left, Right
     };
 
     class InvalidAnchorError: public cpt::Exception {

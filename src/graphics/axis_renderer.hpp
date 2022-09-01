@@ -38,7 +38,7 @@ namespace cpt
         }
 
         bool is_x_axis() const {
-            return _anchor == Anchor::Up || _anchor == Anchor::Down;
+            return _anchor == Anchor::Top || _anchor == Anchor::Bottom;
         }
 
         sf::Vector2f get_position()  const noexcept { return _pos; }

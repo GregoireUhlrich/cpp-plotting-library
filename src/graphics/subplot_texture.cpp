@@ -66,7 +66,7 @@ namespace cpt
         std::vector<float>      positions, 
         std::vector<cpt::Label> values)
     {
-        int size = (anchor == Anchor::Up || anchor == Anchor::Down) ?
+        int size = (anchor == Anchor::Top || anchor == Anchor::Bottom) ?
             _canvas_bounds.width : _canvas_bounds.height;
         auto &ax = (
             _axis[anchor] = cpt::AxisRenderer(
@@ -97,8 +97,8 @@ namespace cpt
     {
         AxisRenderer const *left_axis   = get_axis(Anchor::Left);
         AxisRenderer const *right_axis  = get_axis(Anchor::Right);
-        AxisRenderer const *top_axis    = get_axis(Anchor::Up);
-        AxisRenderer const *bottom_axis = get_axis(Anchor::Down);
+        AxisRenderer const *top_axis    = get_axis(Anchor::Top);
+        AxisRenderer const *bottom_axis = get_axis(Anchor::Bottom);
         float left_space   = left_axis   ?   left_axis->get_bounds().width  : 0.f;
         float right_space  = right_axis  ?  right_axis->get_bounds().width  : 0.f;
         float top_space    = top_axis    ?    top_axis->get_bounds().height : 0.f;
@@ -130,18 +130,18 @@ namespace cpt
     {
         for (auto &p : _axis) {
             AxisRenderer &ax = p.second;
-            bool horizontal = ax.get_anchor() == Anchor::Up || ax.get_anchor() == Anchor::Down;
+            bool horizontal = ax.get_anchor() == Anchor::Top || ax.get_anchor() == Anchor::Bottom;
             int size = horizontal ? _canvas_bounds.width : _canvas_bounds.height;
             ax.set_size(static_cast<float>(size));
             ax.set_font(get_font());
             switch (ax.get_anchor()) {
                 case Anchor::Left:
-                case Anchor::Up:
+                case Anchor::Top:
                     ax.set_position(
                         static_cast<float>(_canvas_bounds.left), 
                         static_cast<float>(_canvas_bounds.top));
                     break;
-                case Anchor::Down:
+                case Anchor::Bottom:
                     ax.set_position(
                         static_cast<float>(_canvas_bounds.left), 
                         static_cast<float>(_canvas_bounds.top + _canvas_bounds.height));
