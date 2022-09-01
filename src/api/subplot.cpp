@@ -101,11 +101,15 @@ namespace cpt {
     static void set_relative_position(
         std::vector<float> &x,
         float               xmin,
-        float               xmax
+        float               xmax,
+        bool                reverse
         )
     {
         for (float &xi : x) {
-            xi = 1.f - (xi - xmin) / (xmax - xmin);
+            xi = (xi - xmin) / (xmax - xmin);
+            if (reverse) {
+                xi = 1.f - xi;
+            }
         }
     }
 
@@ -115,8 +119,8 @@ namespace cpt {
         std::vector<float> y_ticks = calculate_ticks(extent.ymin, extent.ymax);
         std::vector<cpt::Label> x_ticks_labels = create_labels(x_ticks, get_font(), 15);
         std::vector<cpt::Label> y_ticks_labels = create_labels(y_ticks, get_font(), 15);
-        set_relative_position(x_ticks, extent.xmin, extent.xmax);
-        set_relative_position(y_ticks, extent.ymin, extent.ymax);
+        set_relative_position(x_ticks, extent.xmin, extent.xmax, false);
+        set_relative_position(y_ticks, extent.ymin, extent.ymax, true);
         set_ticks(Anchor::Down, std::move(x_ticks), std::move(x_ticks_labels));
         set_ticks(Anchor::Left, std::move(y_ticks), std::move(y_ticks_labels));
     }
