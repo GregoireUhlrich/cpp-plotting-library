@@ -72,6 +72,8 @@ class Histogram : public cpt::PlotData {
 
     cpt::Extent<float> _extent;
 
+    void create_y_data(const cpt::ScienceDataArray<float> &y);
+
   public:
     HistogramConfig config;
 };

@@ -6,10 +6,16 @@ namespace cpt {
 Histogram::Histogram(ScienceDataArray<float> x,
                      ScienceDataArray<float> y,
                      HistogramConfig const  &config_)
-    : _x(std::move(x)), _y(std::move(y)), config(config_)
+    : _x(std::move(x)), config(config_)
 {
+    create_y_data(y);
     check_bounds();
     compute_extent();
+}
+
+void Histogram::create_y_data(const cpt::ScienceDataArray<float> &y)
+{
+    _y = ScienceDataArray<float>(std::move(y));
 }
 
 cpt::Array<float> const &Histogram::xerr(bool lower) const

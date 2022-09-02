@@ -13,7 +13,7 @@ int main()
 
     cpt::Subplot &top_left = fig.get_subplot(0, 0);
     top_left.histogram(x,
-                       5 * cpt::exp(-(x - 5) * (x - 5)),
+                       5 * cpt::exp(1 - (x - 5) * (x - 5)) + 1,
                        {.marker_size = 4.f, .marker_color = sf::Color::Red});
 
     fig.show();
