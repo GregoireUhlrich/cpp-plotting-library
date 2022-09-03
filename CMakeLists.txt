@@ -45,7 +45,12 @@ add_subdirectory(tests)
 
 find_package(Doxygen COMPONENTS dot)
 if (Doxygen_FOUND)
-    doxygen_add_docs(doc src)
+    set(DOXYGEN_WARN_IF_UNDOCUMENTED "NO")
+    set(DOXYGEN_TYPEDEF_HIDES_STRUCT "YES")
+    doxygen_add_docs(
+        doc 
+        ${CMAKE_CURRENT_SOURCE_DIR}/src 
+        COMMENT "Generate CPT Documentation")
 else()
     message(WARNING "Doxygen has not been found and the target \"doc\" could not be generated.")
 endif()
