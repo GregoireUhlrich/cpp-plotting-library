@@ -19,6 +19,12 @@ void Subplot::plot_line(ScienceDataArray<float> x,
 }
 
 void Subplot::histogram(ScienceDataArray<float> x,
+                        HistogramConfig const  &config)
+{
+    _plots.push_back(std::make_shared<Histogram>(std::move(x), config));
+}
+
+void Subplot::histogram(ScienceDataArray<float> x,
                         ScienceDataArray<float> y,
                         HistogramConfig const  &config)
 {

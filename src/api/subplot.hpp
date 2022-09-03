@@ -21,6 +21,9 @@ class Subplot : public SubplotTexture {
                    LinePlotConfig const   &config = {});
 
     void histogram(ScienceDataArray<float> x,
+                   HistogramConfig const  &config = {});
+
+    void histogram(ScienceDataArray<float> x,
                    ScienceDataArray<float> y,
                    HistogramConfig const  &config = {});
 

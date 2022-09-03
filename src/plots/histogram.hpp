@@ -18,14 +18,17 @@ class InvalidHistogramData : public cpt::Exception {
 };
 
 struct HistogramConfig {
-    float     marker_size  = 3.5f;
-    sf::Color marker_color = sf::Color(0, 64, 128);
-    float     line_width   = 2.f;
-    sf::Color line_color   = sf::Color(0, 64, 128);
+    unsigned int n_bins       = 0;
+    float        marker_size  = 3.5f;
+    sf::Color    marker_color = sf::Color(0, 64, 128);
+    float        line_width   = 2.f;
+    sf::Color    line_color   = sf::Color(0, 64, 128);
 };
 
 class Histogram : public cpt::PlotData {
   public:
+    Histogram(ScienceDataArray<float> x, HistogramConfig const &config_ = {});
+
     Histogram(ScienceDataArray<float> x,
               ScienceDataArray<float> y,
               HistogramConfig const  &config_ = {});

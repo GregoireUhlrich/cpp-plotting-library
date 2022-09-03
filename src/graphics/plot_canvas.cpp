@@ -87,8 +87,8 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
     const float ly             = _extent.ymax - _extent.ymin;
     const float x_aspect_ratio = std::abs(target_size.x / lx);
     const float y_aspect_ratio = std::abs(target_size.y / ly);
-    const float bin_width      = float(x.back() - x.front()) / float(x.size());
 
+    const float bin_width = float(x.back() - x.front()) / float(x.size());
     // draw the histo first
     sf::RectangleShape rectangle;
     rectangle.setFillColor(histo.config.line_color);
@@ -100,7 +100,6 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
         const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
         rectangle.setSize(
             sf::Vector2f(bin_width * x_aspect_ratio, y[i] * y_aspect_ratio));
-        std::cout << bin_width / 2.f << std::endl;
         rectangle.setPosition(xi - rectangle.getSize().x / 2.f,
                               target_size.y - yi);
         _texture.draw(rectangle);
@@ -118,7 +117,7 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
         x_prev = xi;
         y_prev = yi;
     }
-
+    /*
     // markers on top
     sf::CircleShape marker(histo.config.marker_size);
     marker.setFillColor(sf::Color::Green);
@@ -130,7 +129,7 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
         marker.setPosition(xi, target_size.y - yi);
         //_texture.draw(marker);
     }
-
+    */
     draw_outline();
 }
 
