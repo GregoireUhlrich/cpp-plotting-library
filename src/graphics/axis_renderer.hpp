@@ -6,6 +6,7 @@
 #include "../utils/direction.hpp"
 #include "../utils/error.hpp"
 #include "label.hpp"
+#include "color.hpp"
 
 namespace cpt
 {
@@ -47,7 +48,7 @@ namespace cpt
 
         sf::FloatRect const &get_bounds() const;
 
-        void set_font(sf::Font const &font);
+        void set_font(cpt::Font const &font);
         void set_config(AxisRendererConfig const &config);
         void set_position(float sx, float sy);
         void set_size(float size);

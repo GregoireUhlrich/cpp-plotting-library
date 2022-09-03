@@ -1,6 +1,7 @@
 #include "plot_canvas.hpp"
 #include "fonts.hpp"
 #include "label.hpp"
+#include "color.hpp"
 #include <numbers>
 
 namespace cpt {
@@ -12,7 +13,7 @@ void PlotCanvas::create(unsigned int width, unsigned int height)
     _texture.create(width, height, settings);
 }
 
-void PlotCanvas::clear(sf::Color color)
+void PlotCanvas::clear(cpt::Color color)
 {
     _texture.clear(color);
 }

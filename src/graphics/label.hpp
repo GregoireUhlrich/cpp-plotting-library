@@ -5,6 +5,7 @@
 #include <string>
 #include "../utils/direction.hpp"
 #include "fonts.hpp"
+#include "color.hpp"
 
 namespace cpt
 {
@@ -27,15 +28,15 @@ namespace cpt
 
         Label(
             std::string const &text,
-            sf::Font    const &font
+            cpt::Font   const &font
         );
 
-        void set_font(sf::Font const &font);
+        void set_font(cpt::Font const &font);
 
         void set_text(std::string const &text);
 
-        sf::Color get_fill_color() const;
-        void set_fill_color(sf::Color color);
+        cpt::Color get_fill_color() const;
+        void set_fill_color(cpt::Color color);
 
         sf::Vector2f get_text_size() const;
         sf::Vector2f get_graphics_size() const;
@@ -59,10 +60,10 @@ namespace cpt
 
     private:
 
-        unsigned int    _font_size;
-        Alignement      _alignement;
-        sf::Font const *_font;
-        sf::Text        _text;
+        unsigned int     _font_size;
+        Alignement       _alignement;
+        cpt::Font const *_font;
+        sf::Text         _text;
     };
 
     // PS: For some reason fonts are unusable on Windows.

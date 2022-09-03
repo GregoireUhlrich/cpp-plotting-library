@@ -19,7 +19,7 @@ namespace cpt
         return &pos->second;
     }
 
-    sf::Font const &SubplotTexture::get_font() const
+    cpt::Font const &SubplotTexture::get_font() const
     {
         if (!_font) {
             throw InvalidSubplotTextureError(
@@ -52,7 +52,7 @@ namespace cpt
         acknowledge_change();
     }
 
-    void SubplotTexture::set_font(sf::Font const &font)
+    void SubplotTexture::set_font(cpt::Font const &font)
     {
         _font = &font;
         for (auto &ax : _axis) {

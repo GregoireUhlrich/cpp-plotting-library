@@ -109,12 +109,12 @@ namespace cpt
             );
     }
 
-    sf::Font const &Figure::get_font() const 
+    cpt::Font const &Figure::get_font() const 
     {
         return *_font;
     }
 
-    void Figure::set_font(sf::Font const &font)
+    void Figure::set_font(cpt::Font const &font)
     {
         _font = &font;
         for (auto &subplot : _subplots) {

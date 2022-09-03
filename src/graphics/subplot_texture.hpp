@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "plot_canvas.hpp"
 #include "axis_renderer.hpp"
+#include "color.hpp"
 #include "../utils/error.hpp"
 
 namespace cpt
@@ -20,7 +21,7 @@ namespace cpt
 
         cpt::AxisRenderer const *get_axis(cpt::Anchor anchor) const;
 
-        sf::Font const &get_font() const;
+        cpt::Font const &get_font() const;
         sf::Vector2f get_position() const noexcept;
         sf::Vector2f get_size() const noexcept;
 
@@ -31,7 +32,7 @@ namespace cpt
         void set_position(float x, float y) noexcept;
         void set_size(float sx, float sy);
 
-        void set_font(sf::Font const &font); 
+        void set_font(cpt::Font const &font); 
         void set_ticks(
             cpt::Anchor             anchor,
             std::vector<float>      positions, 
@@ -53,7 +54,7 @@ namespace cpt
 
         sf::Vector2f _pos;
         sf::Vector2f _size;
-        sf::Font           const *_font = nullptr;
+        cpt::Font           const *_font = nullptr;
         sf::RenderTexture _texture;
         sf::Texture       _final_texture;
         sf::Sprite        _sprite;

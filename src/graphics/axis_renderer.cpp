@@ -19,7 +19,7 @@ namespace cpt
         return _bounds;
     }
     
-    void AxisRenderer::set_font(sf::Font const &font)
+    void AxisRenderer::set_font(cpt::Font const &font)
     {
         for (auto &label : _ticks_labels) {
             label.set_font(font);

@@ -3,6 +3,7 @@
 
 #include "../plots/histogram.hpp"
 #include "../plots/line_plot.hpp"
+#include "color.hpp"
 #include <SFML/Graphics.hpp>
 #include <numeric>
 
@@ -21,7 +22,7 @@ class PlotCanvas {
         _extent = std::move(extent);
     }
 
-    void clear(sf::Color color = sf::Color::White);
+    void clear(cpt::Color color = cpt::Color::White);
 
     void plot(cpt::LinePlot const &line) noexcept;
     void plot(cpt::Histogram const &line) noexcept;

@@ -48,8 +48,8 @@ namespace cpt
         std::vector<Subplot> &get_subplots() noexcept;
         std::vector<Subplot> const &get_subplots() const noexcept;
 
-        sf::Font const &get_font() const;
-        void set_font(sf::Font const &font);
+        cpt::Font const &get_font() const;
+        void set_font(cpt::Font const &font);
 
         void show(bool blocking = false);
 
@@ -60,7 +60,7 @@ namespace cpt
         std::size_t _n_columns;
         std::vector<cpt::Subplot> _subplots;
 
-        sf::Font const *_font;
+        cpt::Font const *_font;
     };
 } // namespace cpt
 

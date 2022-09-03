@@ -4,16 +4,16 @@
 
 namespace cpt {
 
-    Label::Label(std::string const &text, sf::Font const &font)
+    Label::Label(std::string const &text, cpt::Font const &font)
     {
         set_font(font);
         set_text(text);
         set_font_size(10);
-        set_fill_color(sf::Color::Black);
+        set_fill_color(cpt::Color::Black);
         set_alignement(Alignement::Centered);
     }
 
-    void Label::set_font(sf::Font const &font)
+    void Label::set_font(cpt::Font const &font)
     {
         _font = &font;
         _text.setFont(*_font);
@@ -24,12 +24,12 @@ namespace cpt {
         _text.setString(sf::String(text));
     }
 
-    sf::Color Label::get_fill_color() const 
+    cpt::Color Label::get_fill_color() const 
     {
         return _text.getFillColor();
     }
 
-    void Label::set_fill_color(sf::Color color)
+    void Label::set_fill_color(cpt::Color color)
     {
         _text.setFillColor(color);
     } 

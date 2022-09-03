@@ -7,6 +7,11 @@
 #include <array>
 #include "../utils/error.hpp"
 
+namespace cpt
+{
+    using Font = sf::Font;
+} // namespace cpt
+
 namespace cpt::font
 {
     class InvalidFontFileError: public cpt::Exception {
@@ -49,11 +54,11 @@ namespace cpt::font
         }
 
     private:
-        std::string _family_name;
+        std::string                _family_name;
 	    std::array<std::string, 4> _family;
     };
 
-    inline void load(sf::Font &font, std::string const &file_name)
+    inline void load(cpt::Font &font, std::string const &file_name)
     {
         if (!font.loadFromFile(file_name)) {
             throw InvalidFontFileError(
@@ -74,14 +79,6 @@ namespace cpt::font
     );
 
 } // namespace cpt::font
-
-namespace cpt
-{
-    struct Font {
-        cpt::font::FontFamily const &family = cpt::font::arial;
-        cpt::font::Class             class_ = cpt::font::Regular;
-    };
-} // namespace cpt
 
 
 #endif
