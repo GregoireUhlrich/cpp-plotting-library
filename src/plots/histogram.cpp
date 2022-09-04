@@ -4,7 +4,8 @@
 
 namespace cpt {
 
-Histogram::Histogram(ScienceDataArray<float> data, HistogramConfig const &config_)
+Histogram::Histogram(ScienceDataArray<float> data,
+                     HistogramConfig const  &config_)
     : config(config_)
 {
     if (data.size() == 0) {
@@ -12,11 +13,12 @@ Histogram::Histogram(ScienceDataArray<float> data, HistogramConfig const &config
         _y = _x;
         return;
     }
-    auto minmax = std::ranges::minmax_element(data.data.begin(), data.data.end());
+    auto minmax
+        = std::ranges::minmax_element(data.data.begin(), data.data.end());
     float mini = *(minmax.min);
     float maxi = *(minmax.max);
 
-    float width = (maxi - mini) / static_cast<float>(config.n_bins);
+    float width = (maxi - mini + 1.f) / static_cast<float>(config.n_bins);
     if (!(width > 0)) {
         width = 1.f;
     }
@@ -24,10 +26,12 @@ Histogram::Histogram(ScienceDataArray<float> data, HistogramConfig const &config
     cpt::Array<size_t> count(config.n_bins);
     for (float di : data.data) {
         size_t index = static_cast<size_t>(di / width);
-        if (index && !(di < maxi)) { // extrem right of the histogram
+        if (index && !(di <= maxi)) { // extrem right of the histogram
             --index;
         }
         ++count[index];
+        std::cout << di << "," << width << " | " << di / width << " -> "
+                  << index << std::endl;
     }
 
     _x = cpt::linspace(mini, maxi, config.n_bins);
