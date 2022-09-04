@@ -1,5 +1,7 @@
 /*!
- * @brief Contains the Session class.
+ * @file session.hpp
+ *
+ * @brief Contains the `cpt::Session` class.
  */
 #ifndef CPT_SESSION_H_INCLUDED
 #define CPT_SESSION_H_INCLUDED
@@ -28,6 +30,16 @@ namespace cpt
      * is required, it is created inside the session class and all 
      * underlying graphical objects should refer to (through a pointer)
      * the `cpt::Font` object stored by the session. 
+     *
+     * The main use case for the session in the following:
+     *
+     *     cpt::Session session; // default constructed
+     *     cpt::Figure &fig = session.create_figure(10, 5); // size 10x5
+     * 
+     * Do not forget the reference for the figure otherwise 
+     * a compile-time error will be raised ! 
+     *
+     * @sa The `cpt::Figure` class and its constructors.
      */
     class Session {
     

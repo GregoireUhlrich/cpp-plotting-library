@@ -47,6 +47,7 @@ find_package(Doxygen COMPONENTS dot)
 if (Doxygen_FOUND)
     set(DOXYGEN_WARN_IF_UNDOCUMENTED "NO")
     set(DOXYGEN_TYPEDEF_HIDES_STRUCT "YES")
+    set(DOXYGEN_INCLUDE_GRAPH        "NO")
     doxygen_add_docs(
         doc 
         ${CMAKE_CURRENT_SOURCE_DIR}/src 
