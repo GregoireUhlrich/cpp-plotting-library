@@ -7,28 +7,30 @@ namespace cpt {
 Histogram::Histogram(ScienceDataArray<float> x, HistogramConfig const &config_)
     : _x(std::move(x)), config(config_)
 {
-    /*
-        auto xx = cpt::linspace(0, 10, 20);
-        auto yy = 5 * cpt::exp(1 - (xx - 5) * (xx - 5)) + 1;
-        _x = ScienceDataArray<float>(std::move(xx));
-        _y = ScienceDataArray<float>(std::move(yy));
-    */
-
     auto min_value = std::ranges::min_element(_x.data.begin(), _x.data.end());
     auto max_value = std::ranges::max_element(_x.data.begin(), _x.data.end());
 
-    float width = (*max_value - *min_value) / config.n_bins;
-
+    float width = (*max_value - *min_value) / float(config.n_bins);
+    if (width == 0) {
+        exit(0);
+    }
     auto xx = cpt::linspace(*min_value, *max_value, config.n_bins);
     _x      = ScienceDataArray<float>(std::move(xx));
 
     cpt::Array<float> yy(config.n_bins);
     for (size_t i = 0; i != _x.size(); ++i) {
-        ++yy[_x.data[i] / width];
+        if (not(_x.data[i] < *max_value)) {
+            if (--yy[_x.data[i] / width] != 0)
+                --yy[_x.data[i] / width];
+        }
+        else {
+            ++yy[_x.data[i] / width];
+        }
     }
 
     _y = ScienceDataArray<float>(std::move(cpt::linspace(0, 10, _x.size())));
     _y.data = yy;
+
     check_bounds();
     compute_extent();
 }
