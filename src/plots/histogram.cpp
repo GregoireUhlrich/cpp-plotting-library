@@ -4,32 +4,34 @@
 
 namespace cpt {
 
-Histogram::Histogram(ScienceDataArray<float> x, HistogramConfig const &config_)
-    : _x(std::move(x)), config(config_)
+Histogram::Histogram(ScienceDataArray<float> data, HistogramConfig const &config_)
+    : config(config_)
 {
-    auto min_value = std::ranges::min_element(_x.data.begin(), _x.data.end());
-    auto max_value = std::ranges::max_element(_x.data.begin(), _x.data.end());
-
-    float width = (*max_value - *min_value) / float(config.n_bins);
-    if (width == 0) {
-        exit(0);
+    if (data.size() == 0) {
+        _x = cpt::constant(1, 0.f);
+        _y = _x;
+        return;
     }
-    auto xx = cpt::linspace(*min_value, *max_value, config.n_bins);
-    _x      = ScienceDataArray<float>(std::move(xx));
+    auto minmax = std::ranges::minmax_element(data.data.begin(), data.data.end());
+    float mini = *(minmax.min);
+    float maxi = *(minmax.max);
 
-    cpt::Array<float> yy(config.n_bins);
-    for (size_t i = 0; i != _x.size(); ++i) {
-        if (not(_x.data[i] < *max_value)) {
-            if (--yy[_x.data[i] / width] != 0)
-                --yy[_x.data[i] / width];
-        }
-        else {
-            ++yy[_x.data[i] / width];
-        }
+    float width = (maxi - mini) / static_cast<float>(config.n_bins);
+    if (!(width > 0)) {
+        width = 1.f;
     }
 
-    _y = ScienceDataArray<float>(std::move(cpt::linspace(0, 10, _x.size())));
-    _y.data = yy;
+    cpt::Array<size_t> count(config.n_bins);
+    for (float di : data.data) {
+        size_t index = static_cast<size_t>(di / width);
+        if (index && !(di < maxi)) { // extrem right of the histogram
+            --index;
+        }
+        ++count[index];
+    }
+
+    _x = cpt::linspace(mini, maxi, config.n_bins);
+    _y = cpt::view_cast<float>(count);
 
     check_bounds();
     compute_extent();
