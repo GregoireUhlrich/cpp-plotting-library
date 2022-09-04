@@ -1,3 +1,8 @@
+/*!
+ * @file line_plot.hpp
+ *
+ * @brief Classes and configurations for line plots.
+ */
 #ifndef LINE_PLOT_DATA_H_INCLUDED
 #define LINE_PLOT_DATA_H_INCLUDED
 
@@ -14,20 +19,59 @@
 
 namespace cpt
 {
+    /*!
+     * @brief Exception raised when the user-defined line plot 
+     * data is invalid.
+     */
     class InvalidLinePlotData: public cpt::Exception {
         using cpt::Exception::Exception;
     };
 
+    /*!
+     * @brief Configuration for a line plot.
+     */
     struct LinePlotConfig {
+        /*!
+         * @brief Marker size in pixels. 
+         *
+         * @details A marker is a point drawn at a given (x, y) location.
+         */
         float     marker_size  = 3.5f;
-        sf::Color marker_color = sf::Color(0, 64, 128);
+
+        /*!
+         * @brief Marker color.
+         *
+         * @details A marker is a point drawn at a given (x, y) location.
+         */
+        cpt::Color marker_color = cpt::Color(0, 64, 128);
+
+        /*!
+         * @brief Line width in pixels. 
+         *
+         * @details The lines connect the different points (markers) in 
+         * the plot.
+         */
         float     line_width   = 2.f;
-        sf::Color line_color   = sf::Color(0, 64, 128);
+
+        /*!
+         * @brief Line color.
+         *
+         * @details The lines connect the different points (markers) in 
+         * the plot.
+         */
+        cpt::Color line_color   = cpt::Color(0, 64, 128);
     };
 
+    /*!
+     * @brief Represents a line plot object containing the data.
+     *
+     * @details It contains the x and y data (including possible uncertainties)
+     * but is not responsible to plot itself. Final plotting is the role of 
+     * the `cpt::PlotCanvas` class.
+     */
     class LinePlot: public cpt::PlotData {
-    public:
 
+    public:
         LinePlot(
             ScienceDataArray<float> x,
             ScienceDataArray<float> y,
@@ -65,6 +109,11 @@ namespace cpt
         cpt::Extent<float> _extent;
 
     public:
+        /*!
+         * @brief Plot configuration.
+         *
+         * @details This parameter is public to allow direct modifications.
+         */
         LinePlotConfig config;
     };
     
