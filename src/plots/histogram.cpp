@@ -18,7 +18,7 @@ Histogram::Histogram(ScienceDataArray<float> data,
     float mini = *(minmax.min);
     float maxi = *(minmax.max);
 
-    float width = (maxi - mini + 1.f) / static_cast<float>(config.n_bins);
+    float width = (maxi - mini) / static_cast<float>(config.n_bins);
     if (!(width > 0)) {
         width = 1.f;
     }
@@ -26,15 +26,18 @@ Histogram::Histogram(ScienceDataArray<float> data,
     cpt::Array<size_t> count(config.n_bins);
     for (float di : data.data) {
         size_t index = static_cast<size_t>(di / width);
-        if (index && !(di <= maxi)) { // extrem right of the histogram
+        if (index && !(di < maxi)) { // extrem right of the histogram
             --index;
         }
         ++count[index];
-        std::cout << di << "," << width << " | " << di / width << " -> "
-                  << index << std::endl;
     }
 
-    _x = cpt::linspace(mini, maxi, config.n_bins);
+    _x = width/2.f + cpt::linspace(
+            mini, 
+            maxi, 
+            config.n_bins, 
+            {.end_point = false} // last bin position is not equal to maxi
+        );
     _y = cpt::view_cast<float>(count);
 
     check_bounds();
