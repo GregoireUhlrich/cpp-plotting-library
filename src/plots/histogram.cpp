@@ -13,10 +13,17 @@ Histogram::Histogram(ScienceDataArray<float> data,
         _y = _x;
         return;
     }
+
     auto minmax
         = std::ranges::minmax_element(data.data.begin(), data.data.end());
-    float mini = *(minmax.min);
-    float maxi = *(minmax.max);
+    float mini = config.min.value();
+    float maxi = config.max.value();
+    if (!config.min.has_value()) {
+        mini = *(minmax.min);
+    }
+    if (!config.max.has_value()) {
+        maxi = *(minmax.max);
+    }
 
     float width = (maxi - mini) / static_cast<float>(config.n_bins);
     if (!(width > 0)) {
@@ -32,12 +39,10 @@ Histogram::Histogram(ScienceDataArray<float> data,
         ++count[index];
     }
 
-    _x = width/2.f + cpt::linspace(
-            mini, 
-            maxi, 
-            config.n_bins, 
-            {.end_point = false} // last bin position is not equal to maxi
-        );
+    _x = width / 2.f
+         + cpt::linspace(mini, maxi, config.n_bins, {.end_point = false}
+                         // last bin position is not equal to maxi
+         );
     _y = cpt::view_cast<float>(count);
 
     check_bounds();

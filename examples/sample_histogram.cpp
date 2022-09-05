@@ -16,17 +16,23 @@ int main()
     cpt::ScienceDataArray<float> data;
     data.data = d;
 
-    cpt::Subplot &top_left = fig.get_subplot(0, 0);
+    ////////////////////////////////////////////////////
+    cpt::HistogramConfig config_plot{.marker_size  = 4.f,
+                                     .marker_color = sf::Color::Red};
 
-    top_left.histogram(x,
-                       5 * cpt::exp(1 - (x - 5) * (x - 5)) + 1,
-                       {.marker_size = 4.f, .marker_color = sf::Color::Red});
+    cpt::Subplot &top_left = fig.get_subplot(0, 0);
+    top_left.histogram(
+        x, 5 * cpt::exp(1 - (x - 5) * (x - 5)) + 1, config_plot);
+
+    ////////////////////////////////////////////////////
+    cpt::HistogramConfig config{.min          = 0,
+                                .max          = 10,
+                                .n_bins       = 10,
+                                .marker_size  = 4.f,
+                                .marker_color = sf::Color::Red};
 
     cpt::Subplot &top_right = fig.get_subplot(0, 1);
-
-    top_right.histogram(
-        data,
-        {.n_bins = 10, .marker_size = 4.f, .marker_color = sf::Color::Red});
+    top_right.histogram(data, config);
 
     fig.show();
 
