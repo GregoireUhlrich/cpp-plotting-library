@@ -139,6 +139,11 @@ void Histogram::compute_extent() noexcept
                      .ymax = y_extent.max};
 }
 
+HistogramStatistics Histogram::statistics() const
+{
+    return _statistics;
+}
+
 void Histogram::draw_plot(cpt::PlotCanvas &canvas) const
 {
     canvas.plot(*this);

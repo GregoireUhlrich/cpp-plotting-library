@@ -17,6 +17,11 @@ class InvalidHistogramData : public cpt::Exception {
     using cpt::Exception::Exception;
 };
 
+struct HistogramStatistics {
+    float mean;
+    float error;
+};
+
 struct HistogramConfig {
     std::optional<float> min;
     std::optional<float> max;
@@ -64,6 +69,8 @@ class Histogram : public cpt::PlotData {
 
     cpt::Extent<float> get_extent() const override;
 
+    HistogramStatistics statistics() const;
+
     void draw_plot(cpt::PlotCanvas &canvas) const override;
 
   protected:
@@ -74,6 +81,7 @@ class Histogram : public cpt::PlotData {
   private:
     ScienceDataArray<float> _x;
     ScienceDataArray<float> _y;
+    HistogramStatistics     _statistics;
 
     cpt::Extent<float> _extent;
 
