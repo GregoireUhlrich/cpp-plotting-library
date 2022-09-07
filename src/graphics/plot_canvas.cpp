@@ -78,6 +78,8 @@ void PlotCanvas::plot(cpt::LinePlot const &line) noexcept
 ///////////////////
 void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
 {
+
+    /////////////////////////////////////////////////////////////////////
     const sf::Vector2f target_size
         = {static_cast<float>(_texture.getSize().x),
            static_cast<float>(_texture.getSize().y)};
@@ -88,8 +90,19 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
     const float x_aspect_ratio = std::abs(target_size.x / lx);
     const float y_aspect_ratio = std::abs(target_size.y / ly);
 
-    // const float bin_width = float(x.back() - x.front()) / float(x.size());
-    const float bin_width = float(x.back() - x.front()) / float(x.size() - 1);
+    // Fancy Options
+    sf::Color paint_marker_color        = sf::Color::Cyan;
+    sf::Color paint_error_bar_color     = sf::Color::Magenta;
+    sf::Color paint_error_outline_color = sf::Color::Red;
+
+    unsigned int paint_shape              = 4;
+    float        paint_marker_size        = 8.f;
+    float        paint_error_bar_size     = 2.f;
+    float        paint_error_outline_size = 10.f;
+
+    float bin_width = float(x.back() - x.front()) / float(x.size());
+    // float bin_width = float(x.back() - x.front()) / float(x.size() - 1);
+    /////////////////////////////////////////////////////////////////////
 
     // draw the histo first
     sf::RectangleShape bin_value;
@@ -103,16 +116,6 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
                               target_size.y - yi);
         _texture.draw(bin_value);
     }
-
-    // Fancy Options
-    sf::Color paint_marker_color        = sf::Color::Cyan;
-    sf::Color paint_error_bar_color     = sf::Color::Magenta;
-    sf::Color paint_error_outline_color = sf::Color::Red;
-
-    unsigned int paint_shape              = 4;
-    float        paint_marker_size        = 8.f;
-    float        paint_error_bar_size     = 2.f;
-    float        paint_error_outline_size = 10.f;
 
     // Uncertainty
     if (histo.has_yerr()) {
