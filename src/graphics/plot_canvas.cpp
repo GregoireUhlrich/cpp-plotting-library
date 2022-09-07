@@ -90,19 +90,19 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
 
     const float bin_width = float(x.back() - x.front()) / float(x.size());
     // draw the histo first
-    sf::RectangleShape rectangle;
-    rectangle.setFillColor(histo.config.line_color);
-    rectangle.setOrigin(histo.config.line_width / 2.f,
+    sf::RectangleShape bin_value;
+    bin_value.setFillColor(histo.config.line_color);
+    bin_value.setOrigin(histo.config.line_width / 2.f,
                         histo.config.line_width / 2.f);
     float x_prev, y_prev;
     for (std::size_t i = 0; i != x.size(); ++i) {
         const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
         const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
-        rectangle.setSize(
+        bin_value.setSize(
             sf::Vector2f(bin_width * x_aspect_ratio, y[i] * y_aspect_ratio));
-        rectangle.setPosition(xi - rectangle.getSize().x / 2.f,
+        bin_value.setPosition(xi - bin_value.getSize().x / 2.f,
                               target_size.y - yi);
-        _texture.draw(rectangle);
+        _texture.draw(bin_value);
         if (i > 0) {
             const float        dist  = std::sqrt(std::pow(xi - x_prev, 2.f)
                                          + std::pow(yi - y_prev, 2.f));
@@ -112,24 +112,33 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
             rect.setPosition(x_prev, target_size.y - y_prev);
             rect.setRotation(180.f * angle / std::numbers::pi_v<float>);
             rect.setFillColor(sf::Color::Red);
-            _texture.draw(rect);
+            //_texture.draw(rect);
         }
         x_prev = xi;
         y_prev = yi;
     }
-    /*
-    // markers on top
-    sf::CircleShape marker(histo.config.marker_size);
-    marker.setFillColor(sf::Color::Green);
-    marker.setOrigin(histo.config.marker_size / 2.f,
-                     histo.config.marker_size / 2.f);
-    for (std::size_t i = 0; i != x.size(); ++i) {
-        const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
-        const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
-        marker.setPosition(xi, target_size.y - yi);
-        //_texture.draw(marker);
+
+    // Uncertainty on top
+    if (histo.has_yerr()) {
+        const auto        &y_err_plus  = histo.yerr();
+        const auto        &y_err_minus = histo.yerr(true);
+        sf::RectangleShape bin_error;
+        bin_error.setFillColor(sf::Color::Magenta);
+        bin_error.setOrigin(histo.config.marker_size / 2.f,
+                            histo.config.marker_size / 2.f);
+        for (std::size_t i = 0; i != x.size(); ++i) {
+            const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
+            const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
+            const float yepi
+                = ((y_err_plus[i] - _extent.ymin) * y_aspect_ratio);
+            const float yemi
+                = ((y_err_minus[i] - _extent.ymin) * y_aspect_ratio);
+            bin_error.setPosition(xi, target_size.y - yi + yepi);
+            bin_error.setSize(sf::Vector2f(2, yepi + yemi));
+            _texture.draw(bin_error);
+        }
     }
-    */
+
     draw_outline();
 }
 
