@@ -39,15 +39,6 @@ struct ScienceDataArray {
         return data.size();
     }
 
-    auto error_plus()
-    {
-        return err_plus;
-    }
-    auto error_minus()
-    {
-        return err_minus;
-    }
-
     cpt::Array<T>                data;
     std::optional<cpt::Array<T>> err_plus;
     std::optional<cpt::Array<T>> err_minus;

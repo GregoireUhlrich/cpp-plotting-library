@@ -107,7 +107,7 @@ void Histogram::check_bounds() const
     }
     if (_y.err_plus.has_value() && _y.size() != _y.err_plus.value().size()) {
         throw InvalidHistogramData("A line plot data must have the ",
-                                   "same dimension for y and yerr, ",
+                                   "same dimension for y and yerr plus, ",
                                    _y.size(),
                                    " and ",
                                    _y.err_plus.value().size(),
@@ -115,7 +115,7 @@ void Histogram::check_bounds() const
     }
     if (_y.err_minus.has_value() && _y.size() != _y.err_minus.value().size()) {
         throw InvalidHistogramData("A line plot data must have the ",
-                                   "same dimension for y and yerr, ",
+                                   "same dimension for y and yerr minus, ",
                                    _y.size(),
                                    " and ",
                                    _y.err_minus.value().size(),
@@ -137,6 +137,8 @@ void Histogram::compute_data(const ScienceDataArray<float> &data,
                              float                          width,
                              float                          maxi)
 {
+    unsigned int data_size = data.size();
+
     cpt::Array<float> count(config.n_bins);
     for (float di : data.data) {
         size_t index = static_cast<size_t>(di / width);
@@ -145,15 +147,18 @@ void Histogram::compute_data(const ScienceDataArray<float> &data,
         }
         ++count[index];
     }
-    cpt::Array<float> error_up(_y.size());
-    cpt::Array<float> error_down(_y.size());
+
+    cpt::Array<float> error_up(config.n_bins);
+    cpt::Array<float> error_down(config.n_bins);
+
     for (size_t i = 0; i != error_up.size(); ++i) {
-        error_up[i]
-            = std::sqrt(_y.data[i] * (1 - float(_y.data[i]) / float()));
+        error_up[i] = std::sqrt(count[i] * (1 - count[i] / float(data_size)));
         error_down[i] = -error_up[i];
     }
     //_y = cpt::view_cast<float>(count);
-    _y = ScienceDataArray(cpt::view_cast<float>(count), error_up, error_down);
+    _y = ScienceDataArray<float>(cpt::view_cast<float>(count),
+                                 cpt::view_cast<float>(error_up),
+                                 cpt::view_cast<float>(error_down));
 }
 
 cpt::Array<float> Histogram::get_error(unsigned int bin)
