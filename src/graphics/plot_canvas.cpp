@@ -88,13 +88,12 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
     const float x_aspect_ratio = std::abs(target_size.x / lx);
     const float y_aspect_ratio = std::abs(target_size.y / ly);
 
-    const float bin_width = float(x.back() - x.front()) / float(x.size());
+    // const float bin_width = float(x.back() - x.front()) / float(x.size());
+    const float bin_width = float(x.back() - x.front()) / float(x.size() - 1);
+
     // draw the histo first
     sf::RectangleShape bin_value;
     bin_value.setFillColor(histo.config.line_color);
-    bin_value.setOrigin(histo.config.line_width / 2.f,
-                        histo.config.line_width / 2.f);
-    float x_prev, y_prev;
     for (std::size_t i = 0; i != x.size(); ++i) {
         const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
         const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
@@ -103,29 +102,28 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
         bin_value.setPosition(xi - bin_value.getSize().x / 2.f,
                               target_size.y - yi);
         _texture.draw(bin_value);
-        if (i > 0) {
-            const float        dist  = std::sqrt(std::pow(xi - x_prev, 2.f)
-                                         + std::pow(yi - y_prev, 2.f));
-            const float        angle = std::atan2(-yi + y_prev, xi - x_prev);
-            sf::RectangleShape rect({dist, histo.config.line_width});
-            rect.setOrigin({0.f, histo.config.line_width / 2.f});
-            rect.setPosition(x_prev, target_size.y - y_prev);
-            rect.setRotation(180.f * angle / std::numbers::pi_v<float>);
-            rect.setFillColor(sf::Color::Red);
-            //_texture.draw(rect);
-        }
-        x_prev = xi;
-        y_prev = yi;
     }
 
-    // Uncertainty on top
+    // Fancy Options
+    sf::Color paint_marker_color        = sf::Color::Cyan;
+    sf::Color paint_error_bar_color     = sf::Color::Magenta;
+    sf::Color paint_error_outline_color = sf::Color::Red;
+
+    unsigned int paint_shape              = 4;
+    float        paint_marker_size        = 8.f;
+    float        paint_error_bar_size     = 2.f;
+    float        paint_error_outline_size = 10.f;
+
+    // Uncertainty
     if (histo.has_yerr()) {
         const auto        &y_err_plus  = histo.yerr();
         const auto        &y_err_minus = histo.yerr(true);
         sf::RectangleShape bin_error;
-        bin_error.setFillColor(sf::Color::Magenta);
-        bin_error.setOrigin(histo.config.marker_size / 2.f,
-                            histo.config.marker_size / 2.f);
+        sf::RectangleShape bin_error_outline_up, bin_error_outline_down;
+        bin_error.setFillColor(paint_error_bar_color);
+        bin_error_outline_up.setFillColor(paint_error_outline_color);
+        bin_error_outline_down.setFillColor(paint_error_outline_color);
+
         for (std::size_t i = 0; i != x.size(); ++i) {
             const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
             const float yepi
@@ -135,10 +133,37 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
             std::cout << "----------------" << std::endl;
             std::cout << yepi << " : " << yemi << std::endl;
             std::cout << target_size.y << std::endl;
-            bin_error.setPosition(xi, target_size.y - yepi);
-            bin_error.setSize(sf::Vector2f(2, yepi - yemi));
+
+            bin_error.setSize(sf::Vector2f(paint_error_bar_size, yepi - yemi));
+            bin_error_outline_up.setSize(
+                sf::Vector2f(paint_error_outline_size, paint_error_bar_size));
+            bin_error_outline_down.setSize(
+                sf::Vector2f(paint_error_outline_size, paint_error_bar_size));
+
+            bin_error.setPosition(xi - paint_error_bar_size / 2.f,
+                                  target_size.y - yepi);
+            bin_error_outline_up.setPosition(
+                xi - paint_error_outline_size / 2.f,
+                target_size.y - yepi - paint_error_bar_size);
+            bin_error_outline_down.setPosition(
+                xi - paint_error_outline_size / 2.f,
+                target_size.y - yemi - paint_error_bar_size);
+
             _texture.draw(bin_error);
+            _texture.draw(bin_error_outline_up);
+            _texture.draw(bin_error_outline_down);
         }
+    }
+
+    // markers on top
+    sf::CircleShape marker(paint_marker_size, paint_shape);
+    marker.setFillColor(paint_marker_color);
+    for (std::size_t i = 0; i != x.size(); ++i) {
+        const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
+        const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
+        marker.setPosition(xi - paint_marker_size,
+                           target_size.y - yi - paint_marker_size);
+        _texture.draw(marker);
     }
 
     draw_outline();

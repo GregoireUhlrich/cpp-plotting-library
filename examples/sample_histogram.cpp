@@ -5,7 +5,7 @@
 int main()
 {
     cpt::Session session;
-    cpt::Figure &fig = session.create_figure("My Fig", 10, 5);
+    cpt::Figure &fig = session.create_figure("My Fig", 15, 7);
 
     fig.create_subplots(1, 2);
 
