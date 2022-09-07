@@ -128,13 +128,15 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
                             histo.config.marker_size / 2.f);
         for (std::size_t i = 0; i != x.size(); ++i) {
             const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
-            const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
             const float yepi
-                = ((y_err_plus[i] - _extent.ymin) * y_aspect_ratio);
+                = ((y[i] + y_err_plus[i] - _extent.ymin) * y_aspect_ratio);
             const float yemi
-                = ((y_err_minus[i] - _extent.ymin) * y_aspect_ratio);
-            bin_error.setPosition(xi, target_size.y - yi + yepi);
-            bin_error.setSize(sf::Vector2f(2, yepi + yemi));
+                = ((y[i] + y_err_minus[i] - _extent.ymin) * y_aspect_ratio);
+            std::cout << "----------------" << std::endl;
+            std::cout << yepi << " : " << yemi << std::endl;
+            std::cout << target_size.y << std::endl;
+            bin_error.setPosition(xi, target_size.y - yepi);
+            bin_error.setSize(sf::Vector2f(2, yepi - yemi));
             _texture.draw(bin_error);
         }
     }

@@ -27,7 +27,7 @@ int main()
     ////////////////////////////////////////////////////
     cpt::HistogramConfig config{.min          = 0,
                                 .max          = 10,
-                                .n_bins       = 10,
+                                .n_bins       = 5,
                                 .marker_size  = 4.f,
                                 .marker_color = sf::Color::Red};
 
