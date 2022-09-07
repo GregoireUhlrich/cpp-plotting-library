@@ -30,23 +30,17 @@ Histogram::Histogram(ScienceDataArray<float> data,
         width = 1.f;
     }
 
-    cpt::Array<size_t> count(config.n_bins);
-    for (float di : data.data) {
-        size_t index = static_cast<size_t>(di / width);
-        if (index && !(di < maxi)) { // extrem right of the histogram
-            --index;
-        }
-        ++count[index];
-    }
-
     _x = width / 2.f
          + cpt::linspace(mini, maxi, config.n_bins, {.end_point = false}
                          // last bin position is not equal to maxi
          );
-    _y = cpt::view_cast<float>(count);
 
+    compute_data(data, width, maxi);
     check_bounds();
     compute_extent();
+    for (int i = 0; i != config.n_bins; ++i) {
+        std::cout << get_error(i)[0] << " : " << get_error(i)[1] << std::endl;
+    }
 }
 
 Histogram::Histogram(ScienceDataArray<float> x,
@@ -139,9 +133,32 @@ void Histogram::compute_extent() noexcept
                      .ymax = y_extent.max};
 }
 
-HistogramStatistics Histogram::statistics() const
+void Histogram::compute_data(const ScienceDataArray<float> &data,
+                             float                          width,
+                             float                          maxi)
 {
-    return _statistics;
+    cpt::Array<float> count(config.n_bins);
+    for (float di : data.data) {
+        size_t index = static_cast<size_t>(di / width);
+        if (index && !(di < maxi)) { // extrem right of the histogram
+            --index;
+        }
+        ++count[index];
+    }
+    cpt::Array<float> error_up(_y.size());
+    cpt::Array<float> error_down(_y.size());
+    for (size_t i = 0; i != error_up.size(); ++i) {
+        error_up[i]
+            = std::sqrt(_y.data[i] * (1 - float(_y.data[i]) / float()));
+        error_down[i] = -error_up[i];
+    }
+    //_y = cpt::view_cast<float>(count);
+    _y = ScienceDataArray(cpt::view_cast<float>(count), error_up, error_down);
+}
+
+cpt::Array<float> Histogram::get_error(unsigned int bin)
+{
+    return {_y.err_plus.value()[bin], _y.err_minus.value()[bin]};
 }
 
 void Histogram::draw_plot(cpt::PlotCanvas &canvas) const
