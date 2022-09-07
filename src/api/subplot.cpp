@@ -19,17 +19,20 @@ void Subplot::plot_line(ScienceDataArray<float> x,
 }
 
 void Subplot::histogram(ScienceDataArray<float> x,
-                        HistogramConfig const  &config)
+                        HistogramConfig const  &config,
+                        HistogramDesign const  &design)
 {
-    _plots.push_back(std::make_shared<Histogram>(std::move(x), config));
+    _plots.push_back(
+        std::make_shared<Histogram>(std::move(x), config, design));
 }
 
 void Subplot::histogram(ScienceDataArray<float> x,
                         ScienceDataArray<float> y,
-                        HistogramConfig const  &config)
+                        HistogramConfig const  &config,
+                        HistogramDesign const  &design)
 {
-    _plots.push_back(
-        std::make_shared<Histogram>(std::move(x), std::move(y), config));
+    _plots.push_back(std::make_shared<Histogram>(
+        std::move(x), std::move(y), config, design));
 }
 
 Extent<float> Subplot::get_extent()

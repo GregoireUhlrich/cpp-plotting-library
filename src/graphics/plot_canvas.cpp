@@ -90,16 +90,6 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
     const float x_aspect_ratio = std::abs(target_size.x / lx);
     const float y_aspect_ratio = std::abs(target_size.y / ly);
 
-    // Fancy Options
-    sf::Color paint_marker_color        = sf::Color::Cyan;
-    sf::Color paint_error_bar_color     = sf::Color::Magenta;
-    sf::Color paint_error_outline_color = sf::Color::Red;
-
-    unsigned int paint_shape              = 4;
-    float        paint_marker_size        = 8.f;
-    float        paint_error_bar_size     = 2.f;
-    float        paint_error_outline_size = 10.f;
-
     float bin_width = float(x.back() - x.front()) / float(x.size());
     // float bin_width = float(x.back() - x.front()) / float(x.size() - 1);
     /////////////////////////////////////////////////////////////////////
@@ -123,9 +113,9 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
         const auto        &y_err_minus = histo.yerr(true);
         sf::RectangleShape bin_error;
         sf::RectangleShape bin_error_outline_up, bin_error_outline_down;
-        bin_error.setFillColor(paint_error_bar_color);
-        bin_error_outline_up.setFillColor(paint_error_outline_color);
-        bin_error_outline_down.setFillColor(paint_error_outline_color);
+        bin_error.setFillColor(histo.design.error_bar_color);
+        bin_error_outline_up.setFillColor(histo.design.error_outline_color);
+        bin_error_outline_down.setFillColor(histo.design.error_outline_color);
 
         for (std::size_t i = 0; i != x.size(); ++i) {
             const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
@@ -133,24 +123,22 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
                 = ((y[i] + y_err_plus[i] - _extent.ymin) * y_aspect_ratio);
             const float yemi
                 = ((y[i] + y_err_minus[i] - _extent.ymin) * y_aspect_ratio);
-            std::cout << "----------------" << std::endl;
-            std::cout << yepi << " : " << yemi << std::endl;
-            std::cout << target_size.y << std::endl;
 
-            bin_error.setSize(sf::Vector2f(paint_error_bar_size, yepi - yemi));
-            bin_error_outline_up.setSize(
-                sf::Vector2f(paint_error_outline_size, paint_error_bar_size));
-            bin_error_outline_down.setSize(
-                sf::Vector2f(paint_error_outline_size, paint_error_bar_size));
+            bin_error.setSize(
+                sf::Vector2f(histo.design.error_bar_size, yepi - yemi));
+            bin_error_outline_up.setSize(sf::Vector2f(
+                histo.design.error_outline_size, histo.design.error_bar_size));
+            bin_error_outline_down.setSize(sf::Vector2f(
+                histo.design.error_outline_size, histo.design.error_bar_size));
 
-            bin_error.setPosition(xi - paint_error_bar_size / 2.f,
+            bin_error.setPosition(xi - histo.design.error_bar_size / 2.f,
                                   target_size.y - yepi);
             bin_error_outline_up.setPosition(
-                xi - paint_error_outline_size / 2.f,
-                target_size.y - yepi - paint_error_bar_size);
+                xi - histo.design.error_outline_size / 2.f,
+                target_size.y - yepi - histo.design.error_bar_size);
             bin_error_outline_down.setPosition(
-                xi - paint_error_outline_size / 2.f,
-                target_size.y - yemi - paint_error_bar_size);
+                xi - histo.design.error_outline_size / 2.f,
+                target_size.y - yemi - histo.design.error_bar_size);
 
             _texture.draw(bin_error);
             _texture.draw(bin_error_outline_up);
@@ -159,13 +147,14 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
     }
 
     // markers on top
-    sf::CircleShape marker(paint_marker_size, paint_shape);
-    marker.setFillColor(paint_marker_color);
+    sf::CircleShape marker(histo.design.marker_size,
+                           histo.design.marker_shape);
+    marker.setFillColor(histo.design.marker_color);
     for (std::size_t i = 0; i != x.size(); ++i) {
         const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
         const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
-        marker.setPosition(xi - paint_marker_size,
-                           target_size.y - yi - paint_marker_size);
+        marker.setPosition(xi - histo.design.marker_size,
+                           target_size.y - yi - histo.design.marker_size);
         _texture.draw(marker);
     }
 

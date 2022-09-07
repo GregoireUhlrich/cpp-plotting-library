@@ -5,8 +5,9 @@
 namespace cpt {
 
 Histogram::Histogram(ScienceDataArray<float> data,
-                     HistogramConfig const  &config_)
-    : config(config_)
+                     HistogramConfig const  &config_,
+                     HistogramDesign const  &design_)
+    : config(config_), design(design_)
 {
     if (data.size() == 0) {
         _x = cpt::constant(1, 0.f);
@@ -16,13 +17,14 @@ Histogram::Histogram(ScienceDataArray<float> data,
 
     auto minmax
         = std::ranges::minmax_element(data.data.begin(), data.data.end());
-    float mini = config.min.value();
-    float maxi = config.max.value();
-    if (!config.min.has_value()) {
-        mini = *(minmax.min);
+
+    float mini = *(minmax.min);
+    float maxi = *(minmax.max);
+    if (config.min.has_value()) {
+        mini = config.min.value();
     }
-    if (!config.max.has_value()) {
-        maxi = *(minmax.max);
+    if (config.max.has_value()) {
+        maxi = config.max.value();
     }
 
     float width = (maxi - mini) / static_cast<float>(config.n_bins);
@@ -45,8 +47,9 @@ Histogram::Histogram(ScienceDataArray<float> data,
 
 Histogram::Histogram(ScienceDataArray<float> x,
                      ScienceDataArray<float> y,
-                     HistogramConfig const  &config_)
-    : _x(std::move(x)), _y(std::move(y)), config(config_)
+                     HistogramConfig const  &config_,
+                     HistogramDesign const  &design_)
+    : _x(std::move(x)), _y(std::move(y)), config(config_), design(design_)
 {
     check_bounds();
     compute_extent();

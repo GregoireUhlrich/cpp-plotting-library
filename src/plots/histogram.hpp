@@ -23,6 +23,17 @@ class HistogramStatistics {
     float error;
 };
 
+struct HistogramDesign {
+    sf::Color marker_color        = sf::Color::Cyan;
+    sf::Color error_bar_color     = sf::Color::Magenta;
+    sf::Color error_outline_color = sf::Color::Red;
+
+    unsigned int marker_shape       = 4;
+    float        marker_size        = 4.f;
+    float        error_bar_size     = 2.f;
+    float        error_outline_size = 10.f;
+};
+
 struct HistogramConfig {
     std::optional<float> min;
     std::optional<float> max;
@@ -37,11 +48,14 @@ class Histogram : public cpt::PlotData {
   public:
     friend class HistogramStatistics;
 
-    Histogram(ScienceDataArray<float> x, HistogramConfig const &config_ = {});
+    Histogram(ScienceDataArray<float> x,
+              HistogramConfig const  &config_ = {},
+              HistogramDesign const  &design_ = {});
 
     Histogram(ScienceDataArray<float> x,
               ScienceDataArray<float> y,
-              HistogramConfig const  &config_ = {});
+              HistogramConfig const  &config_ = {},
+              HistogramDesign const  &design_ = {});
 
     // Delete copy constructor to enable only move of the underlying data
     Histogram(Histogram const &) = delete;
@@ -93,6 +107,7 @@ class Histogram : public cpt::PlotData {
 
   public:
     HistogramConfig config;
+    HistogramDesign design;
 };
 
 } // namespace cpt
