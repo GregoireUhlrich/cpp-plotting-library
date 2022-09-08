@@ -24,11 +24,16 @@ class HistogramStatistics {
 };
 
 struct HistogramDesign {
+    sf::Color bin_color           = sf::Color(0, 64, 128);
+    sf::Color bin_inner_color     = sf::Color::White;
     sf::Color marker_color        = sf::Color::Cyan;
     sf::Color error_bar_color     = sf::Color::Magenta;
     sf::Color error_outline_color = sf::Color::Red;
 
+    bool         compact_bin        = false;
+    bool         full_bin           = true;
     unsigned int marker_shape       = 4;
+    float        border_size        = 2.f;
     float        marker_size        = 4.f;
     float        error_bar_size     = 2.f;
     float        error_outline_size = 10.f;
@@ -94,8 +99,10 @@ class Histogram : public cpt::PlotData {
     void check_bounds() const;
 
     void compute_extent() noexcept;
-    void
-    compute_data(const ScienceDataArray<float> &data, float width, float maxi);
+    void compute_data(const ScienceDataArray<float> &data,
+                      float                          width,
+                      float                          maxi,
+                      float                          mini);
 
   private:
     ScienceDataArray<float> _x;

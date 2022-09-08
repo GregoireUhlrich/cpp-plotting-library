@@ -5,7 +5,7 @@
 int main()
 {
     cpt::Session session;
-    cpt::Figure &fig = session.create_figure("My Fig", 15, 7);
+    cpt::Figure &fig = session.create_figure("My Fig", 17, 8);
 
     fig.create_subplots(1, 2);
 
@@ -88,23 +88,34 @@ int main()
     data.data = d;
 
     ////////////////////////////////////////////////////
+    cpt::HistogramDesign des = {.marker_color = sf::Color(100, 40, 75),
+                                .full_bin     = false,
+                                .marker_shape = 5,
+                                .marker_size  = 6.f};
     cpt::HistogramConfig config_plot{.marker_size  = 4.f,
                                      .marker_color = sf::Color::Red};
 
     cpt::Subplot &top_left = fig.get_subplot(0, 0);
     top_left.histogram(
-        x, 5 * cpt::exp(1 - (x - 5) * (x - 5)) + 1, config_plot);
+        x, 5 * cpt::exp(1 - (x - 5) * (x - 5)) + 1, config_plot, des);
 
     ////////////////////////////////////////////////////
+    auto x2 = cpt::linspace(0, 150, 200);
+
     cpt::HistogramConfig config{
         .n_bins = 20, .marker_size = 4.f, .marker_color = sf::Color::Red};
     cpt::HistogramDesign design{.marker_color        = sf::Color(255, 0, 139),
                                 .error_bar_color     = sf::Color(209, 0, 255),
-                                .error_outline_color = sf::Color(209, 0, 255)};
+                                .error_outline_color = sf::Color(209, 0, 255),
+                                .compact_bin         = true};
 
     cpt::Subplot &top_right = fig.get_subplot(0, 1);
     top_right.histogram(data, config, design);
-
+    top_right.plot_line(x2,
+                        250 * cpt::exp(-(1.f / 100.f) * cpt::pow(x2 - 60, 2)),
+                        {.marker_size  = 4.f,
+                         .marker_color = sf::Color::Red,
+                         .line_color   = sf::Color::Magenta});
     fig.show();
 
     return 0;

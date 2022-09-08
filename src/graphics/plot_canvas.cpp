@@ -90,13 +90,20 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
     const float x_aspect_ratio = std::abs(target_size.x / lx);
     const float y_aspect_ratio = std::abs(target_size.y / ly);
 
-    float bin_width = float(x.back() - x.front()) / float(x.size());
-    // float bin_width = float(x.back() - x.front()) / float(x.size() - 1);
+    float bin_width = 0;
+    if (histo.design.compact_bin) {
+        bin_width = float(x.back() - x.front()) / float(x.size() - 1);
+    }
+    else {
+        bin_width = float(x.back() - x.front()) / float(x.size());
+    }
     /////////////////////////////////////////////////////////////////////
 
     // draw the histo first
     sf::RectangleShape bin_value;
-    bin_value.setFillColor(histo.config.line_color);
+    sf::RectangleShape bin_value_inner;
+    bin_value.setFillColor(histo.design.bin_color);
+    bin_value_inner.setFillColor(histo.design.bin_inner_color);
     for (std::size_t i = 0; i != x.size(); ++i) {
         const float xi = ((x[i] - _extent.xmin) * x_aspect_ratio);
         const float yi = ((y[i] - _extent.ymin) * y_aspect_ratio);
@@ -105,6 +112,17 @@ void PlotCanvas::plot(cpt::Histogram const &histo) noexcept
         bin_value.setPosition(xi - bin_value.getSize().x / 2.f,
                               target_size.y - yi);
         _texture.draw(bin_value);
+
+        if (!histo.design.full_bin) {
+            bin_value_inner.setSize(sf::Vector2f(
+                bin_width * x_aspect_ratio - histo.design.border_size,
+                y[i] * y_aspect_ratio - histo.design.border_size));
+            bin_value_inner.setPosition(xi - bin_value.getSize().x / 2.f
+                                            + histo.design.border_size / 2.f,
+                                        target_size.y - yi
+                                            + histo.design.border_size / 2.f);
+            _texture.draw(bin_value_inner);
+        }
     }
 
     // Uncertainty

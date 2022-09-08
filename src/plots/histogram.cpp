@@ -37,12 +37,9 @@ Histogram::Histogram(ScienceDataArray<float> data,
                          // last bin position is not equal to maxi
          );
 
-    compute_data(data, width, maxi);
+    compute_data(data, width, maxi, mini);
     check_bounds();
     compute_extent();
-    for (int i = 0; i != config.n_bins; ++i) {
-        std::cout << get_error(i)[0] << " : " << get_error(i)[1] << std::endl;
-    }
 }
 
 Histogram::Histogram(ScienceDataArray<float> x,
@@ -138,7 +135,8 @@ void Histogram::compute_extent() noexcept
 
 void Histogram::compute_data(const ScienceDataArray<float> &data,
                              float                          width,
-                             float                          maxi)
+                             float                          maxi,
+                             float                          mini)
 {
     unsigned int data_size = data.size();
 
