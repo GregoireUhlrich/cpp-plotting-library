@@ -17,18 +17,50 @@ class InvalidHistogramData : public cpt::Exception {
     using cpt::Exception::Exception;
 };
 
+class HistogramStatistics {
+  private:
+    float mean;
+    float error;
+};
+
+struct HistogramDesign {
+    sf::Color bin_color           = sf::Color(0, 64, 128);
+    sf::Color bin_inner_color     = sf::Color::White;
+    sf::Color marker_color        = sf::Color::Cyan;
+    sf::Color error_bar_color     = sf::Color::Magenta;
+    sf::Color error_outline_color = sf::Color::Red;
+
+    bool         compact_bin        = false;
+    bool         full_bin           = true;
+    unsigned int marker_shape       = 4;
+    float        border_size        = 2.f;
+    float        marker_size        = 4.f;
+    float        error_bar_size     = 2.f;
+    float        error_outline_size = 10.f;
+};
+
 struct HistogramConfig {
-    float     marker_size  = 3.5f;
-    sf::Color marker_color = sf::Color(0, 64, 128);
-    float     line_width   = 2.f;
-    sf::Color line_color   = sf::Color(0, 64, 128);
+    std::optional<float> min;
+    std::optional<float> max;
+    unsigned int         n_bins       = 0;
+    float                marker_size  = 3.5f;
+    sf::Color            marker_color = sf::Color(0, 64, 128);
+    float                line_width   = 2.f;
+    sf::Color            line_color   = sf::Color(0, 64, 128);
 };
 
 class Histogram : public cpt::PlotData {
   public:
+    friend class HistogramStatistics;
+
+    Histogram(ScienceDataArray<float> x,
+              HistogramConfig const  &config_ = {},
+              HistogramDesign const  &design_ = {});
+
     Histogram(ScienceDataArray<float> x,
               ScienceDataArray<float> y,
-              HistogramConfig const  &config_ = {});
+              HistogramConfig const  &config_ = {},
+              HistogramDesign const  &design_ = {});
 
     // Delete copy constructor to enable only move of the underlying data
     Histogram(Histogram const &) = delete;
@@ -59,12 +91,18 @@ class Histogram : public cpt::PlotData {
 
     cpt::Extent<float> get_extent() const override;
 
+    cpt::Array<float> get_error(unsigned int bin);
+
     void draw_plot(cpt::PlotCanvas &canvas) const override;
 
   protected:
     void check_bounds() const;
 
     void compute_extent() noexcept;
+    void compute_data(const ScienceDataArray<float> &data,
+                      float                          width,
+                      float                          maxi,
+                      float                          mini);
 
   private:
     ScienceDataArray<float> _x;
@@ -72,8 +110,11 @@ class Histogram : public cpt::PlotData {
 
     cpt::Extent<float> _extent;
 
+    void create_y_data(const cpt::ScienceDataArray<float> &y);
+
   public:
     HistogramConfig config;
+    HistogramDesign design;
 };
 
 } // namespace cpt

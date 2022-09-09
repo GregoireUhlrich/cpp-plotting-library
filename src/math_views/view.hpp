@@ -51,6 +51,13 @@ namespace cpt
         }
     }
 
+    template<ArrayValue T, ArrayRange Range>
+    constexpr auto view_cast(Range &range)
+        requires (!View<Range>)
+    {
+        return view_cast<T>(view(range));
+    }
+
     template<ArrayValue T, View ViewType>
     Array<T> collect(ViewType const &view)
     {

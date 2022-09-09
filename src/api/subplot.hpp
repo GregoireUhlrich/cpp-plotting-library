@@ -21,8 +21,13 @@ class Subplot : public SubplotTexture {
                    LinePlotConfig const   &config = {});
 
     void histogram(ScienceDataArray<float> x,
+                   HistogramConfig const  &config = {},
+                   HistogramDesign const  &design = {});
+
+    void histogram(ScienceDataArray<float> x,
                    ScienceDataArray<float> y,
-                   HistogramConfig const  &config = {});
+                   HistogramConfig const  &config = {},
+                   HistogramDesign const  &design = {});
 
     bool has_auto_extent() const noexcept
     {
