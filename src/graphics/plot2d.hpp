@@ -21,6 +21,10 @@ namespace cpt
 
         }
 
+        Data2D<float> const &get_data() const {
+          return _data;
+        }
+
     public:
         Plot2DConfig config;
 
