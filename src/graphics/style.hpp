@@ -2,10 +2,7 @@
 #define CPT_STYLE_H_INCLUDED
 
 #include <span>
-
-namespace sf {
-  class RenderTarget;
-}
+#include "color.hpp"
 
 namespace cpt {
 
@@ -13,23 +10,29 @@ namespace cpt {
     struct Extent;
 
     class AbstractStyle {
-        virtual void render_data_points(
+
+    public:
+        virtual 
+        void render_data_points(
             std::span<float>          x,
             std::span<float>          y,
             sf::RenderTarget         &target,
             cpt::Extent<float> const &target_extent
             ) const = 0;
 
-        void apply_extent(
-            cpt::Extent<float> const &extent,
+        std::pair<float, float> apply_extent(
+            float                     x,
+            float                     y,
             sf::Vector2f       const &target_size,
-            float &x,
-            float &y
+            cpt::Extent<float> const &extent,
         ) const;
     };
 
     struct LineStyleConfig {
-
+        float      marker_size  = 3.5f;
+        cpt::Color marker_color = cpt::Color(0, 64, 128);
+        float      line_width   = 2.f;
+        cpt::Color line_color   = cpt::Color(0, 64, 128);
     };
 
     class LineStyle: public AbstractStyle {
@@ -40,6 +43,7 @@ namespace cpt {
 
         }
 
+        virtual 
         void render_data_points(
             std::span<float>          x,
             std::span<float>          y,
